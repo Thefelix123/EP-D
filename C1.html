@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadística Descriptiva - IIIº Medio Electivo</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            startup: { typeset: true }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* Layout estricto */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .slide {
+            display: none;
+            height: 100%;
+            width: 100%;
+            animation: fadeIn 0.3s ease-out;
+            flex-direction: column;
+            ;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 select-none h-screen w-screen flex flex-col bg-slate-50">
+
+    <div class="h-4 w-full bg-emerald-800 shrink-0"></div>
+
+    <div id="slide-container" class="flex-1 relative w-full overflow-hidden">
+
+        <div class="slide active p-10 bg-slate-50">
+            <div class="flex-1 flex flex-col items-center justify-center space-y-8 w-full h-full">
+                <i data-lucide="pie-chart" class="w-48 h-48 text-emerald-800 opacity-90"></i>
+                <h1 class="text-7xl font-extrabold tracking-tight text-slate-900 uppercase">
+                    Estadística Descriptiva
+                </h1>
+                <p class="text-5xl text-slate-500 font-light tracking-wide">
+                    Población, Muestra y Variables Aleatorias
+                </p>
+
+                <div
+                    class="mt-16 p-8 glass-card rounded-2xl border-l-8 border-emerald-800 text-left w-full max-w-5xl flex justify-between items-end">
+                    <div>
+                        <p class="text-4xl font-bold text-slate-900">Prof. Luis Quezada</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-3xl font-bold text-emerald-800 uppercase tracking-wider">SEK CHILE • IIIº
+                            ELECTIVO</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-6 border-b-4 border-slate-100 pb-4 shrink-0">
+                <i data-lucide="microscope" class="w-16 h-16 text-emerald-800"></i>
+                <h2 class="text-6xl font-bold text-slate-800">La Paradoja de la Inferencia</h2>
+            </div>
+
+            <div class="grid grid-cols-2 gap-12 flex-1 min-h-0 items-center">
+                <div class="space-y-10 h-full flex flex-col justify-center pr-4">
+                    <p class="text-4xl font-light text-slate-700 leading-relaxed">
+                        En Chile hay más de <strong class="font-bold text-emerald-700">15 millones de votantes</strong>
+                        habilitados. Sin embargo, los centros de estudios estadísticos publican proyecciones nacionales
+                        encuestando a solo <strong class="font-bold text-teal-700">700 personas</strong>.
+                    </p>
+                    <div class="glass-card p-8 rounded-xl border-l-8 border-slate-800 shadow-md">
+                        <p class="text-3xl text-slate-800 leading-snug font-medium">
+                            ¿Cómo es matemáticamente sustentable modelar el comportamiento del 99.99% del país
+                            consultando únicamente al 0.005% de la población total?
+                        </p>
+                    </div>
+                    <button onclick="revelarElemento('concepto-gancho')"
+                        class="mt-4 px-10 py-5 bg-slate-800 text-white rounded-xl text-3xl font-bold hover:bg-slate-700 transition shadow-lg w-max">
+                        <i data-lucide="eye" class="inline-block w-8 h-8 mr-3 mb-1"></i> Revelar Fundamento Matemático
+                    </button>
+
+                    <div id="concepto-gancho"
+                        class="hidden p-6 bg-emerald-50 border-l-8 border-emerald-600 rounded-r-xl space-y-4 shadow-inner">
+                        <p class="text-3xl text-emerald-900 font-bold uppercase tracking-wider">Inferencia Estadística:
+                        </p>
+                        <p class="text-2xl text-emerald-800 leading-relaxed">La precisión de un modelo no depende del
+                            tamaño bruto de la población ($N$), sino de la <strong
+                                class="font-extrabold text-emerald-950">aleatoriedad estricta y
+                                representatividad</strong> de la muestra ($n$). Un subconjunto no sesgado preserva la
+                            distribución de probabilidad original.</p>
+                    </div>
+                </div>
+
+                <div
+                    class="h-full w-full flex items-center justify-center bg-slate-50 rounded-3xl border-2 border-slate-200 p-8 shadow-inner">
+                    <svg viewBox="0 0 500 500" class="w-full h-full max-h-[600px]">
+                        <circle cx="250" cy="250" r="230" fill="#f8fafc" stroke="#94a3b8" stroke-width="4"
+                            stroke-dasharray="10,10" />
+                        <text x="250" y="60" font-size="28" font-family="Inter" font-weight="bold" fill="#64748b"
+                            text-anchor="middle">Población (N = 15.000.000)</text>
+
+                        <g fill="#cbd5e1">
+                            <circle cx="120" cy="250" r="8" />
+                            <circle cx="180" cy="140" r="8" />
+                            <circle cx="320" cy="130" r="8" />
+                            <circle cx="380" cy="280" r="8" />
+                            <circle cx="150" cy="350" r="8" />
+                            <circle cx="350" cy="380" r="8" />
+                            <circle cx="250" cy="420" r="8" />
+                            <circle cx="80" cy="180" r="8" />
+                            <circle cx="420" cy="200" r="8" />
+                            <circle cx="100" cy="320" r="8" />
+                            <circle cx="400" cy="340" r="8" />
+                        </g>
+
+                        <circle cx="250" cy="260" r="110" fill="#ccfbf1" stroke="#0f766e" stroke-width="6" />
+                        <text x="250" y="340" font-size="26" font-family="Inter" font-weight="bold" fill="#0f766e"
+                            text-anchor="middle">Muestra (n = 700)</text>
+
+                        <g fill="#14b8a6">
+                            <circle cx="220" cy="210" r="10" />
+                            <circle cx="280" cy="230" r="10" />
+                            <circle cx="240" cy="270" r="10" />
+                            <circle cx="290" cy="280" r="10" />
+                            <circle cx="200" cy="250" r="10" />
+                            <circle cx="250" cy="220" r="10" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-6 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="book-open" class="w-16 h-16 text-emerald-800"></i>
+                <h2 class="text-6xl font-bold text-slate-800">Estructura Analítica de Datos</h2>
+            </div>
+
+            <div class="grid grid-cols-2 gap-16 flex-1 min-h-0 items-center">
+                <div class="space-y-8 h-full flex flex-col justify-center">
+                    <div class="glass-card p-8 rounded-2xl border-l-8 border-slate-800 shadow-sm">
+                        <p class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-4"><i data-lucide="globe"
+                                class="text-slate-700"></i> 1. Población ($N$)</p>
+                        <p class="text-2xl text-slate-700 leading-snug">Conjunto universal y exhaustivo de todos los
+                            elementos que comparten una característica observable.</p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-2xl border-l-8 border-emerald-600 shadow-sm">
+                        <p class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-4"><i
+                                data-lucide="target" class="text-emerald-600"></i> 2. Muestra ($n \subset N$)</p>
+                        <p class="text-2xl text-slate-700 leading-snug">Subconjunto aleatorio de $N$. Las conclusiones
+                            derivadas de $n$ se infieren sobre la población total.</p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-2xl border-l-8 border-teal-600 shadow-sm">
+                        <p class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-4"><i
+                                data-lucide="variable" class="text-teal-600"></i> 3. Variable Estadística ($X$)</p>
+                        <p class="text-2xl text-slate-700 leading-snug">La propiedad matemática o cualidad específica
+                            que se somete a medición dentro del conjunto.</p>
+                    </div>
+                </div>
+
+                <div
+                    class="h-full w-full flex flex-col justify-center gap-8 bg-white rounded-3xl border-2 border-slate-200 p-10 shadow-lg">
+                    <h3 class="text-4xl font-extrabold text-slate-800 text-center border-b-2 pb-4">Taxonomía de
+                        Variables</h3>
+
+                    <div class="flex flex-col gap-8 w-full h-full">
+                        <div class="flex-1 bg-slate-50 p-8 rounded-2xl border border-slate-300">
+                            <h4 class="text-3xl font-bold text-rose-700 mb-3 flex items-center gap-3"><i
+                                    data-lucide="type"></i> Cualitativas (Categóricas)</h4>
+                            <p class="text-2xl text-slate-600 mb-6">Atributos que no admiten operaciones algebraicas.
+                            </p>
+                            <ul class="space-y-4">
+                                <li class="text-2xl text-slate-800"><strong class="text-rose-900">Nominales:</strong>
+                                    Sin jerarquía lógica. <br><span class="text-xl text-slate-500">(Ej: Grupo sanguíneo,
+                                        Comuna de residencia)</span></li>
+                                <li class="text-2xl text-slate-800"><strong class="text-rose-900">Ordinales:</strong>
+                                    Poseen orden inherente. <br><span class="text-xl text-slate-500">(Ej: Nivel
+                                        socioeconómico, Rango militar)</span></li>
+                            </ul>
+                        </div>
+
+                        <div class="flex-1 bg-slate-50 p-8 rounded-2xl border border-slate-300">
+                            <h4 class="text-3xl font-bold text-blue-700 mb-3 flex items-center gap-3"><i
+                                    data-lucide="hash"></i> Cuantitativas (Numéricas)</h4>
+                            <p class="text-2xl text-slate-600 mb-6">Magnitudes que operan en la recta real matemática.
+                            </p>
+                            <ul class="space-y-4">
+                                <li class="text-2xl text-slate-800"><strong class="text-blue-900">Discretas:</strong>
+                                    Pertenecen a $\mathbb{Z}$ (Valores contables). <br><span
+                                        class="text-xl text-slate-500">(Ej: Número de electrones, Goles por
+                                        partido)</span></li>
+                                <li class="text-2xl text-slate-800"><strong class="text-blue-900">Continuas:</strong>
+                                    Pertenecen a $\mathbb{R}$ (Rango infinito). <br><span
+                                        class="text-xl text-slate-500">(Ej: Temperatura en °C, Masa en kg)</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-6 border-b-4 border-slate-100 pb-4 shrink-0">
+                <i class="w-16 h-16 text-emerald-800" data-lucide="brain-circuit"></i>
+                <h2 class="text-6xl font-bold text-slate-800">Modelaje Analítico</h2>
+            </div>
+
+            <div class="grid grid-cols-2 gap-12 shrink-0 mb-6 bg-slate-50 p-10 rounded-3xl border-2 border-slate-200">
+                <div class="flex flex-col justify-center space-y-6">
+                    <p
+                        class="text-3xl font-medium text-slate-800 leading-relaxed border-l-4 border-slate-400 pl-6 italic">
+                        "El colegio requiere optimizar la red Wi-Fi para sus 1.200 alumnos. El equipo de informática
+                        encuesta aleatoriamente a 50 estudiantes consultando el <strong>sistema operativo de su
+                            teléfono</strong> y la <strong>cantidad de horas diarias</strong> que permanecen
+                        conectados."
+                    </p>
+                    <button onclick="revelarElemento('desarrollo-variables')"
+                        class="px-8 py-4 w-max bg-emerald-800 text-white rounded-xl text-2xl font-bold hover:bg-emerald-700 transition shadow-lg mt-4">
+                        Desarrollo Riguroso
+                    </button>
+                </div>
+                <div class="flex justify-center items-center">
+                    <svg viewBox="0 0 200 200" class="w-full max-h-[250px] text-slate-300">
+                        <rect x="50" y="20" width="100" height="160" rx="10" fill="none" stroke="currentColor"
+                            stroke-width="8" />
+                        <circle cx="100" cy="160" r="8" fill="currentColor" />
+                        <path d="M70 70 A30 30 0 0 1 130 70" fill="none" stroke="currentColor" stroke-width="6"
+                            stroke-linecap="round" />
+                        <path d="M85 85 A15 15 0 0 1 115 85" fill="none" stroke="currentColor" stroke-width="6"
+                            stroke-linecap="round" />
+                        <circle cx="100" cy="100" r="4" fill="currentColor" />
+                    </svg>
+                </div>
+            </div>
+
+            <div id="desarrollo-variables" class="hidden flex-1 min-h-0 flex flex-col gap-6">
+                <div class="bg-slate-100 p-6 rounded-2xl border-l-8 border-slate-700 shadow-md">
+                    <p class="text-2xl font-bold text-slate-800 mb-2">1. Definición del Universo ($N$)</p>
+                    <p class="text-2xl text-slate-700 ml-6"><strong
+                            class="text-slate-900 font-extrabold">Población:</strong> Los 1.200 estudiantes del colegio.
+                    </p>
+                </div>
+
+                <div class="bg-emerald-50 p-6 rounded-2xl border-l-8 border-emerald-600 shadow-md">
+                    <p class="text-2xl font-bold text-slate-800 mb-2">2. Extracción del Subconjunto ($n$)</p>
+                    <p class="text-2xl text-slate-700 ml-6"><strong
+                            class="text-emerald-900 font-extrabold">Muestra:</strong> Los 50 estudiantes encuestados
+                        aleatoriamente.</p>
+                </div>
+
+                <div class="bg-teal-50 p-6 rounded-2xl border-l-8 border-teal-600 shadow-md flex-1">
+                    <p class="text-2xl font-bold text-slate-800 mb-3">3. Clasificación de Variables ($X_1, X_2$)</p>
+                    <div class="ml-6 space-y-4">
+                        <p class="text-2xl text-slate-700"><strong>$X_1$:</strong> Sistema operativo (iOS, Android, etc)
+                            $\rightarrow$ <strong class="text-teal-900 font-extrabold">Cualitativa Nominal</strong>.</p>
+                        <p class="text-2xl text-slate-700"><strong>$X_2$:</strong> Horas conectadas (ej. 3.5 hrs)
+                            $\rightarrow$ <strong class="text-teal-900 font-extrabold">Cuantitativa Continua</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="edit-3" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-800">Práctica Independiente</h2>
+            </div>
+
+            <div class="flex flex-col flex-1 min-h-0 space-y-8 mt-8">
+                <div class="bg-white p-6 rounded-2xl border-2 border-slate-200 shadow-sm shrink-0">
+                    <p class="text-2xl font-medium text-slate-800">
+                        Anoten en sus cuadernos: Para cada caso de estudio, definan analíticamente la <strong
+                            class="text-emerald-700">Población ($N$)</strong>, la <strong class="text-teal-700">Muestra
+                            ($n$)</strong>, e identifiquen el tipo exacto de <strong>Variable Estadística</strong>.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-6 flex-1 min-h-0 overflow-y-auto pr-4">
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-slate-600 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-slate-400 mb-3 uppercase tracking-widest">Caso 1</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">Se consulta a 120 pacientes de la
+                            urgencia de la Clínica Alemana sobre su nivel de dolor en una escala del 1 al 10.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-slate-700 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-slate-400 mb-3 uppercase tracking-widest">Caso 2</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">Una línea de ensamblaje mide el
+                            diámetro exacto en milímetros de 500 rodamientos extraídos de la producción del día.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-slate-800 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-slate-400 mb-3 uppercase tracking-widest">Caso 3</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">El MINEDUC registra la cantidad total
+                            de profesores contratados en 50 colegios elegidos al azar en la Región Metropolitana.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-emerald-600 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-emerald-600 mb-3 uppercase tracking-widest">Caso 4</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">Una automotora clasifica los 30
+                            vehículos vendidos en la última semana según su color (Rojo, Blanco, Negro, Plata).</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-teal-600 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-teal-600 mb-3 uppercase tracking-widest">Caso 5</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">Una fábrica prueba cuánto tiempo (en
+                            horas) duran encendidas 40 pantallas LED extraídas del lote final de 5.000 unidades.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-rose-700 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-rose-700 mb-3 uppercase tracking-widest">Caso 6</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">En el Censo 2024 (Instituto Nacional
+                            de Estadísticas), se consultó a todas las personas del país su nivel educacional.
+                            <i>Justifique su análisis muestral.</i></p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-indigo-500 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-indigo-500 mb-3 uppercase tracking-widest">Caso 7</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">Se entrevista a 200 asistentes de un
+                            concierto de 50.000 personas sobre el monto exacto de dinero que gastaron al interior.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-indigo-600 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-indigo-600 mb-3 uppercase tracking-widest">Caso 8</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">Un inspector revisa si el sellado de
+                            100 latas, extraídas de una línea productiva de 10.000, es "Defectuoso" o "Correcto".</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-blue-600 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-blue-600 mb-3 uppercase tracking-widest">Caso 9</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">Se registra el número de hijos que
+                            tienen todas las familias residentes en un edificio de 20 departamentos. <i>Ojo con el
+                                tamaño de N y n.</i></p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-blue-700 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-blue-700 mb-3 uppercase tracking-widest">Caso 10</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">Se evalúa la infraestructura de 50
+                            colegios elegidos al azar en todo el país, clasificándolos en "Pésimo", "Regular" o
+                            "Excelente".</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-purple-600 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-purple-600 mb-3 uppercase tracking-widest">Caso 11</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">Se mide el tiempo en milisegundos que
+                            tardan 30 atletas en completar 100 metros dentro de una federación de 500 corredores.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-pink-600 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-pink-600 mb-3 uppercase tracking-widest">Caso 12</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">Una App analiza la calificación en
+                            estrellas (1 a 5) dejada en los últimos 200 pedidos de un restaurante de alta demanda.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-rose-500 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-rose-500 mb-3 uppercase tracking-widest">Caso 13</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">Una encuesta pre-electoral nacional
+                            consulta a 800 ciudadanos mayores de edad: "¿Por cuál de los tres candidatos principales
+                            votará?".</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-orange-500 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-orange-500 mb-3 uppercase tracking-widest">Caso 14</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">Una red contabiliza el número total
+                            de "Re-posts" obtenidos en 150 noticias destacadas dentro del universo de tendencias
+                            mensuales.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border-t-8 border-red-700 flex flex-col shadow-md">
+                        <p class="text-xl font-bold text-red-700 mb-3 uppercase tracking-widest">Caso 15</p>
+                        <p class="text-xl text-slate-800 font-medium leading-snug">Un laboratorio examina en 60
+                            voluntarios el nivel de colesterol (mg/dL) luego de un tratamiento experimental enfocado en
+                            uso nacional.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-100 pb-4 shrink-0">
+                <i data-lucide="award" class="w-16 h-16 text-emerald-800"></i>
+                <h2 class="text-6xl font-bold text-slate-800">Ticket de Salida (M1 / M2)</h2>
+            </div>
+
+            <div class="grid grid-cols-2 gap-16 flex-1 min-h-0 items-center">
+                <div class="space-y-10 pr-6">
+                    <div class="p-10 bg-slate-50 border-2 border-slate-200 rounded-3xl shadow-sm">
+                        <p class="text-3xl font-medium text-slate-800 leading-relaxed mb-6">
+                            Un equipo de investigadores decide estudiar el índice de masa corporal (IMC, medido en
+                            kg/m²) y el número exacto de vasos de agua que consumen diariamente los jóvenes entre 15 y
+                            18 años de una comuna.
+                        </p>
+                        <p class="text-3xl font-medium text-slate-700 leading-relaxed">
+                            Para ello, eligen al azar a 400 jóvenes. Respecto a las variables estudiadas (IMC y vasos de
+                            agua), es correcto afirmar que son, <strong>respectivamente</strong>:
+                        </p>
+                    </div>
+                    <div class="space-y-6 text-3xl font-bold text-slate-700 pl-6 font-mono leading-relaxed">
+                        <p>A) Cuantitativa continua y cualitativa discreta.</p>
+                        <p>B) Cuantitativa discreta y cuantitativa discreta.</p>
+                        <p>C) Cuantitativa continua y cuantitativa discreta.</p>
+                        <p>D) Cualitativa ordinal y cuantitativa continua.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col h-full justify-center space-y-10">
+                    <button onclick="revelarElemento('respuesta-paes')"
+                        class="px-10 py-6 bg-emerald-800 text-white rounded-2xl text-4xl font-bold hover:bg-emerald-900 transition shadow-xl w-full">
+                        Comprobar Respuesta
+                    </button>
+
+                    <div id="respuesta-paes"
+                        class="hidden flex-1 glass-card p-10 rounded-3xl border-4 border-emerald-500 bg-emerald-50 text-center flex flex-col justify-center shadow-lg">
+                        <h3 class="text-5xl font-extrabold text-slate-900 mb-8 flex justify-center items-center gap-6">
+                            <i data-lucide="check-circle" class="w-14 h-14 text-emerald-600"></i> Alternativa C</h3>
+                        <div
+                            class="text-3xl text-slate-800 space-y-6 font-mono text-left pl-10 border-l-8 border-emerald-400 ml-6">
+                            <p><span
+                                    class="text-slate-500 text-2xl font-sans font-bold uppercase tracking-wider block mb-2">Variable
+                                    1: IMC (kg/m²)</span> Puede tomar infinitos valores decimales en un intervalo (ej.
+                                22.54). Es <strong class="text-emerald-800">Cuantitativa Continua</strong>.</p>
+                            <p class="pt-4"><span
+                                    class="text-slate-500 text-2xl font-sans font-bold uppercase tracking-wider block mb-2">Variable
+                                    2: Vasos de agua</span> Se cuentan en unidades enteras estrictas (1, 2, 3...). Es
+                                <strong class="text-teal-800">Cuantitativa Discreta</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="h-24 w-full shrink-0 flex justify-between items-center px-12 bg-white border-t-2 border-slate-200 z-50">
+        <div class="text-slate-500 font-bold text-2xl tracking-widest uppercase">
+            Estadística Descriptiva • IIIº Medio Electivo
+        </div>
+        <div class="flex gap-6">
+            <button onclick="changeSlide(-1)"
+                class="p-5 rounded-full bg-slate-100 border border-slate-300 shadow-md hover:bg-slate-200 transition-all"><i
+                    data-lucide="chevron-left" class="w-10 h-10 text-slate-800"></i></button>
+            <button onclick="changeSlide(1)"
+                class="p-5 rounded-full bg-emerald-800 text-white shadow-lg hover:bg-emerald-900 transition-all"><i
+                    data-lucide="chevron-right" class="w-10 h-10"></i></button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function updateSlide() {
+            slides.forEach((s, i) => {
+                s.classList.remove('active');
+                if (i === currentSlide) s.classList.add('active');
+            });
+        }
+
+        function changeSlide(d) {
+            const n = currentSlide + d;
+            if (n >= 0 && n < slides.length) { currentSlide = n; updateSlide(); }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (['ArrowRight', 'Space', 'Enter'].includes(e.key)) changeSlide(1);
+            if (['ArrowLeft', 'Backspace'].includes(e.key)) changeSlide(-1);
+        });
+
+        function revelarElemento(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.remove('hidden');
+                if (!el.classList.contains('flex') && !el.classList.contains('block')) {
+                    el.classList.add('flex');
+                }
+                if (window.MathJax) {
+                    MathJax.typesetPromise([el]).catch((err) => console.log(err.message));
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

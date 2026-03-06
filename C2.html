@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Organización del Azar - IIIº Medio Electivo</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            startup: { typeset: true }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        #slide-container {
+            height: calc(100vh - 6rem - 1rem);
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            height: 100%;
+            width: 100%;
+            animation: fadeIn 0.3s ease-out;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .slide.active {
+            display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scrollable-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .scrollable-content::-webkit-scrollbar-track {
+            background: #f0fdf4;
+            border-radius: 6px;
+        }
+
+        .scrollable-content::-webkit-scrollbar-thumb {
+            background: #4ade80;
+            border-radius: 6px;
+            border: 2px solid #f0fdf4;
+        }
+
+        .scrollable-content::-webkit-scrollbar-thumb:hover {
+            background: #22c55e;
+        }
+
+        @keyframes rollDice {
+            0% {
+                transform: rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: rotate(360deg) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .dice-anim {
+            animation: rollDice 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes highlightCell {
+            0% {
+                background-color: #fca5a5;
+            }
+
+            100% {
+                background-color: transparent;
+            }
+        }
+
+        .highlight-pulse {
+            animation: highlightCell 1s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 select-none bg-slate-50">
+
+    <div class="h-4 w-full bg-emerald-800 shrink-0"></div>
+
+    <div id="slide-container">
+
+        <!-- SLIDE 1: PORTADA (1 min) -->
+        <div class="slide active p-10 bg-slate-50">
+            <div class="flex-1 flex flex-col items-center justify-center space-y-8 w-full h-full pb-10">
+                <i data-lucide="table-properties" class="w-48 h-48 text-emerald-800 opacity-90"></i>
+                <h1
+                    class="text-6xl md:text-8xl font-extrabold tracking-tight text-slate-900 uppercase text-center leading-tight">
+                    La Organización<br>del Azar
+                </h1>
+                <p class="text-4xl md:text-5xl text-slate-500 font-light tracking-wide text-center">
+                    Tabulación de Frecuencias
+                </p>
+
+                <div
+                    class="mt-16 p-8 bg-white/90 backdrop-blur-md rounded-2xl border-l-8 border-emerald-800 text-left w-full max-w-5xl flex justify-between items-end shadow-md">
+                    <div>
+                        <p class="text-4xl font-bold text-slate-900">Prof. Luis Quezada</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-3xl font-bold text-emerald-800 uppercase tracking-wider">SEK CHILE • IIIº MEDIO
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: MOTIVACIÓN (5 min) -->
+        <div class="slide p-10 pb-32">
+            <div class="flex items-center gap-6 mb-6 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="dices" class="w-16 h-16 text-emerald-800"></i>
+                <h2 class="text-6xl font-bold text-slate-800">El Problema de los Datos</h2>
+            </div>
+
+            <div class="grid grid-cols-2 gap-12 flex-1 min-h-0">
+                <div class="space-y-8 flex flex-col pt-4">
+                    <p class="text-3xl font-medium text-slate-700 leading-relaxed border-l-4 border-slate-300 pl-4">
+                        Si registramos una tirada de dados reales <strong>30 veces</strong> y sólo anotamos los números
+                        sucesivos, nuestra mente fracasa al intentar extraer conclusiones probabilísticas inmediatas.
+                        <br> <span class="text-emerald-700 font-bold">A este mar de números desordenados le llamamos
+                            "Ruido".</span>
+                    </p>
+
+                    <button id="btn-roll-30" onclick="simularLanzamientos()"
+                        class="px-8 py-5 bg-emerald-800 text-white rounded-xl text-3xl font-bold hover:bg-emerald-700 transition shadow-lg w-max flex items-center gap-4">
+                        <i data-lucide="play-circle" class="w-8 h-8"></i> Simular 30 Eventos Aleatorios
+                    </button>
+
+                    <div id="resultado-crudo"
+                        class="hidden p-8 bg-white border-2 border-slate-200 rounded-2xl shadow-inner min-h-[200px]">
+                        <p class="text-xl font-bold text-slate-400 mb-6 uppercase tracking-widest border-b pb-2">Vector
+                            de Datos Crudos Acumulados:</p>
+                        <div id="grid-dados-vuelco" class="flex flex-wrap gap-4 text-slate-800"></div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-6 justify-center">
+                    <div id="conclusion-gancho" class="hidden h-full">
+                        <div
+                            class="bg-emerald-900 rounded-3xl p-10 shadow-2xl relative overflow-hidden h-full flex flex-col items-center justify-center">
+                            <i data-lucide="filter"
+                                class="w-48 h-48 text-emerald-700 opacity-20 absolute top-10 right-10"></i>
+                            <h3
+                                class="text-5xl font-bold text-white mb-8 relative z-10 text-center uppercase tracking-widest border-b-2 border-emerald-600 pb-4 w-full">
+                                El Proceso de Tabulación</h3>
+                            <p class="text-3xl text-emerald-50 font-medium text-center leading-relaxed relative z-10">
+                                Es el protocolo algorítmico estadístico de <strong
+                                    class="text-white font-black bg-emerald-700/50 px-2 rounded">agrupar resultados
+                                    idénticos</strong> y contarlos sistemáticamente.
+                                <br><br>Convierte el ruido visual en una pequeña matriz estructurada.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: TEORÍA (10 min) -->
+        <div class="slide p-10 pb-32">
+            <div class="flex items-center gap-6 mb-6 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="book" class="w-16 h-16 text-emerald-800"></i>
+                <h2 class="text-6xl font-bold text-slate-800">Diccionario Estadístico Estructural</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8 flex-1">
+                <div
+                    class="bg-white rounded-3xl border-t-8 border-slate-800 p-8 shadow-md flex flex-col relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 opacity-5"><i data-lucide="hash"
+                            class="w-64 h-64 text-slate-900"></i></div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div
+                            class="bg-slate-800 text-white w-20 h-20 rounded-2xl flex items-center justify-center text-5xl font-extrabold font-mono shadow-sm">
+                            $f_i$</div>
+                        <h3 class="text-3xl font-bold text-slate-800 uppercase tracking-widest">Frecuencia<br>Absoluta
+                        </h3>
+                    </div>
+                    <p class="text-2xl text-slate-600 font-medium leading-relaxed flex-1">
+                        Es el conteo empírico directo. Indica <strong
+                            class="text-slate-900 font-bold border-b-2 border-slate-300">cuántas veces exactas</strong>
+                        ocurrió un resultado específico.
+                    </p>
+                    <div
+                        class="mt-4 p-4 bg-slate-50 rounded-xl font-mono text-2xl text-slate-600 border border-slate-200 font-bold">
+                        $\sum f_i = n$ (Total de Muestra)
+                    </div>
+                </div>
+
+                <div
+                    class="bg-white rounded-3xl border-t-8 border-teal-600 p-8 shadow-md flex flex-col relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 opacity-5"><i data-lucide="sigma"
+                            class="w-64 h-64 text-teal-900"></i></div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div
+                            class="bg-teal-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center text-5xl font-extrabold font-mono shadow-sm">
+                            $F_i$</div>
+                        <h3 class="text-3xl font-bold text-teal-800 uppercase tracking-widest">Frecuencia<br>Acumulada
+                        </h3>
+                    </div>
+                    <p class="text-2xl text-slate-600 font-medium leading-relaxed flex-1">
+                        Es el <strong class="text-teal-900">conteo histórico sumado</strong> verticalmente. Acumula
+                        todos los resultados anteriores hasta la fila $i$.
+                    </p>
+                    <div class="mt-4 p-4 bg-teal-50 rounded-xl font-mono text-xl text-teal-700 border border-teal-200">
+                        El último valor acumulado obliga imperativamente a cerrar totalizando $n$.
+                    </div>
+                </div>
+
+                <div
+                    class="bg-white rounded-3xl border-t-8 border-emerald-600 p-8 shadow-md flex flex-col relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 opacity-5"><i data-lucide="percent"
+                            class="w-64 h-64 text-emerald-900"></i></div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div
+                            class="bg-emerald-600 text-white w-24 h-20 rounded-2xl flex items-center justify-center text-4xl font-extrabold font-mono shadow-sm">
+                            $f_r$ / $h_i$</div>
+                        <h3 class="text-3xl font-bold text-emerald-800 uppercase tracking-widest">Frecuencia<br>Relativa
+                        </h3>
+                    </div>
+                    <p class="text-2xl text-slate-600 font-medium leading-relaxed flex-1">
+                        Es el peso matemático de la variable sobre el total. <br><strong
+                            class="text-emerald-800 bg-emerald-100/50 px-2 rounded">Traduce el dato a Probabilidad
+                            Clásica</strong> de ocurrencia.
+                    </p>
+                    <div
+                        class="mt-4 p-4 bg-emerald-50 rounded-xl border border-emerald-200 flex justify-center items-center text-4xl font-black font-mono text-emerald-900 shadow-inner">
+                        $$ f_r = \frac{f_i}{n} $$
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: YO HAGO (5 min) - EJEMPLO APLICADO -->
+        <div class="slide bg-slate-50 p-10 pb-32">
+            <div class="flex items-center gap-6 mb-6 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="chalkboard" class="w-16 h-16 text-emerald-800"></i>
+                <h2 class="text-5xl md:text-6xl font-bold text-slate-800">Laboratorio Analítico del Docente</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-12 flex-1 min-h-0">
+                <div class="col-span-1 flex flex-col gap-6">
+                    <div class="bg-white p-6 rounded-2xl border-2 border-slate-200 shadow-sm">
+                        <p class="text-xl font-bold text-slate-500 uppercase tracking-widest border-b pb-2 mb-4">Muestra
+                            Inicial</p>
+                        <p class="text-2xl text-slate-800 font-medium leading-relaxed">
+                            Registro de resultados de un <strong class="text-emerald-700 font-black">dado tetraédrico (4
+                                caras)</strong> lanzado 12 veces consecutivas en gravedad normal.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-md h-full">
+                        <p
+                            class="text-xl font-bold text-slate-400 uppercase tracking-widest border-b border-slate-700 pb-2 mb-6">
+                            Vector ($n=12$)</p>
+                        <div class="flex flex-wrap gap-4 font-mono text-4xl font-bold items-center justify-center">
+                            <div
+                                class="w-16 h-16 bg-slate-800 border-2 border-slate-600 rounded flex items-center justify-center shadow">
+                                2</div>
+                            <div
+                                class="w-16 h-16 bg-slate-800 border-2 border-slate-600 rounded flex items-center justify-center shadow">
+                                4</div>
+                            <div
+                                class="w-16 h-16 bg-slate-800 border-2 border-slate-600 rounded flex items-center justify-center shadow">
+                                3</div>
+                            <div
+                                class="w-16 h-16 bg-slate-800 border-2 border-slate-600 rounded flex items-center justify-center shadow">
+                                4</div>
+                            <div
+                                class="w-16 h-16 bg-slate-800 border-2 border-slate-600 rounded flex items-center justify-center shadow text-emerald-400">
+                                1</div>
+                            <div
+                                class="w-16 h-16 bg-slate-800 border-2 border-slate-600 rounded flex items-center justify-center shadow">
+                                2</div>
+                            <div
+                                class="w-16 h-16 bg-slate-800 border-2 border-slate-600 rounded flex items-center justify-center shadow text-emerald-400">
+                                1</div>
+                            <div
+                                class="w-16 h-16 bg-slate-800 border-2 border-slate-600 rounded flex items-center justify-center shadow text-emerald-400">
+                                1</div>
+                            <div
+                                class="w-16 h-16 bg-slate-800 border-2 border-slate-600 rounded flex items-center justify-center shadow">
+                                3</div>
+                            <div
+                                class="w-16 h-16 bg-slate-800 border-2 border-slate-600 rounded flex items-center justify-center shadow">
+                                4</div>
+                            <div
+                                class="w-16 h-16 bg-slate-800 border-2 border-slate-600 rounded flex items-center justify-center shadow">
+                                2</div>
+                            <div
+                                class="w-16 h-16 bg-slate-800 border-2 border-slate-600 rounded flex items-center justify-center shadow">
+                                4</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-span-3 flex flex-col h-full">
+                    <div
+                        class="bg-white border-2 border-slate-300 rounded-2xl overflow-hidden shadow-lg flex-1 flex flex-col">
+                        <div
+                            class="bg-slate-100 p-4 border-b-2 border-slate-300 flex justify-between items-center shrink-0">
+                            <span class="text-xl font-bold text-slate-500 uppercase tracking-wider pl-4"><i
+                                    data-lucide="eye" class="inline w-5 h-5 mb-1"></i> Control de Despliegue</span>
+                            <div class="flex gap-4">
+                                <button onclick="rellenarPasoTabla('yohago_fi')"
+                                    class="px-6 py-2 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-700 transition">Revelar
+                                    Paso 1: Absoluta</button>
+                                <button onclick="rellenarPasoTabla('yohago_Fi')"
+                                    class="px-6 py-2 bg-teal-600 text-white font-bold rounded-xl hover:bg-teal-700 transition">Revelar
+                                    Paso 2: Acumulada</button>
+                                <button onclick="rellenarPasoTabla('yohago_fr')"
+                                    class="px-6 py-2 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition">Revelar
+                                    Paso 3: Probabilidad</button>
+                            </div>
+                        </div>
+
+                        <table class="w-full text-center text-4xl flex-1 max-h-full">
+                            <thead class="bg-slate-800 text-white font-mono h-24">
+                                <tr>
+                                    <th class="border-r-2 border-slate-600 font-medium">Cara Obtenida</th>
+                                    <th class="border-r-2 border-slate-600 tracking-widest bg-slate-700">Ab. ($f_i$)
+                                    </th>
+                                    <th class="border-r-2 border-slate-600 tracking-widest bg-teal-800">Acum. ($F_i$)
+                                    </th>
+                                    <th class="tracking-widest bg-emerald-800">Rel. ($f_r$)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-700 font-mono">
+                                <tr class="border-b border-slate-200 hover:bg-slate-50">
+                                    <td class="p-6 font-bold border-r border-slate-200 bg-slate-50 text-emerald-600">
+                                        Dado = 1</td>
+                                    <td class="p-6 border-r border-slate-200 font-black"><span
+                                            class="yohago_fi hidden text-slate-800">3</span></td>
+                                    <td class="p-6 border-r border-slate-200 text-teal-800 font-black"><span
+                                            class="yohago_Fi hidden">3</span></td>
+                                    <td class="p-6 text-emerald-800 font-bold"><span
+                                            class="yohago_fr hidden">3/12</span></td>
+                                </tr>
+                                <tr class="border-b border-slate-200 hover:bg-slate-50">
+                                    <td class="p-6 font-bold border-r border-slate-200 bg-slate-50">Dado = 2</td>
+                                    <td class="p-6 border-r border-slate-200 font-black"><span
+                                            class="yohago_fi hidden text-slate-800">3</span></td>
+                                    <td class="p-6 border-r border-slate-200 text-teal-800 font-black"><span
+                                            class="yohago_Fi hidden">6 <span
+                                                class="text-2xl text-slate-400 ml-2">(3+3)</span></span></td>
+                                    <td class="p-6 text-emerald-800 font-bold"><span
+                                            class="yohago_fr hidden">3/12</span></td>
+                                </tr>
+                                <tr class="border-b border-slate-200 hover:bg-slate-50">
+                                    <td class="p-6 font-bold border-r border-slate-200 bg-slate-50">Dado = 3</td>
+                                    <td class="p-6 border-r border-slate-200 font-black"><span
+                                            class="yohago_fi hidden text-slate-800">2</span></td>
+                                    <td class="p-6 border-r border-slate-200 text-teal-800 font-black"><span
+                                            class="yohago_Fi hidden">8 <span
+                                                class="text-2xl text-slate-400 ml-2">(6+2)</span></span></td>
+                                    <td class="p-6 text-emerald-800 font-bold"><span
+                                            class="yohago_fr hidden">2/12</span></td>
+                                </tr>
+                                <tr class="border-b border-slate-200 hover:bg-slate-50">
+                                    <td class="p-6 font-bold border-r border-slate-200 bg-slate-50">Dado = 4</td>
+                                    <td class="p-6 border-r border-slate-200 font-black"><span
+                                            class="yohago_fi hidden text-slate-800">4</span></td>
+                                    <td class="p-6 border-r border-slate-200 text-white bg-teal-800 font-black"><span
+                                            class="yohago_Fi hidden">12 <span
+                                                class="text-xl text-teal-200 font-sans tracking-widest uppercase block border-t pt-2 mt-2 border-teal-600">($n$
+                                                Total)</span></span></td>
+                                    <td class="p-6 text-emerald-800 font-bold"><span
+                                            class="yohago_fr hidden">4/12</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: ELLOS HACEN (20 min) - PRÁCTICA INDEPENDIENTE PROGRESIVA -->
+        <div class="slide bg-white p-10 pb-32">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-100 pb-4 shrink-0 justify-between">
+                <div class="flex items-center gap-6">
+                    <i data-lucide="pencil-ruler" class="w-16 h-16 text-emerald-800"></i>
+                    <h2 class="text-5xl font-bold text-slate-800">Laboratorio Analítico Constelado</h2>
+                </div>
+            </div>
+
+            <p class="text-2xl text-slate-600 mb-6 border-l-4 border-emerald-500 pl-4">Anota, desarrolla y completa las
+                tablas rigurosamente en tu cuaderno para preparar la Puesta en Común.</p>
+
+            <div class="scrollable-content flex-1 min-h-0 overflow-y-auto pr-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 auto-rows-max pb-8">
+
+                    <!-- Ejercicio Code Emerald (Básico/Directo) -->
+                    <div
+                        class="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-md flex flex-col h-full border-l-[12px] border-l-emerald-400 gap-6">
+                        <div class="flex gap-4 text-emerald-600 items-center">
+                            <i data-lucide="layers" class="w-8 h-8"></i>
+                            <span class="font-mono text-xl uppercase tracking-widest font-bold">Problema Empírico</span>
+                        </div>
+                        <p class="text-2xl text-slate-800 font-medium leading-relaxed flex-1">
+                            El departamento de Biología anota la cantidad exacta de semillas germinadas exitosamente en
+                            15 masetas idénticas:
+                        </p>
+                        <div
+                            class="font-mono bg-white p-6 font-bold border-2 border-slate-300 rounded-xl flex flex-wrap justify-center gap-4 text-4xl shadow-inner text-emerald-800">
+                            <span>0</span><span>2</span><span>1</span><span>2</span><span>3</span>
+                            <span>0</span><span>1</span><span>1</span><span>2</span><span>3</span>
+                            <span>2</span><span>1</span><span>2</span><span>0</span><span>1</span>
+                        </div>
+                        <div
+                            class="bg-emerald-50 text-emerald-900 font-medium rounded-xl p-6 border border-emerald-200">
+                            <ul class="text-2xl space-y-4 list-decimal pl-6">
+                                <li>Construye la Tabla de Frecuencias completa rigurosamente ($x, f_i, F_i, f_r$).</li>
+                                <li>¿Qué porcentaje exacto de las masetas logró germinar <strong>2 o más</strong>
+                                    semillas?</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio Code Indigo (Medio/Razonamiento) -->
+                    <div
+                        class="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-md flex flex-col h-full border-l-[12px] border-l-indigo-500 gap-6">
+                        <div class="flex gap-4 text-indigo-600 items-center">
+                            <i data-lucide="brain-circuit" class="w-8 h-8"></i>
+                            <span class="font-mono text-xl uppercase tracking-widest font-bold">Inferencia Lógica</span>
+                        </div>
+                        <p class="text-2xl text-slate-800 font-medium leading-relaxed">
+                            Una prestigiosa Universidad estudia las horas mensuales de estudio de sus
+                            $n = 500$ alumnos de ingeniería ($x$).
+                        </p>
+                        <p class="text-2xl text-slate-800 font-medium leading-relaxed">
+                            Sabemos matemáticamente que la <strong>frecuencia relativa acumulada</strong> (porcentaje
+                            acumulado
+                            $H_i$) hasta el penúltimo intervalo es de un $\mathbf{70\%}$ exacto de la muestra.
+                        </p>
+                        <div
+                            class="bg-indigo-50 text-indigo-900 font-medium rounded-xl p-6 border-2 border-indigo-200 mt-auto">
+                            <p class="text-2xl italic font-serif">
+                                "¿Cuántos alumnos en número absoluto exacto caen en el último intervalo de la tabla?"
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio Code Rose (Difícil/Ingeniería Inversa) -->
+                    <div
+                        class="col-span-1 md:col-span-2 bg-slate-800 text-white p-10 rounded-3xl shadow-xl border-l-[12px] border-l-rose-500 flex flex-col xl:flex-row gap-10">
+                        <div class="flex-1 space-y-8">
+                            <div class="flex items-center gap-4">
+                                <i data-lucide="variable" class="w-10 h-10 text-rose-500"></i>
+                                <p class="text-2xl font-bold uppercase tracking-widest text-rose-300 font-mono">
+                                    Ingeniería Inversa Tabular</p>
+                            </div>
+                            <p class="text-2xl font-light text-slate-200 leading-relaxed">
+                                Debido a una falla de servidor se ha borrado drásticamente la estructura de datos sobre
+                                preferencias de talleres extraprogramáticos de alumnos de 8º Básico.
+                            </p>
+                            <p class="text-2xl font-light text-slate-200 leading-relaxed">
+                                Se sabe con certeza estadística que el taller de Computación tiene $\mathbf{15}$
+                                inscritos en su celda absoluta, lo cual, según el experto de sistema, equivale
+                                matemáticamente a un $\mathbf{f_r = 30\%}$.
+                            </p>
+                            <div class="bg-slate-900 border border-slate-700 p-6 rounded-xl">
+                                <p class="text-2xl font-medium text-rose-300">
+                                    $\to$ Copia la tabla defectuosa en el pizarrón y aplica análisis deductivo riguroso
+                                    para reconstruir el 100% de la información oculta.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- La tabla dañada -->
+                        <div
+                            class="bg-slate-100 text-slate-800 p-2 rounded-2xl overflow-hidden shadow-inner flex-1 self-center">
+                            <table class="w-full text-center text-3xl font-mono text-slate-800 h-full">
+                                <thead class="bg-slate-200 text-slate-600 border-b-2 border-slate-400">
+                                    <tr>
+                                        <th class="p-4 w-1/4">Sabor</th>
+                                        <th class="p-4 w-1/4">$f_i$</th>
+                                        <th class="p-4 w-1/4">$F_i$</th>
+                                        <th class="p-4 w-1/4">$f_r$</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-300">
+                                        <td class="p-6 font-bold bg-slate-200 text-slate-700">Ajedrez</td>
+                                        <td class="p-6 font-bold text-slate-400 bg-white">?</td>
+                                        <td class="p-6 font-bold text-slate-900 bg-slate-200">12</td>
+                                        <td class="p-6 font-bold text-slate-400 bg-white">?</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-300">
+                                        <td class="p-6 font-bold bg-slate-200 text-slate-700">Computación</td>
+                                        <td class="p-6 font-bold bg-white text-emerald-600">15</td>
+                                        <td class="p-6 font-bold text-slate-400 bg-slate-200">?</td>
+                                        <td class="p-6 font-bold bg-white text-emerald-600">30%</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-300">
+                                        <td class="p-6 font-bold bg-slate-200 text-slate-700">Robótica</td>
+                                        <td class="p-6 font-bold bg-white text-slate-900">18</td>
+                                        <td class="p-6 font-bold text-slate-400 bg-slate-200">?</td>
+                                        <td class="p-6 font-bold text-slate-400 bg-white">?</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-6 font-bold bg-slate-200 text-slate-700">Debate</td>
+                                        <td class="p-6 font-bold text-slate-400 bg-white">?</td>
+                                        <td class="p-6 font-bold text-slate-400 bg-slate-200">?</td>
+                                        <td class="p-6 font-bold text-slate-900 bg-white">10%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: DESAFÍO FINAL M2 TIPO PAES (5 min) C/ DESARROLLO -->
+        <div class="slide bg-white p-10 pb-32">
+            <div class="flex items-center justify-between mb-8 border-b-4 border-slate-100 pb-4 shrink-0">
+                <div class="flex items-center gap-6">
+                    <i data-lucide="target" class="w-16 h-16 text-emerald-800"></i>
+                    <h2 class="text-6xl font-bold text-slate-800">Desafío M2 (DEMRE)</h2>
+                </div>
+            </div>
+
+            <div class="flex-1 min-h-0 overflow-y-auto pr-4 scrollable-content pb-10">
+
+                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-3xl p-10 shadow-md">
+                    <p class="text-3xl font-medium text-slate-800 leading-relaxed mb-6">
+                        El departamento de calidad de una embotelladora elabora una encuesta de defectos detectados
+                        mensualmente en sus lotes de botellas, categorizando la magnitud del daño en los datos numéricos
+                        de la <strong class="bg-indigo-200 px-2 rounded">Variable (1, 2, 3 o 4)</strong>.
+                    </p>
+                    <p
+                        class="text-3xl font-medium text-slate-800 leading-relaxed mb-6 border-l-8 border-indigo-600 pl-6 bg-white p-6 rounded-xl">
+                        Al intentar reconstruir la tabla, se sabe la siguiente información verídica e inalterable:<br>
+                        - La muestra total es de <strong>200 botellas defectuosas</strong>.<br>
+                        - La frecuencia absoluta para la variable tipo 1 es <strong>80</strong>.<br>
+                        - La frecuencia acumulada hasta la variable tipo 3 es el <strong>85%</strong> de la muestra
+                        total.<br>
+                        - La probabilidad de encontrar variables de tipo 2 es del <strong>15%</strong>.
+                    </p>
+                    <p class="text-4xl font-extrabold text-indigo-900 mt-10 text-center uppercase tracking-wide">
+                        Bajo estas condiciones estrictas, ¿Cuál es la exactitud de la Frecuencia Absoluta reportada
+                        estadísticamente para la avería tipo 4 y 3 respectivamente?
+                    </p>
+                </div>
+
+                <div class="mt-12 grid grid-cols-1 xl:grid-cols-2 gap-12">
+
+                    <div class="bg-white p-8 rounded-3xl border-2 border-slate-200 shadow-xl space-y-6">
+                        <h4
+                            class="text-3xl font-bold text-slate-500 uppercase tracking-widest border-b pb-4 mb-8 font-mono">
+                            Alternativas (PAES)</h4>
+                        <div class="space-y-4 text-3xl font-bold text-slate-700 pl-4 font-mono leading-tight">
+                            <div class="p-6 rounded-xl border border-slate-200 flex items-center gap-6 bg-slate-50">
+                                <span
+                                    class="bg-white border-2 border-slate-300 text-slate-600 w-16 h-16 flex items-center justify-center rounded-xl shadow-sm">A</span>
+                                <p>f4 = 30 y f3 = 60</p>
+                            </div>
+                            <div class="p-6 rounded-xl border border-slate-200 flex items-center gap-6 bg-slate-50">
+                                <span
+                                    class="bg-white border-2 border-slate-300 text-slate-600 w-16 h-16 flex items-center justify-center rounded-xl shadow-sm">B</span>
+                                <p>f4 = 15 y f3 = 45</p>
+                            </div>
+                            <div class="p-6 rounded-xl border-4 border-transparent flex items-center gap-6 bg-slate-50 transition-all"
+                                id="correct-opt-m2"><span
+                                    class="bg-white border-2 border-slate-300 text-slate-600 w-16 h-16 flex items-center justify-center rounded-xl shadow-sm transition-all"
+                                    id="correct-badge-m2">C</span>
+                                <p>f4 = 30 y f3 = 60</p>
+                            </div>
+                            <!-- El profe notará las repetidas pero con trampa. Reemplazaremos esto en la ui real con 30 y 60 correctas -->
+                            <div class="p-6 rounded-xl border-4 border-transparent flex items-center gap-6 bg-slate-50 transition-all"
+                                id="correct-opt-real"><span
+                                    class="bg-white border-2 border-slate-300 text-slate-600 w-16 h-16 flex items-center justify-center rounded-xl shadow-sm transition-all"
+                                    id="correct-badge-real">C</span>
+                                <p>f4 = 30 y f3 = 60</p>
+                            </div> <!-- Hidden real choice logic replaced via inner -->
+                            <script>
+                                document.getElementById('correct-opt-m2').innerHTML = `<span class="bg-white border-2 border-slate-300 text-slate-600 w-16 h-16 flex items-center justify-center rounded-xl shadow-sm transition-all" id="correct-badge">C</span> <p>f4 = 30 y f3 = 60</p>`; // Set real correct to B is fake? Correct is F4=30, f3 = 60. Wait.
+                                /*
+                                Math check: 
+                                n = 200
+                                f1 = 80
+                                f2 = 15% of 200 = 30.
+                                F3 = 85% of 200 = 170. 
+                                F3 = f1 + f2 + f3 => 170 = 80 + 30 + f3 => 170 = 110 + f3 => f3 = 60.
+                                F4 = n = 200. => f4 = n - F3 <=> 200 - 170 = 30.
+                                f4 = 30, f3 = 60. 
+                                */
+                                document.getElementById('correct-opt-m2').parentElement.innerHTML = `
+                                    <div class="p-6 rounded-xl border border-slate-200 flex items-center gap-6 bg-slate-50"><span class="bg-white border-2 border-slate-300 text-slate-600 w-16 h-16 flex items-center justify-center rounded-xl shadow-sm">A</span> <p>f4 = 15 y f3 = 30</p></div>
+                                    <div class="p-6 rounded-xl border border-slate-200 flex items-center gap-6 bg-slate-50"><span class="bg-white border-2 border-slate-300 text-slate-600 w-16 h-16 flex items-center justify-center rounded-xl shadow-sm">B</span> <p>f4 = 60 y f3 = 30</p></div>
+                                    <div class="p-6 rounded-xl border-4 border-transparent flex items-center gap-6 bg-slate-50 transition-all" id="correct-opt-m2"><span class="bg-white border-2 border-slate-300 text-slate-600 w-16 h-16 flex items-center justify-center rounded-xl shadow-sm transition-all" id="correct-badge-m2">C</span> <p>f4 = 30 y f3 = 60</p></div>
+                                    <div class="p-6 rounded-xl border border-slate-200 flex items-center gap-6 bg-slate-50"><span class="bg-white border-2 border-slate-300 text-slate-600 w-16 h-16 flex items-center justify-center rounded-xl shadow-sm">D</span> <p>f4 = 30 y f3 = 85</p></div>
+                                    <div class="p-6 rounded-xl border border-slate-200 flex items-center gap-6 bg-slate-50"><span class="bg-white border-2 border-slate-300 text-slate-600 w-16 h-16 flex items-center justify-center rounded-xl shadow-sm">E</span> <p>f4 = 96 y f3 = 60</p></div>
+                                `;
+                            </script>
+                        </div>
+                    </div>
+
+
+                    <div class="flex flex-col border-2 border-slate-200 rounded-3xl p-8 bg-slate-50 shadow-inner">
+                        <button
+                            onclick="revelarElemento('desarrollo-m2'); document.getElementById('correct-opt-m2').classList.add('border-emerald-500', 'bg-emerald-50'); document.getElementById('correct-badge-m2').classList.add('bg-emerald-600', 'text-white', 'border-emerald-700')"
+                            class="w-full py-6 bg-slate-800 text-white font-bold text-3xl font-mono rounded-2xl hover:bg-slate-700 transition shadow-md flex items-center justify-center gap-4">
+                            <i data-lucide="unlock" class="w-8 h-8"></i> Desatar Análisis y Respuesta M2
+                        </button>
+
+                        <div id="desarrollo-m2"
+                            class="hidden mt-8 text-2xl font-mono text-slate-700 leading-relaxed space-y-4">
+                            <p class="border-b-2 border-slate-300 pb-2"><strong class="text-slate-900">Total
+                                    $n$:</strong> 200</p>
+                            <p class="border-b-2 border-slate-300 pb-2"><strong class="text-slate-900">Tipo 1
+                                    ($f_1$):</strong> 80 explícito.</p>
+                            <p class="border-b-2 border-slate-300 pb-2"><strong class="text-slate-900">Tipo 2
+                                    ($f_2$):</strong> 15% de 200 $\Rightarrow \frac{15 \cdot 200}{100} = \mathbf{30}$
+                            </p>
+                            <p class="border-b-2 border-slate-300 pb-2"><strong class="text-slate-900">Acumulada
+                                    $F_3$:</strong> 85% de 200 $\Rightarrow 170$ en total histórico. <br><br> Si $F_3 =
+                                f_1 + f_2 + f_3$<br> $170 = 80 + 30 + f_3 \Rightarrow 170 = 110 + f_3 \Rightarrow
+                                \mathbf{f_3 = 60}$</p>
+                            <p class="pt-4"><strong class="text-slate-900">Tipo 4 ($f_4$):</strong> Lo que falta para
+                                llegar al total $n=200$. Automáticamente es el 15% sobrante del 85% de la Acumulada
+                                $F_3$.<br>$200 - 170 = \mathbf{f_4 = 30}$.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- NAVEGACIÓN INFERIOR -->
+    <div
+        class="h-24 w-full shrink-0 flex justify-between items-center px-12 bg-white border-t-2 border-slate-200 z-50 fixed bottom-0">
+        <div class="text-slate-500 font-bold text-2xl tracking-widest uppercase">
+            Clase 2 • Tabulación • EP • IIIº Electivo
+        </div>
+        <div class="flex gap-6">
+            <button onclick="changeSlide(-1)"
+                class="p-5 rounded-full bg-slate-100 border-2 border-slate-300 shadow-sm hover:bg-slate-200 transition-all cursor-pointer"><i
+                    data-lucide="chevron-left" class="w-10 h-10 text-slate-800"></i></button>
+            <button onclick="changeSlide(1)"
+                class="p-5 rounded-full bg-emerald-800 text-white shadow-md hover:bg-emerald-900 transition-all cursor-pointer"><i
+                    data-lucide="chevron-right" class="w-10 h-10"></i></button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function updateSlide() {
+            slides.forEach((s, i) => {
+                s.classList.remove('active');
+                if (i === currentSlide) s.classList.add('active');
+            });
+        }
+
+        function changeSlide(d) {
+            const n = currentSlide + d;
+            if (n >= 0 && n < slides.length) { currentSlide = n; updateSlide(); }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (['ArrowRight', 'Space', 'Enter'].includes(e.key)) changeSlide(1);
+            if (['ArrowLeft', 'Backspace'].includes(e.key)) changeSlide(-1);
+        });
+
+        function revelarElemento(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                if (el.classList.contains('hidden')) {
+                    el.classList.remove('hidden');
+                    if (window.MathJax) {
+                        MathJax.typesetPromise([el]).catch((err) => console.log(err.message));
+                    }
+                }
+            }
+        }
+
+        function rellenarPasoTabla(claseObjetivo) {
+            const celdas = document.querySelectorAll(`.${claseObjetivo}`);
+            let i = 0;
+            const intervalo = setInterval(() => {
+                if (i < celdas.length) {
+                    celdas[i].classList.remove('hidden');
+                    celdas[i].parentElement.classList.add('highlight-pulse');
+                    i++;
+                } else {
+                    clearInterval(intervalo);
+                }
+            }, 300);
+        }
+
+        let isSimulating = false;
+        function simularLanzamientos() {
+            if (isSimulating) return;
+            isSimulating = true;
+
+            const btn = document.getElementById('btn-roll-30');
+            const grid = document.getElementById('grid-dados-vuelco');
+            const containerCrudo = document.getElementById('resultado-crudo');
+            const conclusion = document.getElementById('conclusion-gancho');
+
+            btn.innerHTML = '<i data-lucide="loader" class="w-8 h-8 animate-spin"></i> Lanzando...';
+            lucide.createIcons();
+
+            containerCrudo.classList.remove('hidden');
+            grid.innerHTML = '';
+            conclusion.classList.add('hidden');
+
+            let count = 0;
+            const totalRolls = 30;
+
+            const rollInterval = setInterval(() => {
+                count++;
+                // Dados de 6 caras reales.
+                const sides = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+                const roll = sides[Math.floor(Math.random() * sides.length)];
+
+                const dieVisual = document.createElement('div');
+                dieVisual.className = 'w-20 h-20 bg-slate-100 border-2 border-slate-300 rounded-2xl flex items-center justify-center dice-anim shadow leading-none font-sans';
+                dieVisual.style.fontSize = "4rem"; // Massive readable dice
+                dieVisual.innerText = roll;
+
+                // Colorize the 6s for visual interest
+                if (roll === "⚅") dieVisual.classList.add("text-emerald-600");
+                else dieVisual.classList.add("text-slate-700");
+
+                grid.appendChild(dieVisual);
+
+                if (count >= totalRolls) {
+                    clearInterval(rollInterval);
+                    btn.innerHTML = '<i data-lucide="check-circle" class="w-8 h-8"></i> Simulación Completa';
+                    btn.classList.replace('bg-emerald-800', 'bg-slate-400');
+                    btn.classList.add('cursor-not-allowed');
+                    lucide.createIcons();
+
+                    setTimeout(() => {
+                        conclusion.classList.remove('hidden');
+                    }, 1000); // Aparece la definición de Tabulación post-lanzamiento.
+                }
+            }, 100);
+        }
+    </script>
+</body>
+
+</html>
