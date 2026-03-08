@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 
 <html lang="es">
-
 <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" name="viewport" />
-    <title>Repositorio - Probabilidad y Estadística - IIIº EP-D</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&amp;display=swap"
-        rel="stylesheet" />
-    <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" name="viewport"/>
+<title>Repositorio - Probabilidad y Estadística - IIIº EP-D</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<script>
         window.MathJax = {
             tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
             startup: { typeset: true }
         };
     </script>
-    <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -91,159 +89,67 @@
         }
     </style>
 </head>
-
 <body class="text-slate-800 select-none flex flex-col min-h-screen bg-grid-pattern relative">
-    <div class="fixed top-0 left-0 h-2 w-full bg-amber-800 z-50 shadow-md"></div>
-    <header class="w-full bg-slate-900 text-white pt-20 pb-16 px-6 relative overflow-hidden shadow-xl">
-        <i class="absolute -right-10 -top-10 w-96 h-96 text-slate-800 opacity-50 transform rotate-12"
-            data-lucide="bar-chart-2"></i>
-        <div
-            class="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
-            <div class="space-y-4">
-                <div
-                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-900/50 border border-amber-700 text-amber-200 text-sm font-bold tracking-widest uppercase mb-2">
-                    <div class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></div>
+<div class="fixed top-0 left-0 h-2 w-full bg-amber-800 z-50 shadow-md"></div>
+<header class="w-full bg-slate-900 text-white pt-20 pb-16 px-6 relative overflow-hidden shadow-xl">
+<i class="absolute -right-10 -top-10 w-96 h-96 text-slate-800 opacity-50 transform rotate-12" data-lucide="bar-chart-2"></i>
+<div class="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+<div class="space-y-4">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-900/50 border border-amber-700 text-amber-200 text-sm font-bold tracking-widest uppercase mb-2">
+<div class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></div>
                     Plataforma Activa
                 </div>
-                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
-                    Probabilidad y<br /><span class="text-amber-500">Estadística</span>
-                </h1>
-                <p class="text-xl md:text-3xl text-slate-300 font-light tracking-wide max-w-2xl">
+<h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
+                    Probabilidad y<br/><span class="text-amber-500">Estadística</span>
+</h1>
+<p class="text-xl md:text-3xl text-slate-300 font-light tracking-wide max-w-2xl">
                     Repositorio académico.
                 </p>
-            </div>
-            <div
-                class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 text-left md:text-right shrink-0">
-                <p class="text-2xl md:text-3xl font-bold text-white">Prof. Luis Quezada</p>
-                <p class="text-lg md:text-xl font-medium text-amber-300 tracking-widest uppercase mt-2">SEK CHILE • IIIº
+</div>
+<div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 text-left md:text-right shrink-0">
+<p class="text-2xl md:text-3xl font-bold text-white">Prof. Luis Quezada</p>
+<p class="text-lg md:text-xl font-medium text-amber-300 tracking-widest uppercase mt-2">SEK CHILE • IIIº
                     EP-D</p>
-            </div>
-        </div>
-    </header>
-    <main class="flex-1 w-full max-w-7xl mx-auto px-6 py-16 z-10 relative">
-        <div class="mb-16">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-12 h-12 rounded-xl bg-slate-200 flex items-center justify-center shrink-0">
-                    <i class="w-6 h-6 text-slate-700" data-lucide="compass"></i>
-                </div>
-                <div>
-                    <h2 class="text-2xl md:text-4xl font-bold text-slate-900 tracking-tight">Presentación del Curso</h2>
-                    <p class="text-slate-500 text-lg">Lineamientos fundamentales y metodología de trabajo.</p>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><a
-                    class="group block no-underline text-inherit cursor-pointer shadow-sm border border-slate-200 rounded-xl hover:shadow-md transition-all"
-                    href="Intro.html">
-                    <div
-                        class="p-4 flex items-center justify-between border-l-4 border-transparent hover:border-amber-500 transition-colors bg-white hover:bg-slate-50 rounded-xl">
-                        <div class="flex items-center gap-4"><span
-                                class="px-2 py-1 bg-amber-100 text-amber-700 font-bold uppercase tracking-wider text-xs rounded-md shadow-sm shrink-0">C00</span>
-                            <h3
-                                class="text-base md:text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors m-0">
-                                Probabilidad y Estadística</h3>
-                        </div><i
-                            class="w-5 h-5 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-transform shrink-0"
-                            data-lucide="chevron-right"></i>
-                    </div>
-                </a></div>
-        </div>
-        <div>
-            <div class="flex items-center gap-4 mb-8">
-                <div
-                    class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center shrink-0 border border-amber-200">
-                    <i class="w-6 h-6 text-amber-700" data-lucide="pie-chart"></i>
-                </div>
-                <div>
-                    <h2 class="text-2xl md:text-4xl font-bold text-slate-900 tracking-tight">Unidad I: Estadística
+</div>
+</div>
+</header>
+<main class="flex-1 w-full max-w-7xl mx-auto px-6 py-16 z-10 relative">
+<div class="mb-16">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-xl bg-slate-200 flex items-center justify-center shrink-0">
+<i class="w-6 h-6 text-slate-700" data-lucide="compass"></i>
+</div>
+<div>
+<h2 class="text-2xl md:text-4xl font-bold text-slate-900 tracking-tight">Presentación del Curso</h2>
+<p class="text-slate-500 text-lg">Lineamientos fundamentales y metodología de trabajo.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><a class="group block no-underline text-inherit cursor-pointer shadow-sm border border-slate-200 rounded-xl hover:shadow-md transition-all" href="Intro.html"><div class="p-4 flex items-center justify-between border-l-4 border-transparent hover:border-amber-500 transition-colors bg-white hover:bg-slate-50 rounded-xl"><div class="flex items-center gap-4"><span class="px-2 py-1 bg-amber-100 text-amber-700 font-bold uppercase tracking-wider text-xs rounded-md shadow-sm shrink-0">C00</span><h3 class="text-base md:text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors m-0">Probabilidad y Estadística</h3></div><i class="w-5 h-5 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-transform shrink-0" data-lucide="chevron-right"></i></div></a></div>
+</div>
+<div>
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center shrink-0 border border-amber-200">
+<i class="w-6 h-6 text-amber-700" data-lucide="pie-chart"></i>
+</div>
+<div>
+<h2 class="text-2xl md:text-4xl font-bold text-slate-900 tracking-tight">Unidad I: Estadística
                         Descriptiva</h2>
-                    <p class="text-slate-500 text-lg">Descripción formal de datos, recolección y métricas univariadas.
+<p class="text-slate-500 text-lg">Descripción formal de datos, recolección y métricas univariadas.
                     </p>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><a
-                    class="group block no-underline text-inherit cursor-pointer shadow-sm border border-slate-200 rounded-xl hover:shadow-md transition-all"
-                    href="C1.html">
-                    <div
-                        class="p-4 flex items-center justify-between border-l-4 border-transparent hover:border-amber-500 transition-colors bg-white hover:bg-slate-50 rounded-xl">
-                        <div class="flex items-center gap-4"><span
-                                class="px-2 py-1 bg-amber-100 text-amber-700 font-bold uppercase tracking-wider text-xs rounded-md shadow-sm shrink-0">C01</span>
-                            <h3
-                                class="text-base md:text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors m-0">
-                                Estadística Descriptiva</h3>
-                        </div><i
-                            class="w-5 h-5 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-transform shrink-0"
-                            data-lucide="chevron-right"></i>
-                    </div>
-                </a><a
-                    class="group block no-underline text-inherit cursor-pointer shadow-sm border border-slate-200 rounded-xl hover:shadow-md transition-all"
-                    href="C2.html">
-                    <div
-                        class="p-4 flex items-center justify-between border-l-4 border-transparent hover:border-amber-500 transition-colors bg-white hover:bg-slate-50 rounded-xl">
-                        <div class="flex items-center gap-4"><span
-                                class="px-2 py-1 bg-amber-100 text-amber-700 font-bold uppercase tracking-wider text-xs rounded-md shadow-sm shrink-0">C02</span>
-                            <h3
-                                class="text-base md:text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors m-0">
-                                La Organización del Azar</h3>
-                        </div><i
-                            class="w-5 h-5 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-transform shrink-0"
-                            data-lucide="chevron-right"></i>
-                    </div>
-                </a><a
-                    class="group block no-underline text-inherit cursor-pointer shadow-sm border border-slate-200 rounded-xl hover:shadow-md transition-all"
-                    href="C3.html">
-                    <div
-                        class="p-4 flex items-center justify-between border-l-4 border-transparent hover:border-amber-500 transition-colors bg-white hover:bg-slate-50 rounded-xl">
-                        <div class="flex items-center gap-4"><span
-                                class="px-2 py-1 bg-amber-100 text-amber-700 font-bold uppercase tracking-wider text-xs rounded-md shadow-sm shrink-0">C03</span>
-                            <h3
-                                class="text-base md:text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors m-0">
-                                Representación Gráfica</h3>
-                        </div><i
-                            class="w-5 h-5 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-transform shrink-0"
-                            data-lucide="chevron-right"></i>
-                    </div>
-                </a><a
-                    class="group block no-underline text-inherit cursor-pointer shadow-sm border border-slate-200 rounded-xl hover:shadow-md transition-all"
-                    href="C4.html">
-                    <div
-                        class="p-4 flex items-center justify-between border-l-4 border-transparent hover:border-amber-500 transition-colors bg-white hover:bg-slate-50 rounded-xl">
-                        <div class="flex items-center gap-4"><span
-                                class="px-2 py-1 bg-amber-100 text-amber-700 font-bold uppercase tracking-wider text-xs rounded-md shadow-sm shrink-0">C04</span>
-                            <h3
-                                class="text-base md:text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors m-0">
-                                Arquitectura de Datos</h3>
-                        </div><i
-                            class="w-5 h-5 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-transform shrink-0"
-                            data-lucide="chevron-right"></i>
-                    </div>
-                </a><a
-                    class="group block no-underline text-inherit cursor-pointer shadow-sm border border-slate-200 rounded-xl hover:shadow-md transition-all"
-                    href="C5.html">
-                    <div
-                        class="p-4 flex items-center justify-between border-l-4 border-transparent hover:border-amber-500 transition-colors bg-white hover:bg-slate-50 rounded-xl">
-                        <div class="flex items-center gap-4"><span
-                                class="px-2 py-1 bg-amber-100 text-amber-700 font-bold uppercase tracking-wider text-xs rounded-md shadow-sm shrink-0">C05</span>
-                            <h3
-                                class="text-base md:text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors m-0">
-                                Medidas de Tendencia Central</h3>
-                        </div><i
-                            class="w-5 h-5 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-transform shrink-0"
-                            data-lucide="chevron-right"></i>
-                    </div>
-                </a></div>
-        </div>
-    </main>
-    <footer class="w-full bg-white border-t border-slate-200 py-8 mt-auto z-10 relative">
-        <div
-            class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 font-medium">
-            <p>Departamento de Matemáticas y Física • SEK Chile</p>
-            <p class="text-sm tracking-widest uppercase">Año Académico 2026</p>
-        </div>
-    </footer>
-    <script>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><a class="group block no-underline text-inherit cursor-pointer shadow-sm border border-slate-200 rounded-xl hover:shadow-md transition-all" href="C1.html"><div class="p-4 flex items-center justify-between border-l-4 border-transparent hover:border-amber-500 transition-colors bg-white hover:bg-slate-50 rounded-xl"><div class="flex items-center gap-4"><span class="px-2 py-1 bg-amber-100 text-amber-700 font-bold uppercase tracking-wider text-xs rounded-md shadow-sm shrink-0">C01</span><h3 class="text-base md:text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors m-0">Estadística Descriptiva</h3></div><i class="w-5 h-5 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-transform shrink-0" data-lucide="chevron-right"></i></div></a><a class="group block no-underline text-inherit cursor-pointer shadow-sm border border-slate-200 rounded-xl hover:shadow-md transition-all" href="C2.html"><div class="p-4 flex items-center justify-between border-l-4 border-transparent hover:border-amber-500 transition-colors bg-white hover:bg-slate-50 rounded-xl"><div class="flex items-center gap-4"><span class="px-2 py-1 bg-amber-100 text-amber-700 font-bold uppercase tracking-wider text-xs rounded-md shadow-sm shrink-0">C02</span><h3 class="text-base md:text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors m-0">La Organización del Azar</h3></div><i class="w-5 h-5 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-transform shrink-0" data-lucide="chevron-right"></i></div></a><a class="group block no-underline text-inherit cursor-pointer shadow-sm border border-slate-200 rounded-xl hover:shadow-md transition-all" href="C3.html"><div class="p-4 flex items-center justify-between border-l-4 border-transparent hover:border-amber-500 transition-colors bg-white hover:bg-slate-50 rounded-xl"><div class="flex items-center gap-4"><span class="px-2 py-1 bg-amber-100 text-amber-700 font-bold uppercase tracking-wider text-xs rounded-md shadow-sm shrink-0">C03</span><h3 class="text-base md:text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors m-0">Representación Gráfica</h3></div><i class="w-5 h-5 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-transform shrink-0" data-lucide="chevron-right"></i></div></a><a class="group block no-underline text-inherit cursor-pointer shadow-sm border border-slate-200 rounded-xl hover:shadow-md transition-all" href="C4.html"><div class="p-4 flex items-center justify-between border-l-4 border-transparent hover:border-amber-500 transition-colors bg-white hover:bg-slate-50 rounded-xl"><div class="flex items-center gap-4"><span class="px-2 py-1 bg-amber-100 text-amber-700 font-bold uppercase tracking-wider text-xs rounded-md shadow-sm shrink-0">C04</span><h3 class="text-base md:text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors m-0">Arquitectura de Datos</h3></div><i class="w-5 h-5 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-transform shrink-0" data-lucide="chevron-right"></i></div></a><a class="group block no-underline text-inherit cursor-pointer shadow-sm border border-slate-200 rounded-xl hover:shadow-md transition-all" href="C5.html"><div class="p-4 flex items-center justify-between border-l-4 border-transparent hover:border-amber-500 transition-colors bg-white hover:bg-slate-50 rounded-xl"><div class="flex items-center gap-4"><span class="px-2 py-1 bg-amber-100 text-amber-700 font-bold uppercase tracking-wider text-xs rounded-md shadow-sm shrink-0">C05</span><h3 class="text-base md:text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors m-0">Medidas de Tendencia Central</h3></div><i class="w-5 h-5 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-transform shrink-0" data-lucide="chevron-right"></i></div></a></div>
+</div>
+</main>
+<footer class="w-full bg-white border-t border-slate-200 py-8 mt-auto z-10 relative">
+<div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 font-medium">
+<p>Departamento de Matemáticas y Física • SEK Chile</p>
+<p class="text-sm tracking-widest uppercase">Año Académico 2026</p>
+</div>
+</footer>
+<script>
         // Inicializar los iconos de Lucide
         lucide.createIcons();
     </script>
 </body>
-
 </html>
