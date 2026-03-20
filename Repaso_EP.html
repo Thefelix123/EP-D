@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadística Descriptiva - Síntesis y Repaso</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            startup: { typeset: true }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; margin: 0; overflow-y: auto; overflow-x: hidden; background-color: #f8fafc; }
+        .slide { display: none; height: 100vh; width: 100%; animation: fadeIn 0.3s ease-out; flex-direction: column; overflow-y: auto; padding: 2.5rem 2.5rem 10rem 2.5rem !important; }
+        .slide.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .glass-card { background: rgba(255, 255, 255, 0.95); border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        ::-webkit-scrollbar { width: 14px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; margin: 10px 0; }
+        ::-webkit-scrollbar-thumb { background: #6ee7b7; border-radius: 8px; border: 3px solid #e2e8f0; }
+        ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+    </style>
+</head>
+<body class="text-slate-800 select-none flex flex-col h-screen w-screen">
+    <div class="h-4 w-full bg-emerald-800 shrink-0 fixed top-0 z-50"></div>
+    <div id="slide-container" class="flex-1 relative w-full mt-4">
+
+        <!-- SLIDE 1: PORTADA -->
+        <div class="slide active p-10 bg-slate-50">
+            <div class="flex-1 flex flex-col items-center justify-center space-y-8 w-full h-full min-h-[500px]">
+                <i data-lucide="layers" class="w-40 h-40 text-emerald-800 opacity-90"></i>
+                <h1 class="text-7xl font-extrabold tracking-tight text-slate-900 uppercase text-center">Síntesis Analítica Central</h1>
+                <p class="text-5xl text-slate-500 font-semibold tracking-wide text-center">Estadística Descriptiva y Probabilidades</p>
+                <div class="mt-16 p-8 glass-card rounded-2xl border-l-8 border-emerald-800 text-left w-full max-w-5xl flex justify-between items-end shadow-md">
+                    <div><p class="text-4xl font-bold text-slate-900">Prof. Luis Quezada</p></div>
+                    <div class="text-right"><p class="text-3xl font-bold text-emerald-800 uppercase tracking-wider">SEK CHILE • IIIº ELECTIVO</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: GANCHO -->
+        <div class="slide p-10 bg-white">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="globe" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">El Desafío de la Gran Escala</h2>
+            </div>
+            <div class="grid grid-cols-2 gap-12 flex-1 items-center h-full">
+                <div class="space-y-6 flex flex-col justify-center h-full">
+                    <div class="glass-card p-8 rounded-2xl border-l-8 border-emerald-600 shadow-lg">
+                        <p class="text-2xl text-slate-700 leading-relaxed font-medium mb-6">
+                            Imagina una plataforma con <strong class="text-emerald-800 font-mono text-3xl">10.000 millones</strong> de usuarios. 
+                            Es computacional y económicamente imposible encuestar a cada individuo.
+                        </p>
+                        <p class="text-xl text-slate-800 font-bold mb-4 border-b pb-2">La Estadística resuelve esto mediante tres pilares:</p>
+                        <ul class="text-xl font-mono text-slate-600 space-y-4">
+                            <li class="flex items-center gap-3"><i data-lucide="focus" class="text-emerald-700 shrink-0"></i> <span><strong class="text-emerald-700">Inferencia:</strong> Muestras representativas.</span></li>
+                            <li class="flex items-center gap-3"><i data-lucide="bar-chart-2" class="text-emerald-700 shrink-0"></i> <span><strong class="text-emerald-700">Visualización:</strong> Resumen en formas geométricas.</span></li>
+                            <li class="flex items-center gap-3"><i data-lucide="target" class="text-emerald-700 shrink-0"></i> <span><strong class="text-emerald-700">Centralización:</strong> Un único valor justo representativo.</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-center items-center w-full h-full p-8 bg-slate-50 rounded-3xl border-2 border-slate-200 shadow-inner overflow-hidden">
+                    <svg viewBox="0 0 600 400" class="w-full h-full">
+                        <rect x="20" y="20" width="560" height="360" rx="30" fill="#f8fafc" stroke="#cbd5e1" stroke-width="3"/>
+                        <circle cx="200" cy="200" r="150" fill="#e2e8f0" stroke="#94a3b8" stroke-width="4" stroke-dasharray="10"/>
+                        <circle cx="200" cy="200" r="70" fill="#ccfbf1" stroke="#0f766e" stroke-width="5"/>
+                        <text x="200" y="45" font-size="22" font-weight="bold" fill="#64748b" text-anchor="middle">Universo Inabarcable</text>
+                        <text x="200" y="110" font-size="24" font-weight="bold" fill="#475569" text-anchor="middle">Población (N)</text>
+                        <text x="200" y="208" font-size="20" font-weight="bold" fill="#0f766e" text-anchor="middle">Muestra (n)</text>
+                        <path d="M 275 200 L 420 200" stroke="#0f766e" stroke-width="6" marker-end="url(#arrow)" stroke-dasharray="6"/>
+                        <text x="430" y="205" font-size="22" font-weight="bold" fill="#0f766e">Análisis</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: FUNDAMENTOS Y VARIABLES -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="microscope" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Arquitectura de variables</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-12 flex-1 items-stretch">
+                <!-- Conceptos Cuantitativos -->
+                <div class="space-y-6 flex flex-col h-full">
+                    <div class="bg-white p-8 rounded-3xl border-t-8 border-emerald-600 shadow-lg flex-1">
+                        <h3 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-2 flex items-center gap-3">
+                            <i data-lucide="hash" class="text-emerald-600"></i> Variables Cuantitativas
+                        </h3>
+                        <p class="text-xl text-slate-600 font-medium mb-6">Atributos numéricos que admiten operaciones algebraicas lógicas métricas.</p>
+                        
+                        <div class="space-y-6">
+                            <div class="bg-emerald-50 p-6 rounded-xl border border-emerald-200">
+                                <p class="text-2xl font-bold text-emerald-800 mb-2">Discretas</p>
+                                <p class="text-lg text-slate-700">Pertenecen a $\mathbb{Z}$. Valores contables o numerables (sin decimales intermedios).</p>
+                                <p class="text-emerald-900 font-mono mt-2 text-sm bg-white p-2 rounded inline-block shadow-sm">Cantidad de hijos, Número de pacientes clínicos.</p>
+                            </div>
+                            
+                            <div class="bg-emerald-50 p-6 rounded-xl border border-emerald-200">
+                                <p class="text-2xl font-bold text-emerald-800 mb-2">Continuas</p>
+                                <p class="text-lg text-slate-700">Pertenecen a $\mathbb{R}$. Admiten particiones decimales infinitas teóricas.</p>
+                                <p class="text-emerald-900 font-mono mt-2 text-sm bg-white p-2 rounded inline-block shadow-sm">Masa en kilogramos, Tiempo registrado en segundos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conceptos Cualitativos -->
+                <div class="space-y-6 flex flex-col h-full">
+                    <div class="bg-white p-8 rounded-3xl border-t-8 border-emerald-600 shadow-lg flex-1">
+                        <h3 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-2 flex items-center gap-3">
+                            <i data-lucide="tag" class="text-emerald-600"></i> Variables Cualitativas
+                        </h3>
+                        <p class="text-xl text-slate-600 font-medium mb-6">Atributos categóricos que no admiten operaciones algebraicas lógicas directas.</p>
+                        
+                        <div class="space-y-6">
+                            <div class="bg-emerald-50 p-6 rounded-xl border border-emerald-200">
+                                <p class="text-2xl font-bold text-emerald-800 mb-2">Nominales</p>
+                                <p class="text-lg text-slate-700">Categorías puras sin jerarquía ni orden lógico intrínseco. No se pueden clasificar paramétricamente de mayor a menor.</p>
+                                <p class="text-emerald-900 font-mono mt-2 text-sm bg-white p-2 rounded inline-block shadow-sm">Color de ojos principal, Profesión, Estado civil civil.</p>
+                            </div>
+                            
+                            <div class="bg-emerald-50 p-6 rounded-xl border border-emerald-200">
+                                <p class="text-2xl font-bold text-emerald-800 mb-2">Ordinales</p>
+                                <p class="text-lg text-slate-700">Categorías que poseen un orden de magnitud cualitativa establecido universalmente.</p>
+                                <p class="text-emerald-900 font-mono mt-2 text-sm bg-white p-2 rounded inline-block shadow-sm">Nivel de quemadura (1er a 3er grado), Satisfacción (Bajo, Medio, Alto).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: TABLAS DE FRECUENCIA -->
+        <div class="slide p-10 bg-white">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="table-2" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Anatomía de la Frecuencia</h2>
+            </div>
+            
+            <p class="text-2xl text-slate-700 mb-8 max-w-5xl">La tabla de frecuencias encapsula el ruido estadístico. Transforma datos en información a través de 4 pilares fundamentales:</p>
+
+            <div class="grid grid-cols-4 gap-6 mb-8">
+                <!-- Absoluta -->
+                <div class="glass-card p-6 rounded-2xl border-t-4 border-slate-800 text-center">
+                    <p class="text-3xl font-bold text-slate-900 font-mono mb-2">$f_i$</p>
+                    <p class="text-xl font-bold text-emerald-800 mb-2">Frecuencia Absoluta</p>
+                    <p class="text-md text-slate-600">Número de veces exacto que se repite un dato específico $x_i$ en la muestra.</p>
+                    <p class="mt-4 font-mono font-bold text-slate-500 bg-slate-100 p-2 rounded">$\sum f_i = N$ o $n$</p>
+                </div>
+                <!-- Acumulada -->
+                <div class="glass-card p-6 rounded-2xl border-t-4 border-slate-800 text-center">
+                    <p class="text-3xl font-bold text-slate-900 font-mono mb-2">$F_i$</p>
+                    <p class="text-xl font-bold text-emerald-800 mb-2">Frecuencia Acumulada</p>
+                    <p class="text-md text-slate-600">Suma estricta de las frecuencias absolutas hasta la fila actual $i$. Evalúa acumulación.</p>
+                    <p class="mt-4 font-mono font-bold text-slate-500 bg-slate-100 p-2 rounded">$F_i = f_1 + \dots + f_i$</p>
+                </div>
+                <!-- Relativa -->
+                <div class="glass-card p-6 rounded-2xl border-t-4 border-slate-800 text-center">
+                    <p class="text-3xl font-bold text-slate-900 font-mono mb-2">$f_r$</p>
+                    <p class="text-xl font-bold text-emerald-800 mb-2">Frecuencia Relativa</p>
+                    <p class="text-md text-slate-600">Proporción del dato frente al total de la muestra. Número decimal normativo entre 0 y 1.</p>
+                    <p class="mt-4 font-mono font-bold text-slate-500 bg-slate-100 p-2 rounded">$f_r = \frac{f_i}{N}$</p>
+                </div>
+                <!-- Porcentual -->
+                <div class="glass-card p-6 rounded-2xl border-t-4 border-slate-800 text-center">
+                    <p class="text-3xl font-bold text-slate-900 font-mono mb-2">$f_{r\%}$</p>
+                    <p class="text-xl font-bold text-emerald-800 mb-2">Frec. Porcentual</p>
+                    <p class="text-md text-slate-600">Representación del porcentaje directo de ocurrencia sobre el total normativo del 100%.</p>
+                    <p class="mt-4 font-mono font-bold text-slate-500 bg-slate-100 p-2 rounded">$f_{r\%} = f_r \cdot 100$</p>
+                </div>
+            </div>
+
+            <!-- Tabla Visual -->
+            <div class="w-full flex justify-center">
+                <table class="w-full max-w-4xl text-left bg-white border-2 border-slate-300 rounded-xl overflow-hidden shadow-sm text-lg">
+                    <thead class="bg-emerald-800 text-white font-mono text-center">
+                        <tr>
+                            <th class="py-3 px-4 w-1/5 border-r border-emerald-700">Variable ($x_i$)</th>
+                            <th class="py-3 px-4 w-1/5 border-r border-emerald-700">$f_i$</th>
+                            <th class="py-3 px-4 w-1/5 border-r border-emerald-700">$F_i$</th>
+                            <th class="py-3 px-4 w-1/5 border-r border-emerald-700">$f_r$</th>
+                            <th class="py-3 px-4 w-1/5">$f_{r\%}$</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-slate-800 font-mono text-center">
+                        <tr class="border-b border-slate-200 hover:bg-slate-50">
+                            <td class="py-3 px-4 border-r border-slate-200">Gato</td>
+                            <td class="py-3 px-4 border-r border-slate-200 font-bold text-emerald-700">5</td>
+                            <td class="py-3 px-4 border-r border-slate-200">5</td>
+                            <td class="py-3 px-4 border-r border-slate-200 text-slate-500">$5/20 = 0.25$</td>
+                            <td class="py-3 px-4 text-emerald-700 font-bold">$25\%$</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="py-3 px-4 border-r border-slate-200">Perro</td>
+                            <td class="py-3 px-4 border-r border-slate-200 font-bold text-emerald-700">15</td>
+                            <td class="py-3 px-4 border-r border-slate-200 font-bold text-slate-900 border-2 border-emerald-500">20</td>
+                            <td class="py-3 px-4 border-r border-slate-200 text-slate-500">$15/20 = 0.75$</td>
+                            <td class="py-3 px-4 text-emerald-700 font-bold">$75\%$</td>
+                        </tr>
+                        <tr class="bg-slate-100 font-bold">
+                            <td class="py-3 px-4 border-r border-slate-200">TOTAL</td>
+                            <td class="py-3 px-4 border-r border-slate-200">N = 20</td>
+                            <td class="py-3 px-4 border-r border-slate-200">-</td>
+                            <td class="py-3 px-4 border-r border-slate-200">1.00</td>
+                            <td class="py-3 px-4">100%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: GRÁFICO DE BARRAS -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="bar-chart" class="w-14 h-14 text-indigo-600"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Gráfico de Barras</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-12 flex-1 items-center h-full">
+                <div class="space-y-6 flex flex-col justify-center">
+                    <div class="bg-white p-8 rounded-3xl border-l-8 border-indigo-600 shadow-lg">
+                        <p class="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">Propósito Matemático</p>
+                        <p class="text-xl text-slate-600 font-medium leading-relaxed mb-6">
+                            Diseñado exclusivamente para magnitudes puras categorizables. Opera sobre <strong>variables discretas</strong> o <strong>cualitativas</strong>. 
+                        </p>
+                        <ul class="text-xl font-mono text-slate-700 space-y-4">
+                            <li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-6 h-6 text-indigo-500 shrink-0"></i> <span>Las columnas están <strong>separadas</strong> indicando ausencia de continuidad numérica entre el Eje X de un dato y otro.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-6 h-6 text-indigo-500 shrink-0"></i> <span>El eje Y (ordenadas) siempre representa las Frecuencias (Absolutas o Relativas).</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-6 h-6 text-indigo-500 shrink-0"></i> <span>El área de la barra no posee significado analítico (como en la integral), solo su altura.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-6 h-6 text-indigo-500 shrink-0"></i> <span><strong>Variable Ideal:</strong> Cuantitativas Discretas (con repetición de pequeños números) y Variables Cualitativas (Nominal u Ordinal).</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-white p-10 rounded-3xl border-2 border-slate-200 shadow-md flex justify-center items-center h-full">
+                    <svg viewBox="0 0 400 300" class="w-full h-full">
+                        <!-- Grid lines -->
+                        <line x1="40" y1="60" x2="360" y2="60" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="4"/>
+                        <line x1="40" y1="120" x2="360" y2="120" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="4"/>
+                        <line x1="40" y1="180" x2="360" y2="180" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="4"/>
+                        
+                        <line x1="40" y1="240" x2="360" y2="240" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/> <!-- Eje X -->
+                        <line x1="40" y1="40" x2="40" y2="240" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/> <!-- Eje Y -->
+                        
+                        <rect x="80" y="120" width="60" height="120" fill="#6366f1" rx="4" />
+                        <text x="110" y="270" font-size="18" font-family="sans-serif" font-weight="bold" fill="#334155" text-anchor="middle">A</text>
+                        <text x="110" y="110" font-size="18" font-family="sans-serif" font-weight="bold" fill="#4f46e5" text-anchor="middle">5</text>
+
+                        <rect x="180" y="60" width="60" height="180" fill="#6366f1" rx="4" />
+                        <text x="210" y="270" font-size="18" font-family="sans-serif" font-weight="bold" fill="#334155" text-anchor="middle">B</text>
+                        <text x="210" y="50" font-size="18" font-family="sans-serif" font-weight="bold" fill="#4f46e5" text-anchor="middle">12</text>
+
+                        <rect x="280" y="180" width="60" height="60" fill="#6366f1" rx="4" />
+                        <text x="310" y="270" font-size="18" font-family="sans-serif" font-weight="bold" fill="#334155" text-anchor="middle">C</text>
+                        <text x="310" y="170" font-size="18" font-family="sans-serif" font-weight="bold" fill="#4f46e5" text-anchor="middle">3</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: HISTOGRAMA -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="gantt-chart-square" class="w-14 h-14 text-rose-600"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Histograma</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-12 flex-1 items-center h-full">
+                <div class="space-y-6 flex flex-col justify-center">
+                    <div class="bg-white p-8 rounded-3xl border-l-8 border-rose-600 shadow-lg">
+                        <p class="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">Propósito Matemático</p>
+                        <p class="text-xl text-slate-600 font-medium leading-relaxed mb-6">
+                            Utilizado estrictamente para <strong>variables continuas</strong> o datos numéricos agrupados en intervalos de clase $[a, b[$. 
+                        </p>
+                        <ul class="text-xl font-mono text-slate-700 space-y-4">
+                            <li class="flex items-start gap-3"><i data-lucide="alert-triangle" class="w-6 h-6 text-rose-500 shrink-0"></i> <span>Las columnas son <strong>adyacentes (pegadas)</strong>, indicando continuidad. El fin de un intervalo $b$ es el inicio del siguiente $b$.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="alert-triangle" class="w-6 h-6 text-rose-500 shrink-0"></i> <span>Al agrupar datos en intervalos de anchura (amplitud) definida, <strong>se pierde el dato exacto original</strong>.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="alert-triangle" class="w-6 h-6 text-rose-500 shrink-0"></i> <span>A diferencia de las barras, el área del rectángulo representará a la frecuencia si las amplitudes varían.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="alert-triangle" class="w-6 h-6 text-rose-500 shrink-0"></i> <span><strong>Variable Ideal:</strong> Exclusivamente Cuantitativas Continuas (O discretas con rango inmenso agrupadas en intervalos).</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-white p-10 rounded-3xl border-2 border-slate-200 shadow-md flex justify-center items-center h-full">
+                    <svg viewBox="0 0 400 300" class="w-full h-full">
+                        <!-- Grid lines -->
+                        <line x1="40" y1="50" x2="360" y2="50" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="4"/>
+                        <line x1="40" y1="110" x2="360" y2="110" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="4"/>
+                        <line x1="40" y1="170" x2="360" y2="170" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="4"/>
+                        
+                        <!-- Axes -->
+                        <line x1="40" y1="230" x2="360" y2="230" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+                        <line x1="40" y1="30" x2="40" y2="230" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+                        
+                        <!-- Barras pegadas -->
+                        <rect x="60" y="150" width="80" height="80" fill="#f43f5e" stroke="white" stroke-width="2" />
+                        <rect x="140" y="50" width="80" height="180" fill="#f43f5e" stroke="white" stroke-width="2" />
+                        <rect x="220" y="110" width="80" height="120" fill="#f43f5e" stroke="white" stroke-width="2" />
+                        
+                        <!-- Marcas de limites (Ticks) -->
+                        <line x1="60" y1="230" x2="60" y2="240" stroke="#1e293b" stroke-width="2"/>
+                        <line x1="140" y1="230" x2="140" y2="240" stroke="#1e293b" stroke-width="2"/>
+                        <line x1="220" y1="230" x2="220" y2="240" stroke="#1e293b" stroke-width="2"/>
+                        <line x1="300" y1="230" x2="300" y2="240" stroke="#1e293b" stroke-width="2"/>
+
+                        <!-- Etiquetas -->
+                        <text x="60" y="260" font-size="16" font-family="sans-serif" text-anchor="middle" fill="#64748b" font-weight="bold">[0</text>
+                        <text x="140" y="260" font-size="16" font-family="sans-serif" text-anchor="middle" fill="#64748b" font-weight="bold">10[</text>
+                        <text x="220" y="260" font-size="16" font-family="sans-serif" text-anchor="middle" fill="#64748b" font-weight="bold">20[</text>
+                        <text x="300" y="260" font-size="16" font-family="sans-serif" text-anchor="middle" fill="#64748b" font-weight="bold">30[</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: POLÍGONO DE FRECUENCIAS -->
+        <div class="slide p-10 bg-white">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="activity" class="w-14 h-14 text-teal-600"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Polígono de Frecuencias</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-12 flex-1 items-center h-full">
+                <div class="space-y-6 flex flex-col justify-center">
+                    <div class="glass-card p-8 rounded-3xl border-l-8 border-teal-600 shadow-lg">
+                        <p class="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">Evolución Tendencial</p>
+                        <p class="text-xl text-slate-600 font-medium leading-relaxed mb-6">
+                            Es un gráfico de líneas derivado numéricamente del Histograma. Muestra la evolución temporal de las frecuencias.
+                        </p>
+                        <ul class="text-xl font-mono text-slate-700 space-y-4 mb-4">
+                            <li class="flex items-start gap-3"><i data-lucide="pen-tool" class="w-6 h-6 text-teal-500 shrink-0"></i> <span>Los vértices (puntos) superiores se originan calculando la <strong>Marca de Clase</strong> (Punto medio del intervalo).</span></li>
+                        </ul>
+                        <div class="bg-teal-50 p-4 border border-teal-200 rounded-xl font-mono text-center text-teal-800 mb-4 font-bold">
+                            Marca de Clase ($MC_i$) = $\frac{L_{inf} + L_{sup}}{2}$
+                        </div>
+                        <ul class="text-xl font-mono text-slate-700 space-y-4">
+                            <li class="flex items-start gap-3"><i data-lucide="x-circle" class="w-6 h-6 text-teal-500 shrink-0"></i> <span><strong>Regla de oro:</strong> El polígono debe cerrarse conectando el primer y último punto hacia el eje X en sus marcas de clase hipotéticas adyacentes de frecuencia $0$.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="x-circle" class="w-6 h-6 text-teal-500 shrink-0"></i> <span><strong>Variable Ideal:</strong> Cuantitativas Continuas agrupadas. Permite superponer múltiples muestras simultáneamente.</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-10 rounded-3xl border-2 border-slate-200 shadow-inner flex justify-center items-center h-full">
+                    <svg viewBox="0 0 400 300" class="w-full h-full">
+                        <!-- Grid lines -->
+                        <line x1="40" y1="60" x2="360" y2="60" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="4"/>
+                        <line x1="40" y1="120" x2="360" y2="120" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="4"/>
+                        <line x1="40" y1="180" x2="360" y2="180" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="4"/>
+
+                        <line x1="40" y1="240" x2="360" y2="240" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/> 
+                        <line x1="40" y1="40" x2="40" y2="240" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/> 
+                        
+                        <!-- Box phantom for histogram context -->
+                        <rect x="100" y="140" width="60" height="100" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4"/>
+                        <rect x="160" y="60" width="60" height="180" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4"/>
+                        <rect x="220" y="100" width="60" height="140" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4"/>
+
+                        <!-- Linea de poligono -->
+                        <polyline points="70,240 130,140 190,60 250,100 310,240" fill="none" stroke="#0d9488" stroke-width="4" />
+                        
+                        <!-- Puntos de interseccion (Marca de clase) -->
+                        <circle cx="70" cy="240" r="6" fill="#0d9488" />
+                        
+                        <circle cx="130" cy="140" r="8" fill="#14b8a6" stroke="white" stroke-width="2" />
+                        <text x="130" y="120" font-size="14" font-family="sans-serif" text-anchor="middle" fill="#0d9488" font-weight="bold">MC1</text>
+                        
+                        <circle cx="190" cy="60" r="8" fill="#14b8a6" stroke="white" stroke-width="2"/>
+                        <text x="190" y="40" font-size="14" font-family="sans-serif" text-anchor="middle" fill="#0d9488" font-weight="bold">MC2</text>
+                        
+                        <circle cx="250" cy="100" r="8" fill="#14b8a6" stroke="white" stroke-width="2"/>
+                        <text x="250" y="80" font-size="14" font-family="sans-serif" text-anchor="middle" fill="#0d9488" font-weight="bold">MC3</text>
+                        
+                        <circle cx="310" cy="240" r="6" fill="#0d9488" />
+                    </svg>
+                    <div class="absolute bottom-16 left-12 right-12 text-center text-xs text-slate-500 font-mono bg-white/80 p-2 rounded border border-slate-200 shadow-sm">
+                        <span class="font-bold text-teal-800">Nota Analítica:</span> El cierre del polígono hacia el eje $X$ garantiza geométricamente que el Área bajo la curva trazada sea exactamente igual al Área conformada por las barras del Histograma subyacente.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: GRÁFICO CIRCULAR -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="pie-chart" class="w-14 h-14 text-amber-600"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Gráfico Sectorial (Circular)</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-12 flex-1 items-center h-full">
+                <div class="space-y-6 flex flex-col justify-center">
+                    <div class="bg-white p-8 rounded-3xl border-l-8 border-amber-500 shadow-lg">
+                        <p class="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">Propósito Matemático</p>
+                        <p class="text-xl text-slate-600 font-medium leading-relaxed mb-6">
+                            Diseñado exclusivamente de forma universal para observar comportamientos proporcionales. Destaca el <strong>Porcentaje</strong> o la <strong>Frecuencia Relativa</strong>.
+                        </p>
+                        <ul class="text-xl font-mono text-slate-700 space-y-4">
+                            <li class="flex items-start gap-3"><i data-lucide="scissors" class="w-6 h-6 text-amber-600 shrink-0"></i> <span>Exige como norma un $N$ total definido para poder dimensionar la rebanada geométrica.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="circle-dashed" class="w-6 h-6 text-amber-600 shrink-0"></i> <span>Es inefectivo si la variable categórica posee más de 6 factores (los sectores se vuelven imperceptibles).</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="circle-dashed" class="w-6 h-6 text-amber-600 shrink-0"></i> <span><strong>Variable Ideal:</strong> Únicamente Cualitativas de tipo Nominal con base categórica excluyente.</span></li>
+                        </ul>
+                        <div class="bg-amber-50 p-6 border-2 border-amber-200 rounded-xl mt-6 text-center">
+                            <p class="text-lg font-bold text-amber-900 mb-2">Construcción Angular Inversa</p>
+                            <p class="font-mono bg-white p-3 rounded border border-amber-300 shadow-sm text-2xl text-slate-800">$\alpha_i = f_r \cdot 360^\circ$</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-10 rounded-3xl border-2 border-slate-200 shadow-md flex justify-center items-center h-full">
+                    <div class="relative w-[350px] h-[350px] rounded-full shadow-2xl overflow-hidden shadow-amber-900/20 border-8 border-slate-50" style="background: conic-gradient(#f59e0b 0% 40%, #fbbf24 40% 75%, #fcd34d 75% 100%);">
+                        <div class="absolute inset-x-0 bottom-[15%] text-center text-white font-bold text-3xl" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.6);">A (40%)</div>
+                        <div class="absolute inset-y-[45%] right-[10%] text-slate-900 font-bold text-3xl" style="text-shadow: 1px 1px 3px rgba(255,255,255,0.8);">B (35%)</div>
+                        <div class="absolute top-[20%] left-[20%] text-amber-900 font-bold text-2xl" style="text-shadow: 1px 1px 3px rgba(255,255,255,0.8);">C (25%)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: TALLO Y HOJA -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="list-tree" class="w-14 h-14 text-green-700"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Diagrama de Tallo y Hoja</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-12 flex-1 items-center h-full">
+                <div class="space-y-6 flex flex-col justify-center">
+                    <div class="glass-card p-8 rounded-3xl border-l-8 border-green-700 shadow-lg">
+                        <p class="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">Conservación de la Integridad</p>
+                        <p class="text-xl text-slate-600 font-medium leading-relaxed mb-6">
+                            Es un agrupamiento semi-gráfico superior al Histograma, porque agrupa visualmente sin amputar matemáticas: <strong>Los datos puros sí se conservan enteros.</strong>
+                        </p>
+                        <ul class="text-xl font-mono text-slate-700 space-y-4">
+                            <li class="flex items-start gap-3"><i data-lucide="chevron-right" class="w-6 h-6 text-green-600 shrink-0"></i> <span><strong>El Tallo:</strong> Absorbe los dígitos de mayor peso posicional (Decenas, Centenas).</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="chevron-right" class="w-6 h-6 text-green-600 shrink-0"></i> <span><strong>Las Hojas:</strong> Absorben exclusivamente el último dígito correlativo (Unidades). Tantas hojas existan, existirá el mismo número $N$.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="shield-check" class="w-6 h-6 text-green-600 shrink-0"></i> <span>Permite extraer el Rango de la Variable, Mediana Real y Promedio Limpio con precisión milimétrica (a diferencia de otros gráficos agrupados).</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="shield-check" class="w-6 h-6 text-green-600 shrink-0"></i> <span><strong>Variable Ideal:</strong> Cuantitativas (Discretas o Continuas) con espectro numérico reducido.</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-white p-10 rounded-3xl border-2 border-slate-200 shadow-md flex flex-col justify-center items-center h-full">
+                    
+                    <div class="bg-slate-900 p-8 rounded-2xl w-full max-w-sm text-white font-mono shadow-2xl">
+                        <p class="text-green-400 font-bold mb-4 border-b border-slate-700 pb-2 text-center uppercase tracking-widest text-sm">Edades Registradas</p>
+                        <div class="flex text-2xl">
+                            <!-- Tallos -->
+                            <div class="w-1/3 flex flex-col text-right pr-4 border-r-4 border-green-500 text-slate-400 leading-loose">
+                                <span>2</span>
+                                <span>3</span>
+                                <span>4</span>
+                            </div>
+                            <!-- Hojas -->
+                            <div class="w-2/3 flex flex-col text-left pl-4 leading-loose tracking-[0.3em]">
+                                <span class="text-white">1668</span>
+                                <span class="text-white">05579</span>
+                                <span class="text-white">2</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 border border-slate-300 p-3 rounded bg-slate-50 text-slate-600 font-mono text-sm max-w-sm w-full text-center">
+                        La fila central contiene: 30, 35, 35, 37, 39.
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: BOXPLOT -->
+        <div class="slide p-10 bg-white">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="scan-line" class="w-14 h-14 text-slate-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Diagrama de Caja y Bigotes</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-12 flex-1 items-center h-full">
+                <div class="space-y-6 flex flex-col justify-center">
+                    <div class="bg-slate-50 p-8 rounded-3xl border-l-8 border-slate-800 shadow-md">
+                        <p class="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">El Medidor Geométrico de Dispersión (Resumen Numérico 5)</p>
+                        <p class="text-xl text-slate-600 font-medium leading-relaxed mb-6">
+                            Elimina arbitrariamente a la Media del análisis y se centra en los Cuartiles ($Q_k$) y los bordes para evaluar simetría en cuatro parcelas del $25\%$.
+                        </p>
+                        <div class="bg-white p-4 border border-slate-200 rounded-lg shadow-sm mb-4 font-mono font-bold text-slate-800 space-y-2">
+                            <p>1. Valor Mínimo Absoluto</p>
+                            <p>2. Cuartil 1 ($Q_1$)</p>
+                            <p>3. Mediana o Cuartil 2 ($M_e$ o $Q_2$)</p>
+                            <p>4. Cuartil 3 ($Q_3$)</p>
+                            <p>5. Valor Máximo Absoluto</p>
+                        </div>
+                        <ul class="text-lg font-mono text-slate-700 space-y-2">
+                            <li class="flex items-start gap-3"><i data-lucide="layers" class="w-5 h-5 text-slate-500 shrink-0"></i> <span>La "Caja" aloja de manera exclusiva el $50\%$ central representativo.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="maximize-2" class="w-5 h-5 text-slate-500 shrink-0"></i> <span>El <strong>Rango (R)</strong> es la distancia métrica entre Máximo y Mínimo ($R = Max - Min$).</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="ruler" class="w-5 h-5 text-slate-500 shrink-0"></i> <span>La anchura de la Caja se llama <strong class="text-slate-900">Rango Intercuartil (RIC)</strong> $= Q_3 - Q_1$. A menor RIC, mayor es la concentración de la población.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="layers" class="w-5 h-5 text-slate-500 shrink-0"></i> <span><strong>Variable Ideal:</strong> Cuantitativas (Especializado en análisis de dispersión, simetría comparativa y detección métrica de atípicos).</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-slate-100 p-10 rounded-3xl border-4 border-slate-800 shadow-xl flex flex-col justify-center items-center h-full relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10"><i data-lucide="layout" class="w-48 h-48"></i></div>
+                    
+                    <svg viewBox="0 0 300 120" class="w-full max-h-[300px] z-10">
+                        <line x1="20" y1="100" x2="280" y2="100" stroke="#94a3b8" stroke-width="2" />
+                        
+                        <!-- Bigotes -->
+                        <line x1="50" y1="50" x2="100" y2="50" stroke="#0f172a" stroke-width="4" />
+                        <line x1="50" y1="35" x2="50" y2="65" stroke="#0f172a" stroke-width="4" /> <!-- Min -->
+                        
+                        <line x1="200" y1="50" x2="260" y2="50" stroke="#0f172a" stroke-width="4" />
+                        <line x1="260" y1="35" x2="260" y2="65" stroke="#0f172a" stroke-width="4" /> <!-- Max -->
+                        
+                        <!-- Caja -->
+                        <rect x="100" y="20" width="100" height="60" fill="rgba(255,255,255,0.8)" stroke="#0f172a" stroke-width="4" />
+                        <line x1="140" y1="20" x2="140" y2="80" stroke="#dc2626" stroke-width="4" /> <!-- Mediana Asimetrica -->
+                        
+                        <!-- Etiquetas -->
+                        <text x="50" y="115" font-size="10" font-family="sans-serif" font-weight="bold" text-anchor="middle" fill="#334155">Min</text>
+                        <text x="100" y="115" font-size="10" font-family="sans-serif" font-weight="bold" text-anchor="middle" fill="#334155">Q1</text>
+                        <text x="140" y="115" font-size="10" font-family="sans-serif" font-weight="bold" text-anchor="middle" fill="#dc2626">Me(Q2)</text>
+                        <text x="200" y="115" font-size="10" font-family="sans-serif" font-weight="bold" text-anchor="middle" fill="#334155">Q3</text>
+                        <text x="260" y="115" font-size="10" font-family="sans-serif" font-weight="bold" text-anchor="middle" fill="#334155">Max</text>
+                    </svg>
+                    
+                    <div class="mt-4 bg-rose-100 text-rose-900 border border-rose-300 p-3 rounded-lg w-full text-center font-bold text-sm z-10">
+                        <strong>¡Cuidado Atípicos (Outliers)! Valores fuera del límite $Q_3 + 1.5 \cdot RIC$ o $Q_1 - 1.5 \cdot RIC$</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: MEDIA ARITMÉTICA -->
+        <div class="slide p-10 bg-white">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="scale" class="w-14 h-14 text-indigo-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Media Aritmética ($\overline{x}$)</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-12 flex-1 items-stretch h-full">
+                <div class="space-y-6 flex flex-col justify-center">
+                    <div class="bg-indigo-50 p-8 rounded-3xl border-l-8 border-indigo-800 shadow-md">
+                        <p class="text-2xl font-bold text-indigo-900 mb-4 border-b border-indigo-200 pb-2">El Centro de Gravedad</p>
+                        <p class="text-xl text-slate-700 font-medium leading-relaxed mb-6">
+                            Es valor numérico que equilibra las magnitudes. Si todos los individuos aportaran lo mismo al total, ese aporte igualitario sería la media.
+                        </p>
+                        <div class="space-y-4 mb-6">
+                            <div class="bg-white p-4 rounded-xl border border-indigo-200">
+                                <p class="font-bold text-slate-800">Datos No Agrupados</p>
+                                <p class="text-xl font-mono text-center text-indigo-900">$\overline{x} = \frac{\sum_{i=1}^{n} x_i}{n}$</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-indigo-200">
+                                <p class="font-bold text-slate-800">Datos Agrupados / Tabla</p>
+                                <p class="text-xl font-mono text-center text-indigo-900">$\overline{x} = \frac{\sum (x_i \cdot f_i)}{N}$</p>
+                                <p class="text-sm text-slate-500 text-center mt-1"><strong>*Para intervalos, usar $MC \cdot f_i$</strong></p>
+                            </div>
+                        </div>
+                        <div class="bg-rose-100 text-rose-800 p-4 border-l-4 border-rose-600 rounded">
+                            <strong><i data-lucide="alert-triangle" class="w-5 h-5 inline"></i> Vulnerabilidad Crítica:</strong> Extremadamente sensible a valores atípicos (outliers). Un solo dato exagerado destruye su representatividad.
+                        </div>
+                    </div>
+                </div>
+                <!-- Animación/Gráfico Equilibrio -->
+                <div class="bg-slate-50 p-10 rounded-3xl border-2 border-slate-200 shadow-inner flex flex-col justify-center items-center h-full">
+                    <p class="text-xl font-bold text-slate-700 mb-6 text-center">Datos: $2, 3, 3, 4, 8$</p>
+                    <svg viewBox="0 -30 400 250" class="w-full h-full">
+                        <!-- Palanca / Eje -->
+                        <line x1="40" y1="140" x2="360" y2="140" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+                        
+                        <!-- Marcas Eje X -->
+                        <circle cx="80" cy="140" r="4" fill="#334155" /> <text x="80" y="170" font-size="16" text-anchor="middle" font-family="sans-serif">2</text>
+                        <circle cx="120" cy="140" r="4" fill="#334155" /> <text x="120" y="170" font-size="16" text-anchor="middle" font-family="sans-serif">3</text>
+                        <circle cx="160" cy="140" r="4" fill="#334155" /> <text x="160" y="170" font-size="16" text-anchor="middle" font-family="sans-serif">4</text>
+                        <circle cx="320" cy="140" r="4" fill="#dc2626" /> <text x="320" y="170" font-size="16" text-anchor="middle" font-family="sans-serif" fill="#dc2626">8</text>
+
+                        <!-- Pesos (Datos) -->
+                        <rect x="65" y="110" width="30" height="30" fill="#4f46e5" rx="4"/> <!-- 2 -->
+                        <rect x="105" y="80" width="30" height="60" fill="#4f46e5" rx="4"/> <!-- 3, 3 -->
+                        <rect x="145" y="110" width="30" height="30" fill="#4f46e5" rx="4"/> <!-- 4 -->
+                        <rect x="305" y="110" width="30" height="30" fill="#ef4444" rx="4"/> <!-- 8 (Outlier) -->
+
+                        <!-- Fulcro (Media = 4) -->
+                        <polygon points="160,140 145,170 175,170" fill="#1e1b4b" />
+                        <text x="160" y="195" font-size="18" font-weight="bold" fill="#1e1b4b" text-anchor="middle">$\overline{x} = 4$</text>
+                        <path d="M 160 50 L 160 130" stroke="#1e1b4b" stroke-width="3" stroke-dasharray="4" />
+                    </svg>
+                    <p class="mt-8 text-center text-slate-600">El fulcro (triángulo) debe ubicarse en <strong>4</strong> para equilibrar el peso masivo del dato atípico <strong>8</strong>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: MEDIANA -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="align-center" class="w-14 h-14 text-emerald-700"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Mediana ($M_e$)</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-12 flex-1 items-stretch h-full">
+                <!-- Modelo de datos pares vs impares -->
+                <div class="bg-white p-10 rounded-3xl border-2 border-slate-200 shadow-md flex flex-col justify-center">
+                    <h3 class="text-2xl font-bold text-emerald-800 mb-6 text-center">Algoritmo de Posición (¡Ordenar Primero!)</h3>
+                    
+                    <div class="mb-8 p-6 bg-slate-50 rounded-xl border border-slate-200">
+                        <p class="font-bold text-slate-800 mb-2">Caso $N$ Impar</p>
+                        <p class="text-slate-600 mb-2">El dato central es exacto. Posición: $P = \frac{N+1}{2}$</p>
+                        <div class="flex justify-center gap-2 font-mono text-xl mt-4">
+                            <span class="p-2 border rounded">2</span>
+                            <span class="p-2 border rounded">5</span>
+                            <span class="p-2 border-2 border-emerald-500 bg-emerald-100 text-emerald-900 font-bold rounded">7</span>
+                            <span class="p-2 border rounded">11</span>
+                            <span class="p-2 border rounded">15</span>
+                        </div>
+                    </div>
+
+                    <div class="p-6 bg-slate-50 rounded-xl border border-slate-200">
+                        <p class="font-bold text-slate-800 mb-2">Caso $N$ Par</p>
+                        <p class="text-slate-600 mb-2">Promedio de los dos centrales. Posiciones: $\frac{N}{2}$ y $\frac{N}{2} + 1$</p>
+                        <div class="flex justify-center gap-2 font-mono text-xl mt-4">
+                            <span class="p-2 border rounded">2</span>
+                            <span class="p-2 border rounded">5</span>
+                            <span class="p-2 border-2 border-emerald-500 bg-emerald-100 text-emerald-900 font-bold rounded">7</span>
+                            <span class="p-2 border-2 border-emerald-500 bg-emerald-100 text-emerald-900 font-bold rounded">9</span>
+                            <span class="p-2 border rounded">11</span>
+                            <span class="p-2 border rounded">15</span>
+                        </div>
+                        <p class="text-center font-bold text-emerald-800 mt-4">$M_e = \frac{7+9}{2} = 8$</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6 flex flex-col justify-center">
+                    <div class="glass-card p-8 rounded-3xl border-l-8 border-emerald-700 shadow-lg">
+                        <p class="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">Partición 50/50</p>
+                        <p class="text-xl text-slate-600 font-medium leading-relaxed mb-6">
+                            Es un divisor topológico. Parte el espectro de datos ordenados exactamente a la mitad. <strong>Es una posición estadística, no una magnitud manipulable</strong>.
+                        </p>
+                        
+                        <div class="bg-emerald-100 text-emerald-900 p-5 mt-4 rounded-xl shadow-inner font-medium text-lg">
+                            <i data-lucide="shield-check" class="inline w-6 h-6 mr-2"></i><strong>Máxima Robustez:</strong> Completamente inmune a los <em>Outliers</em>. Al ser de naturaleza posicional, un 1 millón es el mismo borde que un 10. Siempre elegirá su posición central de manera segura.
+                        </div>
+
+                        <div class="mt-8">
+                            <p class="font-bold text-slate-800 mb-2">En Tablas de Frecuencia:</p>
+                            <p class="text-slate-700">Se busca la primera Frecuencia Acumulada ($F_i$) que logre superar estrictamente la barrera del $50\%$ de los datos ($\frac{N}{2}$).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 13: MODA -->
+        <div class="slide p-10 bg-white">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="zap" class="w-14 h-14 text-orange-600"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Moda ($M_o$)</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-12 flex-1 items-stretch h-full">
+                <div class="space-y-6 flex flex-col justify-center">
+                    <div class="glass-card p-8 rounded-3xl border-l-8 border-orange-600 shadow-lg">
+                        <p class="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">El Concepto de Mayor Ocurrencia</p>
+                        <p class="text-xl text-slate-600 font-medium leading-relaxed mb-6">
+                            Identifica el(los) dato(s) o categoría(s) con la <strong>mayor frecuencia absoluta</strong> observada empíricamente.
+                        </p>
+                        <ul class="text-xl font-mono text-slate-700 space-y-4">
+                            <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-6 h-6 text-orange-500 shrink-0"></i> <span>Puede ser Aplicado en Variables Categóricas (Nominales u Ordinales). No requiere cálculo matemático.</span></li>
+                        </ul>
+                        <div class="mt-6 flex flex-col gap-4">
+                            <div class="p-4 border-l-4 border-slate-400 bg-slate-50">
+                                <p class="font-bold text-slate-800">Amodal (Sin Moda)</p>
+                                <p class="text-slate-600 font-mono text-sm">Ej: {2, 2, 5, 5, 8, 8}. Frecuencias empatan al máximo nivel global.</p>
+                            </div>
+                            <div class="p-4 border-l-4 border-blue-500 bg-blue-50">
+                                <p class="font-bold text-slate-800">Unimodal (1 Moda)</p>
+                                <p class="text-slate-600 font-mono text-sm">Ej: {2, <span class="text-blue-600 font-bold">5, 5</span>, 8, 9}. Mo = 5.</p>
+                            </div>
+                            <div class="p-4 border-l-4 border-purple-500 bg-purple-50">
+                                <p class="font-bold text-slate-800">Bimodal o Multimodal</p>
+                                <p class="text-slate-600 font-mono text-sm">Ej: {<span class="text-purple-600 font-bold">2, 2</span>, 3, <span class="text-purple-600 font-bold">8, 8</span>}. Mo = {2, 8}.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráfico de montaña para modales -->
+                <div class="bg-slate-50 p-10 rounded-3xl border-2 border-slate-200 shadow-inner flex flex-col justify-center items-center h-full">
+                    <p class="text-2xl font-bold text-slate-700 mb-8 text-center">Topología Multimodal</p>
+                    <svg viewBox="0 0 300 150" class="w-full h-full max-h-[400px]">
+                        <!-- Suelo -->
+                        <line x1="20" y1="130" x2="280" y2="130" stroke="#1e293b" stroke-width="2"/>
+                        
+                        <!-- Curva Bimodal suave -->
+                        <path d="M 30 130 C 50 130, 60 40, 90 40 C 120 40, 140 120, 160 120 C 180 120, 200 40, 230 40 C 260 40, 270 130, 290 130" 
+                              fill="rgba(249, 115, 22, 0.2)" stroke="#ea580c" stroke-width="4"/>
+                        
+                        <!-- Cimas -->
+                        <circle cx="90" cy="40" r="5" fill="#c2410c" />
+                        <line x1="90" y1="40" x2="90" y2="130" stroke="#c2410c" stroke-width="2" stroke-dasharray="4"/>
+                        <text x="90" y="145" font-size="12" font-weight="bold" fill="#c2410c" text-anchor="middle">Moda 1</text>
+                        
+                        <circle cx="230" cy="40" r="5" fill="#c2410c" />
+                        <line x1="230" y1="40" x2="230" y2="130" stroke="#c2410c" stroke-width="2" stroke-dasharray="4"/>
+                        <text x="230" y="145" font-size="12" font-weight="bold" fill="#c2410c" text-anchor="middle">Moda 2</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 14: PRÁCTICA ANALÍTICA -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="dumbbell" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Entrenamiento Analítico Avanzado</h2>
+            </div>
+            
+            <div class="flex flex-col gap-6 w-full max-w-7xl mx-auto pb-10">
+                <p class="text-xl text-slate-600 mb-4">Resuelva formalmente las siguientes interrogantes aplicando propiedades teóricas expuestas.</p>
+
+                <!-- Ejercicio 1 -->
+                <div class="bg-white p-6 rounded-2xl border-2 border-slate-200 shadow-sm relative">
+                    <div class="absolute top-0 right-0 bg-slate-800 text-white font-mono text-sm px-3 py-1 rounded-bl-lg rounded-tr-xl font-bold">Problema I</div>
+                    <p class="text-sm font-bold text-slate-800 mb-2">I. Análisis Inductivo de Media Dinámica y Resistencia de Mediana</p>
+                    <p class="text-slate-700 mb-4 text-sm leading-relaxed">
+                        En una competencia académica, la puntuación total máxima es de $100$ puntos. 
+                        Un equipo de $N=6$ integrantes obtiene matemáticamente una media aritmética inicial de $\overline{x} = 82$ puntos. 
+                        Sus puntuaciones tabuladas correspondientes a las $6$ plazas son: $P = \{ 74, 78, 80, 84, y, 92 \}$.
+                        <br><br>
+                        <strong>a)</strong> Modele y determine algebraicamente la puntuación faltante del integrante ($y$).<br>
+                        <strong>b)</strong> Determine la Posición Topológica de la <strong>Mediana</strong> del grupo completo e indique su valor numérico.<br>
+                        <strong>c)</strong> Si por una apelación externa, el integrante que obtuvo $74$ puntos recibe una sanción y su puntaje cae drásticamente a $30$ puntos (convirtiéndose en un <em>Outlier</em> inferior agresivo), desglose paso a paso cómo se ven afectadas la nueva Media ($\overline{x}_{nueva}$) y la nueva Mediana ($M_{e_{nueva}}$). ¿Qué conclusión analítica puede extraerse sobre la robustez de ambas medidas?
+                    </p>
+                </div>
+
+                <!-- Ejercicio 2 -->
+                <div class="bg-white p-6 rounded-2xl border-2 border-slate-200 shadow-sm relative">
+                    <div class="absolute top-0 right-0 bg-slate-800 text-white font-mono text-sm px-3 py-1 rounded-bl-lg rounded-tr-xl font-bold">Problema II</div>
+                    <p class="text-sm font-bold text-slate-800 mb-2">II. Ingeniería Gráfica Inversa y Topología Modal</p>
+                    <p class="text-slate-700 mb-4 text-sm leading-relaxed">
+                        Una encuesta sobre cantidad de mascotas arrojó: $M = \{ 0, 1, 1, 2, 2, 2, 3, 3, 4, 4 \}$.
+                        <br><br>
+                        <strong>a)</strong> Construya la Frecuencia Absoluta ($f_i$) y Relativa ($f_r$) para "2 mascotas".<br>
+                        <strong>b)</strong> Identifique la topología Modal (Amodal, Unimodal, Bimodal) y señale la Moda ($M_o$).<br>
+                        <strong>c)</strong> Si llegaran dos mascotas nuevas a familias con 1 mascota, ¿cuál es la nueva moda?
+                    </p>
+                </div>
+
+                <!-- Ejercicio 3 -->
+                <div class="bg-white p-6 rounded-2xl border-2 border-slate-200 shadow-sm relative">
+                    <div class="absolute top-0 right-0 bg-slate-800 text-white font-mono text-sm px-3 py-1 rounded-bl-lg rounded-tr-xl font-bold">Problema III</div>
+                    <p class="text-sm font-bold text-slate-800 mb-2">III. Disección de Cuartiles y Detección Métrica de Atípicos Reales</p>
+                    <p class="text-slate-700 mb-2 text-sm leading-relaxed">
+                        En un análisis toxicológico del agua (medido en ppm), el Resumen estadístico de 5 Números proveniente de un Diagrama de Caja de una gran muestra arrojó los siguientes valores fronterizos: $\text{Min}=10$, $Q_1=18$, $Q_2=20$, $Q_3=28$, $\text{Max}=48$. Se solicita a un grupo de ingenieros ambientales dictaminar formalmente el grado de dispersión e intoxicación atípica.
+                        <br><br>
+                        <strong>a)</strong> Calcule la medida de condensación o concentración poblacional central denominada <strong>Rango Intercuartil (RIC)</strong>.<br>
+                        <strong>b)</strong> Interprete analíticamente qué significa geométricamente el espacio comprendido estrictamente entre los valores $10$ y $28$ en función de la muestra de agua. ¿Qué porcentaje poblacional habita en dicho intervalo concentrado?<br>
+                        <strong>c)</strong> Demuestre, aplicando inecuaciones paramétricas preestablecidas, si la lectura máxima de $48$ ppm es oficialmente un <strong>Outlier Atípico Verdadero</strong> (dato perturbador gravísimo). Formule y resuelva el cálculo de comprobación normativa del límite superior ($> Q_3 + 1.5 \cdot \text{RIC}$).
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- NAVEGACIÓN INFERIOR (Fixed) -->
+    <div class="h-24 w-full shrink-0 flex justify-between items-center px-12 bg-white border-t-2 border-slate-200 fixed bottom-0 z-50">
+        <div class="text-slate-500 font-bold text-2xl tracking-widest uppercase flex items-center gap-4">
+            <i data-lucide="laptop-2"></i> Síntesis Estadística
+        </div>
+        <div class="flex gap-6">
+            <button onclick="changeSlide(-1)" class="p-5 rounded-full bg-slate-100 border border-slate-300 shadow-md hover:bg-slate-200 transition-all"><i data-lucide="chevron-left" class="w-10 h-10 text-slate-800"></i></button>
+            <button onclick="changeSlide(1)" class="p-5 rounded-full bg-emerald-800 text-white shadow-lg hover:bg-emerald-900 transition-all"><i data-lucide="chevron-right" class="w-10 h-10"></i></button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        let currentSlide = 0;
+        let slides = document.querySelectorAll('.slide');
+        
+        function updateSlidesList() {
+            slides = document.querySelectorAll('.slide');
+        }
+
+        function updateSlide() {
+            slides.forEach((s, i) => {
+                s.classList.remove('active');
+                if (i === currentSlide) {
+                    s.classList.add('active');
+                    s.scrollTop = 0;
+                }
+            });
+        }
+
+        function changeSlide(d) {
+            updateSlidesList();
+            const n = currentSlide + d;
+            if (n >= 0 && n < slides.length) {
+                currentSlide = n;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (['ArrowRight', 'Space', 'Enter'].includes(e.key)) changeSlide(1);
+            if (['ArrowLeft', 'Backspace'].includes(e.key)) changeSlide(-1);
+        });
+
+        function revelarSolucion(idBtn, idRes) {
+            document.getElementById(idBtn).style.display = 'none';
+            document.getElementById(idRes).classList.remove('hidden');
+            if (window.MathJax) { MathJax.typesetPromise().catch((err) => console.log(err.message)); }
+        }
+    </script>
+</body>
+</html>

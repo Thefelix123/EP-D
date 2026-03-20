@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posición - IIIº Medio Electivo</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            startup: { typeset: true }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #f8fafc;
+        }
+
+        #slide-container {
+            height: calc(100vh - 5rem);
+            width: 100vw;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            height: 100%;
+            width: 100%;
+            animation: fadeIn 0.3s ease-out;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-bottom: 3rem;
+            scroll-behavior: smooth;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        ::-webkit-scrollbar {
+            width: 14px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #6ee7b7;
+            border-radius: 8px;
+            border: 3px solid #e2e8f0;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10b981;
+        }
+
+        .fade-transition {
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 select-none flex flex-col">
+
+    <div class="h-4 w-full bg-emerald-800 shrink-0 fixed top-0 z-50"></div>
+
+    <div id="slide-container" class="mt-4">
+
+        <!-- SLIDE 1: PORTADA -->
+        <div class="slide active p-10 bg-slate-50">
+            <div class="flex-1 flex flex-col items-center justify-center space-y-8 w-full h-full min-h-[500px]">
+                <i data-lucide="layout-template" class="w-40 h-40 text-emerald-800 opacity-90"></i>
+                <h1 class="text-7xl font-extrabold tracking-tight text-slate-900 uppercase text-center">
+                    Medidas de Posición
+                </h1>
+                <p class="text-5xl text-slate-500 font-semibold tracking-wide text-center">
+                    Segmentando la Jerarquía Matemática
+                </p>
+
+                <div
+                    class="mt-16 p-8 glass-card rounded-2xl border-l-8 border-emerald-800 text-left w-full max-w-5xl flex justify-between items-end shadow-md">
+                    <div>
+                        <p class="text-4xl font-bold text-slate-900">Prof. Luis Quezada</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-3xl font-bold text-emerald-800 uppercase tracking-wider">SEK CHILE • IIIº
+                            ELECTIVO</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: MOTIVACION EL PROBLEMA DE LA JERARQUIA -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="align-horizontal-justify-start" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">El Problema del Puntaje Bruto</h2>
+            </div>
+
+            <div class="grid grid-cols-12 gap-10 flex-1 items-center">
+                <div class="col-span-6 space-y-6 flex flex-col justify-center h-full">
+                    <p class="text-2xl text-slate-700 leading-relaxed font-medium">
+                        Sofía rinde el Examen Nacional de Selección (PAES). Al recibir sus resultados, observa que obtuvo 
+                        <strong class="text-emerald-800 text-3xl font-mono">60</strong> puntos sobre un máximo teórico de 100.
+                    </p>
+                    <p class="text-2xl text-slate-700 leading-relaxed font-medium">
+                        Sofía se desanima asumiendo que "apenas" superó la mitad del puntaje. Sin embargo, su profesor le advierte que lo importante en una prueba estandarizada <strong>no es el puntaje absoluto, sino su jerarquía frente al grupo.</strong>
+                    </p>
+                    
+                    <button onclick="revelarElemento('solucion-posicion')"
+                        class="px-8 py-4 bg-emerald-800 text-white rounded-xl text-2xl font-bold hover:bg-emerald-900 transition shadow-lg w-max mt-4">
+                        Analizar el Ranking Relativo
+                    </button>
+                </div>
+
+                <div class="col-span-6 flex flex-col justify-center items-center w-full h-full gap-8">
+                    <div id="solucion-posicion"
+                        class="hidden w-full max-w-xl p-8 bg-white border-4 border-slate-200 rounded-3xl shadow-xl flex flex-col gap-6">
+
+                        <div class="bg-indigo-50 border-l-8 border-indigo-500 p-4 rounded-r-xl">
+                            <h3 class="text-2xl font-bold text-indigo-800 mb-2">Escenario 1 (Prueba Fácil):</h3>
+                            <p class="text-lg text-slate-700 flex flex-col gap-2">
+                                <span class="text-sm font-mono text-indigo-600 font-bold tracking-widest uppercase">Distribución:</span>
+                                El 80% de los estudiantes obtuvo más de 70 puntos.
+                                <strong class="text-indigo-900">Conclusión: Con 60 puntos, Sofía está en el 20% inferior. Pertenece al $P_{20}$.</strong>
+                            </p>
+                        </div>
+
+                        <div class="bg-emerald-50 border-l-8 border-emerald-500 p-4 rounded-r-xl">
+                            <h3 class="text-2xl font-bold text-emerald-800 mb-2">Escenario 2 (Prueba Extremadamente Difícil):</h3>
+                            <p class="text-lg text-slate-700 flex flex-col gap-2">
+                                <span class="text-sm font-mono text-emerald-600 font-bold tracking-widest uppercase">Distribución Real de Sofía:</span>
+                                La prueba fue tan compleja que el 90% de los estudiantes obtuvo <span class="underline decoration-emerald-500">menos</span> de 55 puntos.
+                                <strong class="text-emerald-900">Conclusión Analítica: Con 60 puntos, Sofía superó al 90% de la población nacional. Su puntaje es de Excelencia Nacional ($P_{90}$).</strong>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: DEFINICION CUANTILES -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="bar-chart-horizontal-big" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Fractil / Cuantil</h2>
+            </div>
+
+            <div class="grid grid-cols-2 gap-10 flex-1 items-start">
+                <!-- CUARTILES -->
+                <div
+                    class="glass-card p-8 rounded-3xl border-t-8 border-indigo-600 shadow-md flex flex-col justify-start relative bg-white">
+                    <h3 class="text-3xl font-extrabold text-slate-800 mb-4 flex items-center gap-3">
+                        <i data-lucide="columns-4" class="text-indigo-600"></i> Cuartiles ($Q_k$)</h3>
+                    <p class="text-xl text-slate-700 font-medium leading-relaxed mb-6">
+                        Son $3$ valores que dividen al conjunto de datos ordenados en <strong class="text-indigo-800">cuatro</strong> partes porcentualmente iguales (25% cada parte).
+                    </p>
+                    
+                    <ul class="text-lg text-slate-700 space-y-4 font-mono mb-8 p-6 bg-indigo-50 border border-indigo-200 rounded-xl">
+                        <li><strong class="text-indigo-900">$Q_1$:</strong> Supera al 25% inferior.</li>
+                        <li><strong class="text-indigo-900">$Q_2 \equiv M_e$:</strong> Supera al 50%. Equivalente a la Mediana.</li>
+                        <li><strong class="text-indigo-900">$Q_3$:</strong> Supera al 75%.</li>
+                    </ul>
+
+                    <div class="bg-slate-900 p-6 rounded-xl border-l-[12px] border-indigo-500 mt-auto">
+                        <p class="text-sm font-bold text-indigo-400 uppercase tracking-widest mb-2">Fórmula Posicional</p>
+                        <p class="text-3xl font-bold text-center font-mono text-white">$$ Pos(Q_k) = \frac{k \cdot N}{4} $$</p>
+                        <p class="text-center text-slate-400 text-sm mt-2 font-medium">Donde $k \in \{1, 2, 3\}$ y $N$ es el total de datos.</p>
+                    </div>
+                </div>
+
+                <!-- PERCENTILES -->
+                <div
+                    class="glass-card p-8 rounded-3xl border-t-8 border-rose-600 shadow-md flex flex-col justify-start relative bg-white h-full">
+                    <h3 class="text-3xl font-extrabold text-slate-800 mb-4 flex items-center gap-3">
+                        <i data-lucide="split-square-horizontal" class="text-rose-600"></i> Percentiles ($P_k$)</h3>
+                    <p class="text-xl text-slate-700 font-medium leading-relaxed mb-6">
+                        Son $99$ valores que dividen al conjunto de datos en <strong class="text-rose-800">cien</strong> partes iguales (1% cada parte). Ofrecen la máxima granularidad jerárquica.
+                    </p>
+                    
+                    <ul class="text-lg text-slate-700 space-y-4 font-medium mb-8 p-6 bg-rose-50 border border-rose-200 rounded-xl">
+                        <li>El Percentil $k$ ($P_k$) asegura que el $k\%$ de las observaciones son <strong>menores o iguales</strong> a este valor.</li>
+                        <li>Ejemplo Médico: Estar en el $P_{95}$ de peso, implica pesar más que el 95% de los infantes.</li>
+                    </ul>
+
+                    <div class="bg-slate-900 p-6 rounded-xl border-l-[12px] border-rose-500 mt-auto">
+                        <p class="text-sm font-bold text-rose-400 uppercase tracking-widest mb-2">Fórmula Posicional</p>
+                        <div class="mt-2 text-rose-100 font-mono text-3xl font-bold text-center">
+                            $$ Pos(P_k) = \frac{k \cdot N}{100} $$
+                        </div>
+                        <p class="text-center text-slate-400 text-sm mt-2 font-medium">Donde $k \in \{1, 2, \dots, 99\}$.</p>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: LABORATORIO DE POSICION (YO HAGO) -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="microscope" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Laboratorio: Extracción Analítica</h2>
+            </div>
+
+            <div class="flex flex-col flex-1 gap-8">
+                <p class="text-2xl text-slate-700 leading-relaxed font-medium">
+                    Se registraron los años de experiencia de un equipo de $10$ ingenieros de software ($N=10$). Los datos, <strong>ya ordenados</strong>, son:
+                </p>
+
+                <div class="bg-slate-100 border border-slate-300 p-6 rounded-2xl shadow-inner max-w-4xl mx-auto w-full">
+                    <p class="text-3xl text-emerald-900 font-bold font-mono tracking-widest text-center">
+                        $2, 3, 3, \textbf{4}, 5, 7, 8, \textbf{10}, 12, 15$
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-8 mt-4">
+                    <!-- Cuartil 1 -->
+                    <div class="glass-card p-8 rounded-2xl border-l-8 border-indigo-500 shadow-md">
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4 pb-2 border-b border-indigo-200">Encontrar el Primer Cuartil ($Q_1$)</h3>
+                        
+                        <div class="space-y-4">
+                            <button onclick="revelarCeldas('.pos-q1-paso1')"
+                                class="w-full text-left bg-indigo-50 hover:bg-indigo-100 text-indigo-800 font-bold py-3 px-6 rounded-xl transition border border-indigo-200 flex justify-between">
+                                <span>Paso 1: Calcular Posición</span> <i data-lucide="calculator" class="w-5 h-5"></i>
+                            </button>
+                            <div class="pos-q1-paso1 hidden transition-all">
+                                <p class="text-xl text-slate-700 font-mono bg-white p-4 rounded-lg border">$\frac{1 \cdot 10}{4} = \mathbf{2.5}$</p>
+                                <p class="text-sm mt-3 font-medium text-slate-600 bg-emerald-50 p-2 rounded border border-emerald-200">
+                                    <strong class="text-emerald-800 uppercase tracking-widest">Axioma:</strong> Si el resultado es decimal, <strong class="underline">se aproxima siempre al entero superior</strong> ($\rightarrow$ Posición 3).
+                                </p>
+                            </div>
+
+                            <button onclick="revelarCeldas('.pos-q1-paso2')"
+                                class="w-full text-left bg-indigo-100 hover:bg-indigo-200 text-indigo-900 font-bold py-3 px-6 rounded-xl transition border border-indigo-300 flex justify-between mt-2">
+                                <span>Paso 2: Valor en Posición</span> <i data-lucide="target" class="w-5 h-5"></i>
+                            </button>
+                            <div class="pos-q1-paso2 hidden transition-all mt-2">
+                                <p class="text-3xl text-indigo-900 font-black font-mono bg-indigo-50 p-4 border border-indigo-300 text-center rounded-xl">
+                                    $Q_1 = 3 \text{ años}$
+                                </p>
+                                <p class="text-md text-slate-600 italic mt-2 text-center">El individuo en la posición $3$ tiene $3\text{ años}$ de experiencia.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Percentil 80 -->
+                    <div class="glass-card p-8 rounded-2xl border-l-8 border-rose-500 shadow-md">
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4 pb-2 border-b border-rose-200">Encontrar el Percentil $80$ ($P_{80}$)</h3>
+                        
+                        <div class="space-y-4">
+                            <button onclick="revelarCeldas('.pos-p80-paso1')"
+                                class="w-full text-left bg-rose-50 hover:bg-rose-100 text-rose-800 font-bold py-3 px-6 rounded-xl transition border border-rose-200 flex justify-between">
+                                <span>Paso 1: Calcular Posición</span> <i data-lucide="calculator" class="w-5 h-5"></i>
+                            </button>
+                            <div class="pos-p80-paso1 hidden transition-all">
+                                <p class="text-xl text-slate-700 font-mono bg-white p-4 rounded-lg border">$\frac{80 \cdot 10}{100} = \mathbf{8}$</p>
+                                <p class="text-sm mt-3 font-medium text-slate-600 bg-emerald-50 p-2 rounded border border-emerald-200">
+                                    <strong class="text-emerald-800 uppercase tracking-widest">Axioma:</strong> Si el resultado es un entero exacto ($K$), el Cuantil es el <strong>promedio</strong> entre el dato en la posición $K$ y la posición $K+1$.
+                                </p>
+                            </div>
+
+                            <button onclick="revelarCeldas('.pos-p80-paso2')"
+                                class="w-full text-left bg-rose-100 hover:bg-rose-200 text-rose-900 font-bold py-3 px-6 rounded-xl transition border border-rose-300 flex justify-between mt-2">
+                                <span>Paso 2: Promedio de Posiciones</span> <i data-lucide="split" class="w-5 h-5"></i>
+                            </button>
+                            <div class="pos-p80-paso2 hidden transition-all mt-2 flex flex-col items-center">
+                                <p class="text-xl text-slate-700 font-mono bg-white p-4 rounded-lg border w-full text-center">Datos en pos. $8$ y $9$: $\textbf{10}$ y $\textbf{12}$</p>
+                                <p class="text-3xl text-rose-900 font-black font-mono bg-rose-50 p-4 border border-rose-300 text-center rounded-xl w-full mt-4">
+                                    $P_{80} = \frac{10+12}{2} = \mathbf{11 \text{ años}}$
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SLIDE 5: RANGO INTERCUARTÍLICO (RIC) -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="move-horizontal" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Rango Intercuartílico ($RIC$)</h2>
+            </div>
+
+            <div class="grid grid-cols-12 gap-8 flex-1 items-start">
+                <div class="col-span-12 xl:col-span-6 bg-white p-8 rounded-3xl border-4 border-indigo-200 shadow-lg flex flex-col justify-start relative h-full">
+                    <h3 class="text-3xl font-extrabold text-slate-800 mb-6 flex items-center gap-3">
+                        <i data-lucide="shield-check" class="text-indigo-600 w-10 h-10"></i> El Núcleo Robusto</h3>
+                    
+                    <p class="text-xl text-slate-700 font-medium leading-relaxed mb-6">
+                        El Rango simple ($x_{m\acute{a}x} - x_{m\acute{i}n}$) es extremadamente frágil a los valores atípicos. El $RIC$ es una medida de dispersión que evalúa <strong>únicamente el $50\%$ central</strong> de los datos, descartando el ruido de los extremos.
+                    </p>
+
+                    <div class="bg-slate-900 text-emerald-400 p-8 rounded-2xl shadow-xl font-mono text-5xl font-bold text-center mt-auto border-t-8 border-emerald-500">
+                        $$ RIC = Q_3 - Q_1 $$
+                    </div>
+                </div>
+
+                <div class="col-span-12 xl:col-span-6 bg-slate-50 p-8 flex flex-col justify-center items-center relative h-full">
+                    <!-- Diagrama Conceptual del Boxplot -->
+                    <div class="w-full flex flex-col items-center">
+                        <p class="text-2xl font-bold text-slate-500 uppercase tracking-widest mb-8 border-b-2 border-slate-300 pb-2">Topología del 50% Central (Boxplot)</p>
+
+                        <svg viewBox="0 0 500 200" class="w-full h-auto drop-shadow-xl overflow-visible max-w-lg">
+                            <!-- Eje -->
+                            <line x1="20" y1="150" x2="480" y2="150" stroke="#94a3b8" stroke-width="4" stroke-linecap="round" />
+                            
+                            <!-- Bigotes -->
+                            <line x1="50" y1="100" x2="150" y2="100" stroke="#64748b" stroke-width="6" stroke-linecap="round" stroke-dasharray="4" />
+                            <line x1="350" y1="100" x2="450" y2="100" stroke="#64748b" stroke-width="6" stroke-linecap="round" stroke-dasharray="4" />
+
+                            <!-- Limites del Rango Bruto -->
+                            <line x1="50" y1="80" x2="50" y2="120" stroke="#475569" stroke-width="4" stroke-linecap="round" />
+                            <text x="50" y="170" font-size="16" font-family="monospace" font-weight="bold" fill="#64748b" text-anchor="middle">Mín</text>
+
+                            <line x1="450" y1="80" x2="450" y2="120" stroke="#475569" stroke-width="4" stroke-linecap="round" />
+                            <text x="450" y="170" font-size="16" font-family="monospace" font-weight="bold" fill="#64748b" text-anchor="middle">Máx</text>
+
+                            <!-- Caja RIC -->
+                            <rect x="150" y="60" width="200" height="80" fill="#e0e7ff" stroke="#4f46e5" stroke-width="6" rx="4" />
+                            
+                            <!-- Mediana (Q2) -->
+                            <line x1="260" y1="60" x2="260" y2="140" stroke="#1d4ed8" stroke-width="6" stroke-linecap="round" />
+                            <text x="260" y="45" font-size="20" font-family="monospace" font-weight="bold" fill="#1e3a8a" text-anchor="middle">$Q_2$</text>
+
+                            <!-- Textos Q1 y Q3 -->
+                            <text x="150" y="170" font-size="20" font-family="monospace" font-weight="bold" fill="#4338ca" text-anchor="middle">$Q_1$</text>
+                            <text x="350" y="170" font-size="20" font-family="monospace" font-weight="bold" fill="#4338ca" text-anchor="middle">$Q_3$</text>
+
+                            <!-- Flecha RIC -->
+                            <path d="M 150 25 L 350 25" stroke="#059669" stroke-width="3" />
+                            <polygon points="150,25 160,20 160,30" fill="#059669" />
+                            <polygon points="350,25 340,20 340,30" fill="#059669" />
+                            <text x="250" y="15" font-size="22" font-family="monospace" font-weight="bold" fill="#047857" text-anchor="middle">RIC = Amplitud Central</text>
+                        </svg>
+
+                        <div class="mt-8 flex gap-4 text-slate-800 font-medium bg-emerald-100 border-l-8 border-emerald-600 p-4 rounded-xl items-center w-full shadow-sm">
+                            <i data-lucide="info" class="w-8 h-8 shrink-0 text-emerald-700"></i>
+                            <span class="text-lg">Un $RIC$ más pequeño indica que el centro de la distribución está fuertemente comprimido alrededor de la Mediana.</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: FILTRADO DE ATIPICOS -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="filter" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Barreras de Anomalía (Filtro RIC)</h2>
+            </div>
+            
+            <p class="text-2xl text-slate-700 leading-relaxed font-medium mb-6">
+                El Rango Intercuartílico nos provee una herramienta analítica matemática para <strong>comprobar si un valor es atípico o no</strong> (Outlier), evitando la subjetividad visual. Se definen las Barreras Internas Admisibles ($L_i, L_s$).
+            </p>
+
+            <div class="grid grid-cols-2 gap-10 flex-1 items-start mt-4">
+                
+                <div class="glass-card bg-slate-50 p-6 rounded-3xl border-4 border-rose-200 shadow-md flex flex-col gap-4">
+                    <div class="p-6 bg-white rounded-xl shadow-sm border border-slate-200 text-center">
+                        <p class="text-xl font-bold text-slate-500 uppercase tracking-widest mb-4">Límite Inferior Admitido ($L_i$)</p>
+                        <p class="text-3xl font-mono text-rose-900 font-black">
+                            $$ L_i = Q_1 - 1.5 \cdot RIC $$
+                        </p>
+                        <p class="text-sm text-slate-400 mt-2">Cualquier dato menor a esto es considerado Atípico Inferior.</p>
+                    </div>
+
+                    <div class="p-6 bg-white rounded-xl shadow-sm border border-slate-200 text-center">
+                        <p class="text-xl font-bold text-slate-500 uppercase tracking-widest mb-4">Límite Superior Admitido ($L_s$)</p>
+                        <p class="text-3xl font-mono text-rose-900 font-black">
+                            $$ L_s = Q_3 + 1.5 \cdot RIC $$
+                        </p>
+                        <p class="text-sm text-slate-400 mt-2">Cualquier dato mayor a esto es considerado Atípico Superior.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 p-8 rounded-3xl shadow-xl flex flex-col relative text-white">
+                    <h3 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3 border-b border-slate-700 pb-2">
+                        <i data-lucide="terminal" class="w-6 h-6"></i> Demostración Lógica
+                    </h3>
+                    
+                    <p class="text-lg text-slate-300 font-mono mb-6 leading-relaxed">
+                        Problema: En una métrica de software, el tiempo de carga dictaminó $Q_1 = 20\text{ ms}$ y $Q_3 = 60\text{ ms}$. Un usuario reportó un cargado de $130\text{ ms}$. ¿Es matemáticamente un valor atípico ignorado para el reporte general?
+                    </p>
+
+                    <ol class="space-y-4 font-mono w-full">
+                        <li class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            1. Calcular $RIC = 60 - 20 = \textbf{40 ms}$
+                        </li>
+                        <li class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col gap-2">
+                            <span>2. Calcular Barrera Superior ($L_s$):</span>
+                            <span>$L_s = 60 + 1.5 \cdot (40) = 60 + 60 = \textbf{120 ms}$</span>
+                        </li>
+                    </ol>
+
+                    <div class="mt-auto bg-rose-900/40 p-6 rounded-xl border border-rose-500 text-center">
+                        <p class="text-rose-300 font-bold text-xl uppercase tracking-widest">Respuesta</p>
+                        <p class="text-white text-lg mt-2 font-medium">Como el tiempo reportado ($130\text{ ms}$) es <strong>estrictamente mayor</strong> que el umbral máximo tolerado ($L_s = 120\text{ ms}$), el dato se considera legalmente un atípico.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SLIDE 7: APLICACION ANALITICA GENERAL -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-3 shrink-0">
+                <i data-lucide="shield" class="w-12 h-12 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Aplicación Analítica Final</h2>
+            </div>
+
+            <p class="text-2xl text-slate-600 mb-6 font-medium border-l-4 border-emerald-500 pl-4">Desarrolla el razonamiento algebraico en tu cuaderno, aproximando enteros en cada extración posicional si la fórmula lo indexa.</p>
+
+            <div class="flex-1 overflow-y-auto w-full max-w-full">
+                <!-- Se reemplazó items-stretch por items-start para evitar saltos horizontales y espacios en grillas no-uniformes -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start pb-10">
+
+                    <!-- Ejercicio 1 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-emerald-500 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Mediana y Cuantiles</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Determina el $Q_2$ de la serie: $\{12, 14, 15, 18, 20, 21, 25, 30, 31\}$.
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 2 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-emerald-600 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Jerarquía Superior</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            De 50 empleados registrados y ordenados por sueldo ascendantemente, indica específicamente en qué <strong>posición numérica indexada</strong> se sitúa la persona que delimita el tercer cuartil ($Q_3$).
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 3 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-emerald-700 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Extracción de RIC</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Dados $N=4$ datos $\{5, 10, 15, 20\}$. Identifica el valor del $Q_1$, el $Q_3$, y el Rango Intercuartílico numéricos.
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 4 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-indigo-500 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Percentil Exigente</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Para ingresar a la élite de un gremio que compuso nota en base a 200 concursantes analizados, exigen superar el percentil $95$ ($P_{95}$). ¿Qué posición exacta dictamina ese umbral de puntaje?
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 5 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-indigo-600 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Filtro Simple</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Un ecosistema con $Q_1 = 30$ y $RIC = 15$ generó una observación biológica en la cifra $8$. Demuestra analíticamente que la métrica califica (o no califica) bajo anomalía inferior inaceptable.
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 6 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-indigo-700 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Límite Superior Gammámico</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Para una distribución con $Q_1 = 1$, $Q_2 = 4$ y $Q_3=8$. Calcula el Límite Admisible Superior  $\left(L_s \right)$ máximo donde la gráfica del boxplot puede trazar su bigote.
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 7 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-rose-500 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Abstracción Pareada</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Verdadero o Falso analítico justificado: <strong>"Un RIC de cero ($0$) certifica irrevocablemente que al menos el $50\%$ de los datos en el centro asumen idéntico valor."</strong>
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 8 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-rose-600 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Decisiones Posicionales</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            ¿Qué percentil indexado corresponde rigurosamente, y de idénticas magnitudes semánticas formales, al primer Cuartil ($Q_1$)? Establece la identidad de demostración matemática simple de fracciones.
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 9 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-rose-700 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Ingeniería Inversa Pura</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Una empresa determina que su $L_s$ está fijado en $\$250.000$ diarios, y su $RIC$ promedia $\$40.000$ diarios continuos. Despeja el Cuartil 3 monetario propio de la empresa usando las barreras invertidas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: TICKET DE SALIDA -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-100 pb-4 shrink-0 justify-between">
+                <div class="flex items-center gap-6">
+                    <i data-lucide="target" class="w-16 h-16 text-emerald-800"></i>
+                    <h2 class="text-6xl font-bold text-slate-800">Ticket de Salida (DEMRE)</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-12 flex-1 min-h-[450px]">
+                <div class="col-span-12 xl:col-span-7 flex flex-col h-full space-y-8">
+                    <div class="bg-slate-50 border-2 border-slate-200 rounded-3xl p-8 shadow-md">
+                        <p class="text-2xl font-medium text-slate-800 leading-relaxed mb-4">
+                            Se tiene una muestra de notas finales (de 1.0 a 7.0) obtenidas por los estudiantes de un curso preuniversitario intensivo.<br>  Al calcular las medidas de posición de esta distribución se comprueba que $Q_1 = Q_2 = Q_3 = 5.0$.
+                        </p>
+                        <p class="text-xl font-bold text-slate-700 tracking-wider">¿Cuál de las siguientes afirmaciones es CORRECTA e INFALIBLE ante cualquier escenario con esa configuración de datos teórica?</p>
+                    </div>
+
+                    <div class="flex-1">
+                        <p class="text-2xl font-bold text-emerald-900 mb-6 uppercase tracking-widest border-b pb-2">Selecciones la Alternativa:</p>
+                        <div class="space-y-4 text-2xl font-bold text-slate-700 font-mono leading-relaxed">
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left">
+                                A) El Rango total ($R$) de las calificaciones de este curso es indudablemente cero ($0$).</p>
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left">
+                                B) Todos y cada uno de los estudiantes de la sala de clases obtuvo invariablemente la calificación de $5.0$.</p>
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left" id="alt-corr">
+                                C) El Rango Intercuartílico ($RIC$) numérico es cero ($0$), y a lo menos la mitad central del universo del salón aprobó con nota exacta $5.0$.</p>
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left">
+                                D) La Desviación Estándar ($\sigma$) generada en aquellos resultados académicos es necesariamente cero ($0$).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="col-span-12 xl:col-span-5 flex flex-col h-full bg-slate-900 rounded-3xl p-8 shadow-xl items-center justify-center relative">
+                    <button id="btn-ticket" onclick="revelarTicket()"
+                        class="w-full px-8 py-6 bg-emerald-600 text-white rounded-2xl text-3xl font-bold hover:bg-emerald-500 transition shadow-2xl relative z-20">
+                        <i data-lucide="scan" class="inline-block w-8 h-8 mr-3 mb-1"></i> Ver Análisis de Alternativas
+                    </button>
+
+                    <div id="respuesta-ticket"
+                        class="hidden absolute inset-0 w-full h-full p-8 flex flex-col justify-center bg-emerald-50 text-slate-800 rounded-3xl border-4 border-emerald-500 z-10 overflow-y-auto">
+                        <h3 class="text-3xl font-extrabold text-emerald-900 mb-6 flex items-center gap-4"><i
+                                data-lucide="check-circle" class="w-10 h-10 text-emerald-600"></i> Alternativa C</h3>
+                        <div class="text-lg space-y-4 font-mono text-left pl-4 border-l-4 border-emerald-400">
+                            <p><strong class="font-sans text-xl text-slate-600">A y B son Falsas:</strong> Perfectamente puede haber un mínimo de 1.0 (un solo alumno) y un máximo de 7.0 (otro alumno), generando rango 6.0, pero donde toda la inmensa mayoría central (25% al 75%) sacó un 5.0 concentradamente.</p>
+                            <p><strong class="font-sans text-xl text-slate-600">D es Falsa:</strong> Solo si t-o-d-o-s los datos fuesen idénticos, la desviación sería cero. Esto no está garantizado solo porque el centro $50\%$ sea constante.</p>
+                            <p><strong class="font-sans text-xl text-slate-600">C es Correcta Institucional:</strong> Matemáticamente si $Q_3 = Q_1$, el $RIC = Q_3 - Q_1 = 5.0 - 5.0 = 0$. Esto dictamina lógicamente que el bloque entre el 25% y el 75% es uniforme y estático en el valor de cinco coma cero.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- NAVEGACIÓN INFERIOR -->
+    <script>
+        lucide.createIcons();
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function updateSlide() {
+            slides.forEach((s, i) => {
+                s.classList.remove('active');
+                if (i === currentSlide) {
+                    s.classList.add('active');
+                    s.scrollTop = 0;
+                }
+            });
+        }
+
+        function changeSlide(d) {
+            const n = currentSlide + d;
+            if (n >= 0 && n < slides.length) {
+                currentSlide = n;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (['ArrowRight', 'Space', 'Enter'].includes(e.key)) changeSlide(1);
+            if (['ArrowLeft', 'Backspace'].includes(e.key)) changeSlide(-1);
+        });
+
+        function revelarElemento(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                if (el.classList.contains('hidden')) {
+                    el.classList.remove('hidden');
+                    if (window.MathJax) {
+                        MathJax.typesetPromise([el]).catch((err) => console.log(err.message));
+                    }
+                }
+            }
+        }
+
+        function revelarTicket() {
+            document.getElementById('btn-ticket').style.display = 'none';
+            document.getElementById('respuesta-ticket').classList.remove('hidden');
+            document.getElementById('respuesta-ticket').classList.add('flex');
+
+            document.getElementById('alt-corr').classList.add('border-l-8', 'border-emerald-500', 'bg-emerald-50', 'text-emerald-900');
+            if (window.MathJax) {
+                MathJax.typesetPromise([document.getElementById('respuesta-ticket')]).catch(err => console.log(err));
+            }
+        }
+
+        function revelarCeldas(selector) {
+            const elms = document.querySelectorAll(selector);
+            elms.forEach(e => {
+                e.classList.remove('hidden');
+            });
+            if (window.MathJax) {
+                MathJax.typesetPromise().catch((err) => console.log(err.message));
+            }
+        }
+    </script>
+</body>
+
+</html>

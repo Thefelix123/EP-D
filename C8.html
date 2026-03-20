@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conclusiones - IIIº Medio Electivo</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            startup: { typeset: true }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #f8fafc;
+        }
+
+        #slide-container {
+            height: calc(100vh - 5rem);
+            width: 100vw;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            height: 100%;
+            width: 100%;
+            animation: fadeIn 0.3s ease-out;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-bottom: 3rem;
+            scroll-behavior: smooth;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        ::-webkit-scrollbar {
+            width: 14px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #6ee7b7;
+            border-radius: 8px;
+            border: 3px solid #e2e8f0;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10b981;
+        }
+
+        .fade-transition {
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 select-none flex flex-col">
+
+    <div class="h-4 w-full bg-emerald-800 shrink-0 fixed top-0 z-50"></div>
+
+    <div id="slide-container" class="mt-4">
+
+        <!-- SLIDE 1: PORTADA -->
+        <div class="slide active p-10 bg-slate-50">
+            <div class="flex-1 flex flex-col items-center justify-center space-y-8 w-full h-full min-h-[500px]">
+                <i data-lucide="bar-chart-3" class="w-40 h-40 text-emerald-800 opacity-90"></i>
+                <h1 class="text-7xl font-extrabold tracking-tight text-slate-900 uppercase text-center">
+                    Extracción de Conclusiones
+                </h1>
+                <p class="text-5xl text-slate-500 font-semibold tracking-wide text-center">
+                    Analizando la Evidencia Visual y Tabular
+                </p>
+
+                <div
+                    class="mt-16 p-8 glass-card rounded-2xl border-l-8 border-emerald-800 text-left w-full max-w-5xl flex justify-between items-end shadow-md">
+                    <div>
+                        <p class="text-4xl font-bold text-slate-900">Prof. Luis Quezada</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-3xl font-bold text-emerald-800 uppercase tracking-wider">SEK CHILE • IIIº
+                            ELECTIVO</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: MOTIVACION EL PELIGRO DE LA INTERPRETACION VISUAL -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="eye-off" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">El Engaño Óptico de la Estadística</h2>
+            </div>
+
+            <div class="grid grid-cols-12 gap-10 flex-1 items-center">
+                <div class="col-span-6 flex flex-col justify-start h-full gap-8">
+                    <div class="space-y-6">
+                        <p class="text-2xl text-slate-700 leading-relaxed font-medium">
+                            Una municipalidad publicó el siguiente gráfico afirmando que los delitos aumentaron de manera 
+                            <strong class="text-emerald-800 uppercase tracking-widest">catastrófica y desproporcionada</strong> este año en relación al año anterior.
+                        </p>
+                        <p class="text-2xl text-slate-700 leading-relaxed font-medium">
+                            La prensa local replicó la noticia exigiendo medidas urgentes, argumentando que la barra del Año 2 es <strong class="text-rose-700">tres veces más alta</strong> que la del Año 1.
+                        </p>
+                        
+                        <button id="btn-revelar-optico" onclick="document.getElementById('btn-revelar-optico').style.display='none'; revelarElemento('solucion-grafico')"
+                            class="px-8 py-4 bg-emerald-800 text-white rounded-xl text-2xl font-bold hover:bg-emerald-900 transition shadow-lg w-max mt-4">
+                            Analizar Rigurosamente el Gráfico
+                        </button>
+                    </div>
+
+                    <!-- ANALISIS INFERIOR (No tapa el enunciado) -->
+                    <div id="solucion-grafico"
+                        class="hidden bg-slate-900 rounded-3xl p-8 shadow-2xl flex flex-col justify-center gap-6 border-4 border-emerald-500">
+
+                        <div class="flex items-center gap-4">
+                            <i data-lucide="scan-eye" class="w-12 h-12 text-emerald-400 shrink-0"></i>
+                            <h3 class="text-3xl font-bold text-white">Falta Rigurosidad Analítica</h3>
+                        </div>
+                        
+                        <div class="bg-slate-800 border-l-8 border-emerald-500 p-6 rounded-xl w-full">
+                            <p class="text-xl text-slate-300 font-mono mb-2">Incremento Absoluto:</p>
+                            <p class="text-2xl font-bold text-emerald-400 mb-4">$1010 - 990 = 20 \text{ delitos extra}$</p>
+                            
+                            <p class="text-xl text-slate-300 font-mono mb-2">Incremento Relativo Porcentual:</p>
+                            <p class="text-2xl font-bold text-emerald-400">$\frac{20}{990} \cdot 100\% \approx \mathbf{2\%}$</p>
+                        </div>
+
+                        <p class="text-xl text-slate-200 leading-relaxed">
+                            Al truncar el eje $Y$ comenzando desde $980$, se generó la ilusión óptica de que el Año 2 triplicó al Año 1. 
+                            <strong class="text-rose-400 font-bold">Jamás se concluye basándose solo en el impacto visual.</strong> Se debe analizar numéricamente.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-span-6 flex justify-center items-center w-full h-full">
+                    <!-- Gráfico "Engañoso" Visualmente Visible Siempre -->
+                    <div class="bg-white p-12 pl-16 border-4 border-slate-200 shadow-xl rounded-3xl w-full max-w-2xl flex flex-col items-center">
+                        <h3 class="text-center font-bold text-slate-700 text-3xl mb-12">Tasa de Delitos (Año 1 vs Año 2)</h3>
+                        <div class="flex items-end justify-center h-72 gap-20 border-b-4 border-l-4 border-slate-800 pb-2 pl-6 relative">
+                            <!-- Eje Y Engañoso (comienza en 980) -->
+                            <div class="absolute -left-20 bottom-0 flex flex-col justify-between h-full font-mono text-xl text-slate-600 text-right w-16 font-bold">
+                                <span>1010-</span>
+                                <span>1000-</span>
+                                <span>990-</span>
+                                <span>980-</span>
+                            </div>
+                            
+                            <!-- Año 1: 990 (Barra de altura 10 visualmente sobre base 980) -->
+                            <div class="flex flex-col items-center">
+                                <div class="w-32 bg-emerald-500 h-16 rounded-t-sm shadow-inner relative group border-t-4 border-emerald-600">
+                                    <span class="absolute -top-12 left-1/2 -translate-x-1/2 font-bold text-slate-700 text-3xl">990</span>
+                                </div>
+                                <span class="font-bold text-slate-600 mt-8 text-2xl">Año 1</span>
+                            </div>
+
+                            <!-- Año 2: 1010 (Barra de altura 30 visualmente sobre base 980) -->
+                            <div class="flex flex-col items-center">
+                                <div class="w-32 bg-rose-500 h-48 rounded-t-sm shadow-inner relative group border-t-4 border-rose-600" style="height: 192px;">
+                                    <span class="absolute -top-12 left-1/2 -translate-x-1/2 font-bold text-rose-800 text-3xl">1010</span>
+                                </div>
+                                <span class="font-bold text-slate-600 mt-8 text-2xl">Año 2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: FORMALIZACION DEL ANALISIS E INFERENCIA -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="split-square-horizontal" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Niveles de Análisis y Exigencia</h2>
+            </div>
+
+            <div class="grid grid-cols-2 gap-10 flex-1 items-start">
+                <div
+                    class="glass-card p-8 rounded-3xl border-t-8 border-indigo-600 shadow-md flex flex-col justify-start relative bg-white h-full">
+                    <h3 class="text-3xl font-extrabold text-slate-800 mb-6 flex items-center gap-3">
+                        <i data-lucide="binary" class="text-indigo-600 w-8 h-8"></i> Lectura Estructural Directa</h3>
+                    <p class="text-xl text-slate-700 font-medium leading-relaxed mb-6">
+                        Corresponde a la identificación y cuantificación primaria de frecuencias, modas evidentes y rangos máximos. Es la traducción de la Geometría a la Aritmética.
+                    </p>
+                    
+                    <ul class="text-lg text-slate-700 space-y-4 font-mono mb-8 p-6 bg-indigo-50 border border-indigo-200 rounded-xl">
+                        <li class="flex gap-2 items-start"><i data-lucide="check" class="w-6 h-6 text-indigo-700 shrink-0 mt-1"></i> <span>Extraer la Frecuencia Absoluta ($f_i$) del eje de ordenadas.</span></li>
+                        <li class="flex gap-2 items-start"><i data-lucide="check" class="w-6 h-6 text-indigo-700 shrink-0 mt-1"></i> <span>Reconocer el intervalo o clase Unimodal observando la barra de mayor altura.</span></li>
+                        <li class="flex gap-2 items-start"><i data-lucide="check" class="w-6 h-6 text-indigo-700 shrink-0 mt-1"></i> <span>Detectar valores mínimos y máximos registrados.</span></li>
+                    </ul>
+
+                    <div class="mt-auto bg-indigo-900 text-indigo-50 p-4 rounded-xl text-center shadow-inner">
+                        <span class="font-bold tracking-widest uppercase text-sm text-indigo-300">Responde a la pregunta:</span><br>
+                        <span class="text-xl italic">"¿Cuántos reportaron exactamente el atributo X?"</span>
+                    </div>
+                </div>
+
+                <div
+                    class="glass-card p-8 rounded-3xl border-t-8 border-rose-600 shadow-md flex flex-col justify-start relative bg-white h-full">
+                    <h3 class="text-3xl font-extrabold text-slate-800 mb-6 flex items-center gap-3">
+                        <i data-lucide="cpu" class="text-rose-600 w-8 h-8"></i> Inferencia Lógica Avanzada</h3>
+                    <p class="text-xl text-slate-700 font-medium leading-relaxed mb-6">
+                        No basta con la traducción literal. El análisis riguroso requiere operar con los datos (acumulación, promedios ponderados, posicionamiento cuantil) usando ingeniería inversa.
+                    </p>
+                    
+                    <ul class="text-lg text-slate-700 space-y-4 font-medium mb-8 p-6 bg-rose-50 border border-rose-200 rounded-xl">
+                        <li class="flex gap-2 items-start"><i data-lucide="chevron-right" class="w-6 h-6 text-rose-700 shrink-0 mt-1"></i> <span><strong class="text-rose-900 font-bold">Acumulativas ($F_i$):</strong> Sumar progresivamente el área bajo la curva o las barras para determinar totalidades previas a un suceso.</span></li>
+                        <li class="flex gap-2 items-start"><i data-lucide="chevron-right" class="w-6 h-6 text-rose-700 shrink-0 mt-1"></i> <span><strong class="text-rose-900 font-bold">Posición ($Q_k, P_k$):</strong> Identificar en qué intervalo o clase recae un percentil, sabiendo la totalización de la muestra.</span></li>
+                        <li class="flex gap-2 items-start"><i data-lucide="chevron-right" class="w-6 h-6 text-rose-700 shrink-0 mt-1"></i> <span><strong class="text-rose-900 font-bold">Límites:</strong> Validar hipótesis (Ej: "Al menos el 50% de las empresas que ganan menos de 100M...").</span></li>
+                    </ul>
+
+                    <div class="mt-auto bg-rose-900 text-rose-50 p-4 rounded-xl text-center shadow-inner">
+                        <span class="font-bold tracking-widest uppercase text-sm text-rose-300">Responde a la pregunta:</span><br>
+                        <span class="text-xl italic">"¿Qué asegura irrevocablemente el $50\%$ central general?"</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: LABORATORIO 1 HISTOGRAMA DECONSTRUYENDO -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="microscope" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Laboratorio: Deconstruyendo un Histograma</h2>
+            </div>
+
+            <div class="grid grid-cols-12 gap-10 flex-1">
+                <div class="col-span-12 lg:col-span-5 h-full flex flex-col justify-center items-center">
+                    <div class="glass-card p-6 rounded-2xl border-2 border-slate-200 w-full shadow-lg relative">
+                        <h3 class="text-center font-bold text-slate-700 text-xl mb-4">Masa Corporal (Kg) de Estudiantes</h3>
+                        <svg viewBox="0 0 400 300" class="w-full h-auto">
+                            <!-- Ejes -->
+                            <line x1="40" y1="30" x2="40" y2="250" stroke="#475569" stroke-width="2" />
+                            <line x1="40" y1="250" x2="380" y2="250" stroke="#475569" stroke-width="2" />
+                            
+                            <!-- Marcas Y (Frecuencia Absoluta) -->
+                            <text x="35" y="255" font-size="12" font-family="monospace" text-anchor="end">0</text>
+                            <text x="35" y="195" font-size="12" font-family="monospace" text-anchor="end">5</text>
+                            <text x="35" y="135" font-size="12" font-family="monospace" text-anchor="end">10</text>
+                            <text x="35" y="75" font-size="12" font-family="monospace" text-anchor="end">15</text>
+                            <!-- Grid lines -->
+                            <line x1="40" y1="195" x2="380" y2="195" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2" />
+                            <line x1="40" y1="135" x2="380" y2="135" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2" />
+                            <line x1="40" y1="75" x2="380" y2="75" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2" />
+
+                            <!-- Barras del Histograma (Ancho 60, Base 250)
+                                 Escala: f=15 -> y=75. Dif 175 px. => 1 f = 11.66 px.
+                                 Para f=8, height= 8*11.66 = 93.3 px. y = 250 - 93.3 = 156.7
+                                 Para f=14, height = 163.2. y = 86.8
+                                 Para f=10, height = 116.6. y = 133.4
+                                 Para f=5, height = 58.3. y = 191.7
+                                 Para f=3, height = 35. y = 215 -->
+                            
+                            <rect x="50" y="156.7" width="55" height="93.3" fill="#6ee7b7" stroke="#059669" stroke-width="2" />
+                            <text x="77.5" y="150" font-size="14" font-family="monospace" font-weight="bold" fill="#047857" text-anchor="middle">8</text>
+
+                            <rect x="105" y="86.8" width="55" height="163.2" fill="#6ee7b7" stroke="#059669" stroke-width="2" />
+                            <text x="132.5" y="80" font-size="14" font-family="monospace" font-weight="bold" fill="#047857" text-anchor="middle">14</text>
+
+                            <rect x="160" y="133.4" width="55" height="116.6" fill="#6ee7b7" stroke="#059669" stroke-width="2" />
+                            <text x="187.5" y="127" font-size="14" font-family="monospace" font-weight="bold" fill="#047857" text-anchor="middle">10</text>
+
+                            <rect x="215" y="191.7" width="55" height="58.3" fill="#6ee7b7" stroke="#059669" stroke-width="2" />
+                            <text x="242.5" y="185" font-size="14" font-family="monospace" font-weight="bold" fill="#047857" text-anchor="middle">5</text>
+
+                            <rect x="270" y="215" width="55" height="35" fill="#6ee7b7" stroke="#059669" stroke-width="2" />
+                            <text x="297.5" y="209" font-size="14" font-family="monospace" font-weight="bold" fill="#047857" text-anchor="middle">3</text>
+
+                            <!-- Marcas X (Límites de Intervalos) -->
+                            <text x="50" y="270" font-size="12" font-family="monospace" text-anchor="middle">40</text>
+                            <text x="105" y="270" font-size="12" font-family="monospace" text-anchor="middle">50</text>
+                            <text x="160" y="270" font-size="12" font-family="monospace" text-anchor="middle">60</text>
+                            <text x="215" y="270" font-size="12" font-family="monospace" text-anchor="middle">70</text>
+                            <text x="270" y="270" font-size="12" font-family="monospace" text-anchor="middle">80</text>
+                            <text x="325" y="270" font-size="12" font-family="monospace" text-anchor="middle">90</text>
+                            <text x="195" y="295" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle" fill="#475569">Masa (Kg) [ , [ </text>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-7 flex flex-col justify-center space-y-6">
+                    <div class="bg-indigo-50 border-l-8 border-indigo-500 p-6 rounded-r-2xl shadow-sm">
+                        <h3 class="text-xl font-bold text-indigo-900 mb-2 uppercase tracking-widest font-mono">1. Población Total Estudiada ($N$)</h3>
+                        <p class="text-lg text-slate-700">Se debe calcular sumando la frecuencia absoluta de todas las clases continuas evidenciadas.</p>
+                        <button onclick="revelarElemento('lab1-n')" class="mt-3 px-6 py-2 bg-indigo-200 text-indigo-800 font-bold rounded shadow hover:bg-indigo-300">Despejar $N$</button>
+                        <div id="lab1-n" class="hidden mt-4 pt-4 border-t border-indigo-200 text-xl font-mono font-bold text-slate-800">
+                            $$ N = 8 + 14 + 10 + 5 + 3 = 40 \text{ estudiantes} $$
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50 border-l-8 border-emerald-500 p-6 rounded-r-2xl shadow-sm">
+                        <h3 class="text-xl font-bold text-emerald-900 mb-2 uppercase tracking-widest font-mono">2. Inferencia de Porcentajes Relativos</h3>
+                        <p class="text-lg text-slate-700">¿Qué porcentaje de la muestra posee una masa corporal <strong>inferior a 60 Kg</strong>?</p>
+                        <button onclick="revelarElemento('lab1-perc')" class="mt-3 px-6 py-2 bg-emerald-200 text-emerald-800 font-bold rounded shadow hover:bg-emerald-300">Extraer Inferencia</button>
+                        <div id="lab1-perc" class="hidden mt-4 pt-4 border-t border-emerald-200">
+                            <p class="text-lg text-slate-800 mb-2">Sumamos las frecuencias acumuladas anteriores al límite de $60$: Intervalos $[40, 50[$ y $[50, 60[$.</p>
+                            <div class="text-xl font-mono font-bold text-emerald-900 bg-white p-3 border border-emerald-300 rounded block w-max">
+                                $F(60) = 8 + 14 = 22 \text{ estudiantes.}$
+                            </div>
+                            <div class="text-xl font-mono font-bold text-emerald-900 bg-white p-3 border border-emerald-300 rounded block w-max mt-2">
+                                $\% = \frac{22}{40} \cdot 100\% = 55\%$
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-rose-50 border-l-8 border-rose-500 p-6 rounded-r-2xl shadow-sm">
+                        <h3 class="text-xl font-bold text-rose-900 mb-2 uppercase tracking-widest font-mono">3. Ubicación del Tercer Cuartil ($Q_3$)</h3>
+                        <p class="text-lg text-slate-700">Identificar analíticamente el intervalo exacto que contiene a la persona que delimita el $75\%$ de la muestra.</p>
+                        <button onclick="revelarElemento('lab1-q3')" class="mt-3 px-6 py-2 bg-rose-200 text-rose-800 font-bold rounded shadow hover:bg-rose-300">Indexar Cuartil</button>
+                        <div id="lab1-q3" class="hidden mt-4 pt-4 border-t border-rose-200">
+                            <p class="text-lg text-slate-800 font-mono font-bold mb-2">Posición $Q_3 = \frac{3 \cdot 40}{4} = 30$</p>
+                            <p class="text-lg text-rose-900">Debemos buscar al sujeto N° 30 barriendo las frecuencias acumuladas:<br>
+                            $8 \rightarrow (8+14=22) \rightarrow (22+10=32)$.<br>
+                            El sujeto N° 30 entra en el acopio al sumar la frecuencia $10$. Entonces, <strong class="text-rose-900 bg-rose-200 px-2 rounded">El intervalo es $[60, 70[$</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- SLIDE 5: FORMALIZACION MEDIDAS Y GRAFICOS -->
+         <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="merge" class="w-14 h-14 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Síntesis Visual: Evidenciando los Extremos</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 flex-1 items-stretch">
+                <!-- PANEL: TALLO Y HOJAS -->
+                <div class="glass-card bg-slate-50 p-8 rounded-3xl border-4 border-indigo-100 shadow-md flex flex-col">
+                    <h3 class="text-3xl font-extrabold text-indigo-900 mb-4 flex items-center gap-3 border-b-2 border-indigo-200 pb-2">
+                        <i data-lucide="list-tree" class="w-8 h-8"></i> Tallo y Hoja
+                    </h3>
+                    <p class="text-lg text-slate-700 mb-6">Muestra explícitamente el Rango ($X_{m\acute{a}x} - X_{m\acute{i}n}$) preservando cada dato íntegro empíricamente. Ideal para distribuciones cuantitativas asimétricas leves.</p>
+                    
+                    <div class="flex justify-center flex-1 items-center">
+                        <table class="font-mono text-xl border-collapse bg-white shadow-sm border border-slate-300 rounded-lg overflow-hidden w-full max-w-md">
+                            <tr class="bg-indigo-900 text-indigo-100">
+                                <th class="p-6 border-r-2 border-slate-400 text-2xl">Tallo(Dec)</th>
+                                <th class="p-6 text-2xl">Hoja(Uni)</th>
+                            </tr>
+                            <tr class="border-b border-slate-200">
+                                <td class="p-5 text-center border-r-2 border-slate-800 font-bold bg-slate-100 text-3xl">1</td>
+                                <td class="p-5 tracking-[0.5em] text-cyan-700 text-3xl">225</td>
+                            </tr>
+                            <tr class="border-b border-slate-200">
+                                <td class="p-5 text-center border-r-2 border-slate-800 font-bold bg-slate-100 text-3xl">2</td>
+                                <td class="p-5 tracking-[0.5em] text-cyan-700 text-3xl">01389</td>
+                            </tr>
+                            <tr>
+                                <td class="p-5 text-center border-r-2 border-slate-800 font-bold bg-slate-100 text-3xl">3</td>
+                                <td class="p-5 tracking-[0.5em] text-cyan-700 text-3xl">47</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="mt-6 text-sm bg-indigo-100 p-3 rounded text-indigo-800 font-bold text-center border border-indigo-300">
+                        Inferencia Máxima: Identificamos Rango Exacto ($37 - 12 = 25$) de forma limpia e inmediata.
+                    </div>
+                </div>
+
+                <!-- PANEL: BOX AND WHISKER -->
+                <div class="glass-card bg-slate-50 p-8 rounded-3xl border-4 border-emerald-100 shadow-md flex flex-col">
+                    <h3 class="text-3xl font-extrabold text-emerald-900 mb-4 flex items-center gap-3 border-b-2 border-emerald-200 pb-2">
+                        <i data-lucide="box" class="w-8 h-8"></i> Diagrama de Caja
+                    </h3>
+                    <p class="text-lg text-slate-700 mb-6">Omite la visión de cada dato individual para mostrar la densidad del centro (Rango Intercuartílico). Excelente para comparar dos poblaciones paralelas.</p>
+                    
+                    <div class="flex justify-center flex-1 items-center w-full px-4">
+                        <svg viewBox="0 0 400 120" class="w-full max-w-xl self-center drop-shadow-md">
+                            <line x1="20" y1="90" x2="380" y2="90" stroke="#94a3b8" stroke-width="2" />
+                            <text x="50" y="110" font-size="14" font-weight="bold" font-family="monospace" fill="#475569" text-anchor="middle">10</text>
+                            <text x="150" y="110" font-size="14" font-weight="bold" font-family="monospace" fill="#475569" text-anchor="middle">20</text>
+                            <text x="250" y="110" font-size="14" font-weight="bold" font-family="monospace" fill="#475569" text-anchor="middle">30</text>
+                            <text x="350" y="110" font-size="14" font-weight="bold" font-family="monospace" fill="#475569" text-anchor="middle">40</text>
+                            
+                            <!-- Boxplot -->
+                            <line x1="80" y1="50" x2="150" y2="50" stroke="#0f172a" stroke-width="3" />
+                            <line x1="300" y1="50" x2="330" y2="50" stroke="#0f172a" stroke-width="3" />
+                            
+                            <line x1="80" y1="35" x2="80" y2="65" stroke="#0f172a" stroke-width="3" />
+                            <line x1="330" y1="35" x2="330" y2="65" stroke="#0f172a" stroke-width="3" />
+                            
+                            <!-- Caja muy asimetrica -->
+                            <rect x="150" y="25" width="150" height="50" fill="#a7f3d0" stroke="#059669" stroke-width="3" />
+                            <line x1="250" y1="25" x2="250" y2="75" stroke="#047857" stroke-width="4" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="mt-6 text-sm bg-emerald-100 p-3 rounded text-emerald-800 font-bold text-center border border-emerald-300">
+                        Inferencia Crítica: Mayor distancia $Q_2 - Q_1$ vs $Q_3 - Q_2$ certifica Asimetría Negativa del conjunto interno.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 6: APLICACION ANALITICA GENERAL - GRILLA -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-3 shrink-0">
+                <i data-lucide="shield" class="w-12 h-12 text-emerald-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Práctica Analítica Final</h2>
+            </div>
+
+            <p class="text-2xl text-slate-600 mb-6 font-medium border-l-4 border-emerald-500 pl-4">Anota la conclusión categórica (matemáticamente demostrable) usando lógica inferencial para cada mini-estudio.</p>
+
+            <div class="flex-1 overflow-y-auto w-full max-w-full">
+                <!-- Se usa items-start para fluidez vertical natural en la grilla -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start pb-10">
+
+                    <!-- Ejercicio 1 Histograma -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-emerald-500 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Proporcionalidad Circular</p>
+                        <div class="w-full flex justify-center py-2 relative">
+                            <svg viewBox="0 0 100 100" class="w-32 h-32 transform -rotate-90 origin-center drop-shadow-md">
+                                <circle cx="50" cy="50" r="40" fill="transparent" stroke="#0ea5e9" stroke-width="20" stroke-dasharray="125.6 251.2" /> <!-- 50% = 125.6 de 251.2 -->
+                                <circle cx="50" cy="50" r="40" fill="transparent" stroke="#f43f5e" stroke-width="20" stroke-dasharray="62.8 251.2" stroke-dashoffset="-125.6" /> <!-- 25% -->
+                                <circle cx="50" cy="50" r="40" fill="transparent" stroke="#10b981" stroke-width="20" stroke-dasharray="62.8 251.2" stroke-dashoffset="-188.4" /> <!-- 25% -->
+                            </svg>
+                        </div>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Un ecosistema financiero segmenta carteras de inversión ($N = 80.000$ USD). Utilizando las proporciones angulares de los sectores equitativos contiguos (Rojo y Verde), demuestra algebraicamente su impacto consolidado en contraste al hiper-sector primario (Azul).
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 2 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-emerald-600 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Inferencia en Tallo Decimal</p>
+                        <table class="font-mono text-base bg-white w-full border border-slate-300 text-center mt-2 group shadow-sm">
+                            <tr class="bg-slate-800 text-white"><th colspan="3" class="py-2 tracking-widest text-sm">Masas (Kg) | Tallo: Década</th></tr>
+                            <tr class="bg-slate-100 border-b"><td class="w-2/5 text-right pr-4 text-emerald-800 font-bold tracking-[0.2em]">42</td><td class="w-1/5 font-bold border-x-2 border-slate-400 bg-slate-200 text-lg">5</td><td class="w-2/5 text-left pl-4 tracking-[0.2em] text-indigo-700">1238</td></tr>
+                            <tr class="border-b"><td class="text-right pr-4 text-emerald-800 font-bold tracking-[0.2em]">655310</td><td class="font-bold border-x-2 border-slate-400 bg-slate-200 text-lg">6</td><td class="text-left pl-4 tracking-[0.2em] text-indigo-700">2477</td></tr>
+                            <tr class="bg-slate-100"><td class="text-right pr-4 text-emerald-800 font-bold tracking-[0.2em]">980</td><td class="font-bold border-x-2 border-slate-400 bg-slate-200 text-lg">7</td><td class="text-left pl-4 tracking-[0.2em] text-indigo-700">01</td></tr>
+                        </table>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Se contrastan Masas del Grupo A (Verde) y Grupo B (Azul). Determina rigurosamente qué grupo presenta el mayor Rango Intercuartílico ($RIC$) y argumenta cuál de las dos distribuciones posee asimetría negativa más pronunciada.
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 3 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-emerald-700 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Asimetría Boxplot</p>
+                        <svg viewBox="0 0 200 60" class="w-full max-w-[200px] h-auto self-center drop-shadow-sm">
+                            <line x1="10" y1="30" x2="190" y2="30" stroke="#cbd5e1" stroke-width="2"/>
+                            <!-- Limites -->
+                            <line x1="20" y1="20" x2="20" y2="40" stroke="#334155" stroke-width="2"/>
+                            <line x1="180" y1="20" x2="180" y2="40" stroke="#334155" stroke-width="2"/>
+                            <!-- Bigotes y Caja -->
+                            <line x1="20" y1="30" x2="40" y2="30" stroke="#334155" stroke-width="2"/>
+                            <line x1="150" y1="30" x2="180" y2="30" stroke="#334155" stroke-width="2"/>
+                            <rect x="40" y="15" width="110" height="30" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
+                            <line x1="50" y1="15" x2="50" y2="45" stroke="#e11d48" stroke-width="3"/>
+                        </svg>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Analizando este diagrama de dispersión posicional, evaluando la magnitud relativa intercuartílica adyacente a $Q_2$ (Rojo), fundamenta matemáticamente la existencia de Asimetría Positiva y su implicancia dogmática sobre el promedio general.
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 4 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-indigo-500 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Teorema de Complemento Acumulado</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            En una Ojiva Poligonal modelando la calibración de sensores térmicos, el área integrada hasta la frontera restrictiva de $40^\circ\text{C}$ intercepta el percentil $60$ del lote de producción ($N=2500$). Determine vía axiomas probabilísticos la cardinalidad exacta del subconjunto complementario superior extremo.
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 5 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-indigo-600 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Detección de Valores Atípicos</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Un diagnóstico métrico de resistividad denota $min=1.60 \Omega$, $Q_1=1.75 \Omega$, $Q_3=1.90 \Omega$ y $max=1.92 \Omega$. Comprueba algebraicamente evaluando el vector límite si la frontera inferior de admisibilidad normalizada ($L_i = Q_1 - 1.5 \cdot RIC$) resulta vulnerada.
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 6 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-indigo-700 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Limitaciones Estructurales</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Un diagrama sectorial ilustra la jerarquización corporativa: Nivel A ($20\%$), Nivel B ($50\%$), Nivel C ($30\%$). Fundamenta mediante geometría posicional si bajo esta amalgama porcentual resulta factible delimitar la Desviación Estándar ($\sigma$) frente al cálculo de Moda.
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 7 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-rose-500 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Inferencia en Ojiva Poligonal</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            La curva de Frecuencias Acumuladas Porcentuales (Ojiva Ascendente) intersecta ortogonalmente su eje de simetría horizontal en la coordenada limitante $F(x) = 50\% \rightarrow x=50\text{kg}$. Demuestra rigurosamente por qué este punto de contacto configura irrevocablemente a la Mediana poblacional ($Q_2$).
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 8 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-rose-600 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Trampas de Dispersión Visual</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Refuta analíticamente la premisa empírica: <span class="italic">"Dado que el bigote superior de un Boxplot triplica geométricamente la longitud del flanco inferior, entonces alberga forzosamente al triple de unidades muestrales"</span>, empleando la fundamentación base de la equidistancia en Cuantiles.
+                        </p>
+                    </div>
+
+                    <!-- Ejercicio 9 -->
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-rose-700 shadow-md flex flex-col gap-4">
+                        <p class="text-slate-800 font-extrabold text-xl uppercase tracking-widest font-mono">Equilibrio Cuantílico Dual</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Operando con dos histogramas paralelos, la Mediana combinada del supersistema resulta matemáticamente equivalente al $P_{50}$ extraído localmente en ambas poblaciones segregadas. Deduce el axioma restrictivo de distribución y frecuencias acumuladas que viabiliza este teorema.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: TICKET DE SALIDA -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-100 pb-4 shrink-0 justify-between">
+                <div class="flex items-center gap-6">
+                    <i data-lucide="target" class="w-16 h-16 text-emerald-800"></i>
+                    <h2 class="text-6xl font-bold text-slate-800">Ticket de Salida (DEMRE M2)</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-12 flex-1 min-h-[450px]">
+                <div class="col-span-12 xl:col-span-7 flex flex-col h-full space-y-8">
+                    <div class="bg-slate-50 border-2 border-slate-200 rounded-3xl p-8 shadow-md relative">
+                        <p class="text-2xl font-medium text-slate-800 leading-relaxed mb-6">
+                            Un estudio de radiación electromagnética arroja el siguiente <strong class="text-emerald-900">Gráfico Circular</strong> (sectores 1 al 4) y una tabla paralela de <strong class="text-emerald-900">Frecuencia Acumulada</strong> complementaria.
+                        </p>
+                        <p class="text-xl font-bold text-slate-700 tracking-wider bg-white p-4 border rounded">Enunciado: "Se sabe que el sector 1 engloba el $30\%$ de los casos, y la frecuencia acumulada hasta el intervalo consecuente 2 determina $N=80$."</p>
+                        <p class="text-xl font-bold text-slate-700 tracking-wider mt-4">Para obtener el valor exacto de la Mediana global ($Q_2$), se requiere imperativamente de forma adicional:</p>
+                    </div>
+
+                    <div class="flex-1">
+                        <div class="space-y-4 text-2xl font-bold text-slate-700 font-mono leading-relaxed">
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left">
+                                (1) El tamaño total universal ($N$) de la población sometida al escaneo.</p>
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left">
+                                (2) El grado angular individual que emite el Sector 3 dentro del polígono.</p>
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left mt-6 font-sans">
+                                A) (1) por sí sola.<br>
+                                B) (2) por sí sola.<br>
+                                C) Ambas juntas, (1) y (2).<br>
+                                D) Se requiere información extra.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="col-span-12 xl:col-span-5 flex flex-col h-full bg-slate-900 rounded-3xl p-8 shadow-xl items-center justify-center relative">
+                    <button id="btn-ticket" onclick="revelarTicket()"
+                        class="w-full px-8 py-6 bg-emerald-600 text-white rounded-2xl text-3xl font-bold hover:bg-emerald-500 transition shadow-2xl relative z-20">
+                        <i data-lucide="scan" class="inline-block w-8 h-8 mr-3 mb-1"></i> Ver Análisis de Alternativas
+                    </button>
+
+                    <div id="respuesta-ticket"
+                        class="hidden absolute inset-0 w-full h-full p-8 flex flex-col justify-center bg-emerald-50 text-slate-800 rounded-3xl border-4 border-emerald-500 z-10 overflow-y-auto">
+                        <h3 class="text-3xl font-extrabold text-emerald-900 mb-6 flex items-center gap-4"><i
+                                data-lucide="check-circle" class="w-10 h-10 text-emerald-600"></i> Alternativa A</h3>
+                        <div class="text-lg space-y-4 font-mono text-left pl-4 border-l-4 border-emerald-400">
+                            <p><strong class="font-sans text-xl text-slate-600">Por qué es A (Suficiencia de Datos):</strong> Si logramos acceder a (1), es decir a la Población Total $N$, entonces el sector 1 deja de ser un simple $30\%$ vacío y pasa a ser una frecuencia Absoluta. Luego, como tenemos la Acumulada ($F_2=80$), podemos rastrear el paso de las frecuencias e indexar $Pos(Q_2) = \frac{N}{2}$ con exactitud y revisar de qué intervalo salió.</p>
+                            <p><strong class="font-sans text-xl text-slate-600">B y C son Inservibles:</strong> Conducir la variable angular (2) sólo te otorga un nuevo porcentaje relativo estéril. Un gráfico circular no revela la Media ni la Mediana directa ni con todos sus grados expuestos, pues estos precisan volumen frecuencial posicionado en ejes ordenados.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- NAVEGACIÓN INFERIOR -->
+    <script>
+        lucide.createIcons();
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function updateSlide() {
+            slides.forEach((s, i) => {
+                s.classList.remove('active');
+                if (i === currentSlide) {
+                    s.classList.add('active');
+                    s.scrollTop = 0;
+                }
+            });
+        }
+
+        function changeSlide(d) {
+            const n = currentSlide + d;
+            if (n >= 0 && n < slides.length) {
+                currentSlide = n;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (['ArrowRight', 'Space', 'Enter'].includes(e.key)) changeSlide(1);
+            if (['ArrowLeft', 'Backspace'].includes(e.key)) changeSlide(-1);
+        });
+
+        function revelarElemento(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                if (el.classList.contains('hidden')) {
+                    el.classList.remove('hidden');
+                    if (window.MathJax) {
+                        MathJax.typesetPromise([el]).catch((err) => console.log(err.message));
+                    }
+                }
+            }
+        }
+
+        function revelarTicket() {
+            document.getElementById('btn-ticket').style.display = 'none';
+            document.getElementById('respuesta-ticket').classList.remove('hidden');
+            document.getElementById('respuesta-ticket').classList.add('flex');
+
+            if (window.MathJax) {
+                MathJax.typesetPromise([document.getElementById('respuesta-ticket')]).catch(err => console.log(err));
+            }
+        }
+
+        function revelarCeldas(selector) {
+            const elms = document.querySelectorAll(selector);
+            elms.forEach(e => {
+                e.classList.remove('hidden');
+            });
+            if (window.MathJax) {
+                MathJax.typesetPromise().catch((err) => console.log(err.message));
+            }
+        }
+    </script>
+</body>
+
+</html>
