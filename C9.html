@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>C9 EP</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Covarianza - IIIº Medio Electivo</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            startup: { typeset: true }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #f8fafc;
+        }
+
+        #slide-container {
+            height: calc(100vh - 5rem);
+            width: 100vw;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            height: 100%;
+            width: 100%;
+            animation: fadeIn 0.3s ease-out;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-bottom: 10rem;
+            scroll-behavior: smooth;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        ::-webkit-scrollbar { width: 14px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; margin: 10px 0; }
+        ::-webkit-scrollbar-thumb { background: #0d9488; border-radius: 8px; border: 3px solid #e2e8f0; }
+        ::-webkit-scrollbar-thumb:hover { background: #0f766e; }
+    </style>
+</head>
+
+<body class="text-slate-800 select-none flex flex-col">
+
+    <div class="h-4 w-full bg-teal-800 shrink-0 fixed top-0 z-50"></div>
+
+    <div id="slide-container" class="mt-4">
+
+        <div class="slide active p-10 bg-slate-50">
+            <div class="flex-1 flex flex-col items-center justify-center space-y-8 w-full h-full min-h-[500px]">
+                <i data-lucide="crosshair" class="w-40 h-40 text-teal-800 opacity-90"></i>
+                <h1 class="text-7xl font-extrabold tracking-tight text-slate-900 uppercase text-center">
+                    Covarianza
+                </h1>
+                <p class="text-5xl text-slate-500 font-semibold tracking-wide text-center">
+                    El Centro de Gravedad y la Variación Conjunta
+                </p>
+
+                <div class="mt-16 p-8 glass-card rounded-2xl border-l-8 border-teal-800 text-left w-full max-w-5xl flex justify-between items-end shadow-md">
+                    <div>
+                        <p class="text-4xl font-bold text-slate-900">Prof. Luis Quezada</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-3xl font-bold text-teal-800 uppercase tracking-wider">SEK CHILE • IIIº ELECTIVO</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="scale" class="w-14 h-14 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">El Punto de Equilibrio</h2>
+            </div>
+
+            <div class="grid grid-cols-12 gap-10 flex-1 items-center">
+                <div class="col-span-12 lg:col-span-6 flex flex-col gap-6">
+                    <p class="text-2xl text-slate-700 leading-relaxed font-medium">
+                        Consideremos la Nube de Puntos que modelamos la sesión anterior. Si asumiéramos que cada punto tiene el mismo peso y el plano cartesiano fuese una placa de metal, existiría una coordenada exacta donde podríamos colocar el dedo para sostener la placa en perfecto equilibrio.
+                    </p>
+                    <p class="text-2xl text-teal-900 font-bold leading-relaxed border-l-8 border-teal-500 pl-6 bg-teal-50 p-6 rounded-r-2xl">
+                        Este "Centro de Gravedad" no solo equilibra el peso, sino que actúa como el <strong class="text-teal-700">Punto Cero de Referencia</strong>. Al trazar una cruz sobre él, dividimos el universo de datos para descubrir hacia dónde "tira" la tendencia general.
+                    </p>
+
+                    <button onclick="revelarCentroGravedad()" id="btn-centro"
+                        class="mt-4 px-8 py-4 bg-teal-700 text-white rounded-xl text-2xl font-bold hover:bg-teal-600 transition shadow-lg w-full flex items-center justify-center gap-4">
+                        <i data-lucide="focus" class="w-6 h-6"></i> Trazar Ejes del Centro de Gravedad
+                    </button>
+
+                    <div id="explicacion-centro" class="hidden mt-4 bg-slate-900 p-6 rounded-2xl text-white shadow-xl transition-all duration-700 opacity-0">
+                        <p class="text-xl font-mono text-teal-300 font-bold mb-4 uppercase tracking-widest border-b border-slate-700 pb-2">El Origen de la Covarianza</p>
+                        <p class="text-lg text-slate-300 leading-relaxed font-medium">
+                            El centro se define por las medias: <strong class="text-white font-mono text-xl">$(\bar{x}, \bar{y})$</strong>.
+                        </p>
+                        <p class="text-lg text-slate-300 mt-2 font-medium">
+                            La <strong class="text-teal-400">Covarianza</strong> será la herramienta matemática que medirá las distancias de todos los puntos hacia este centro. Si la mayoría de los puntos habitan en los cuadrantes cruzados opuestos, nos confirmará matemáticamente que ambas variables están bailando juntas.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-6 bg-slate-50 rounded-3xl border-4 border-slate-200 shadow-inner p-8 flex justify-center relative overflow-visible h-[450px]">
+                    
+                    <div id="html-labels-centro" class="absolute inset-0 z-10 pointer-events-none opacity-0 transition-opacity duration-1000">
+                        <div class="absolute bottom-[20px] left-[200px] text-rose-600 font-bold text-lg bg-white/80 px-2 rounded">Media de X ($\bar{x}$)</div>
+                        <div class="absolute top-[160px] left-[10px] text-blue-600 font-bold text-lg bg-white/80 px-2 rounded -translate-y-1/2">Media de Y ($\bar{y}$)</div>
+                    </div>
+
+                    <svg viewBox="0 0 500 400" class="w-full h-full font-mono overflow-visible z-0">
+                        <line x1="60" y1="340" x2="480" y2="340" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrow)"/>
+                        <line x1="60" y1="340" x2="60" y2="20" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrow)"/>
+                        <defs>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+                            </marker>
+                        </defs>
+
+                        <g fill="#0f766e">
+                            <circle cx="120" cy="280" r="7" />
+                            <circle cx="160" cy="310" r="7" />
+                            <circle cx="190" cy="240" r="7" />
+                            <circle cx="230" cy="290" r="7" />
+                            
+                            <circle cx="340" cy="120" r="7" />
+                            <circle cx="380" cy="70" r="7" />
+                            <circle cx="430" cy="100" r="7" />
+                            <circle cx="460" cy="40" r="7" />
+
+                            <circle cx="180" cy="100" r="7" fill="#0d9488" opacity="0.6" />
+                            <circle cx="400" cy="260" r="7" fill="#0d9488" opacity="0.6" />
+                        </g>
+
+                        <g id="svg-centro" class="opacity-0 transition-opacity duration-1000">
+                            <line x1="280" y1="340" x2="280" y2="20" stroke="#f43f5e" stroke-width="3" stroke-dasharray="8"/>
+                            <line x1="60" y1="180" x2="480" y2="180" stroke="#3b82f6" stroke-width="3" stroke-dasharray="8"/>
+                            
+                            <circle cx="280" cy="180" r="12" fill="#1e293b" />
+                            <circle cx="280" cy="180" r="5" fill="#fbbf24" />
+                            
+                            <text x="380" y="100" text-anchor="middle" font-weight="bold" font-size="50" fill="#94a3b8" opacity="0.3">I</text>
+                            <text x="170" y="100" text-anchor="middle" font-weight="bold" font-size="50" fill="#94a3b8" opacity="0.3">II</text>
+                            <text x="170" y="280" text-anchor="middle" font-weight="bold" font-size="50" fill="#94a3b8" opacity="0.3">III</text>
+                            <text x="380" y="280" text-anchor="middle" font-weight="bold" font-size="50" fill="#94a3b8" opacity="0.3">IV</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="library" class="w-14 h-14 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">La Anatomía de la Covarianza ($S_{xy}$)</h2>
+            </div>
+
+            <div class="flex gap-10">
+                <div class="flex-1 bg-white p-8 rounded-3xl border-4 border-slate-200 shadow-lg flex flex-col justify-center relative">
+                    <p class="text-2xl text-slate-700 font-medium mb-6 leading-relaxed">
+                        La Covarianza cuantifica la variación conjunta promediando el producto de las distancias de cada punto hacia el centro de gravedad.
+                    </p>
+                    <div class="bg-slate-900 text-teal-300 p-8 rounded-2xl shadow-inner text-4xl font-bold font-mono text-center flex flex-col gap-4">
+                        <p class="text-sm text-slate-400 font-sans tracking-widest uppercase mb-2">Fórmula Analítica Muestral</p>
+                        $$ S_{xy} = \frac{\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})}{n-1} $$
+                    </div>
+                    <p class="text-lg text-slate-500 mt-6 font-medium bg-slate-100 p-4 rounded-xl border border-slate-200">
+                        <strong class="text-teal-800">Nota Analítica:</strong> El valor bruto numérico de la Covarianza carece de unidad universal y límites. Su verdadero poder de interpretación reside entera y exclusivamente en su <strong class="text-slate-900">Signo Algebraico final</strong>.
+                    </p>
+                </div>
+
+                <div class="flex-1 flex flex-col gap-6">
+                    
+                    <div class="bg-emerald-50 border-l-8 border-emerald-500 p-6 rounded-2xl shadow-sm flex items-center gap-6">
+                        <div class="w-24 h-24 shrink-0 bg-white border-2 border-emerald-200 rounded-lg relative">
+                            <svg viewBox="0 0 100 100" class="w-full h-full opacity-80">
+                                <line x1="50" y1="0" x2="50" y2="100" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4"/>
+                                <line x1="0" y1="50" x2="100" y2="50" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4"/>
+                                <circle cx="80" cy="20" r="5" fill="#059669" /> <circle cx="20" cy="80" r="5" fill="#059669" /> </svg>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-emerald-900">Covarianza Positiva ($+$)</p>
+                            <p class="text-lg text-slate-700 font-medium mt-1">
+                                Concentración en Cuadrantes I y III. El producto de signos $(+) \cdot (+)$ o $(-) \cdot (-)$ siempre suma valores positivos. <strong class="text-emerald-800">Relación Directa.</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-rose-50 border-l-8 border-rose-500 p-6 rounded-2xl shadow-sm flex items-center gap-6">
+                        <div class="w-24 h-24 shrink-0 bg-white border-2 border-rose-200 rounded-lg relative">
+                            <svg viewBox="0 0 100 100" class="w-full h-full opacity-80">
+                                <line x1="50" y1="0" x2="50" y2="100" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4"/>
+                                <line x1="0" y1="50" x2="100" y2="50" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4"/>
+                                <circle cx="20" cy="20" r="5" fill="#e11d48" /> <circle cx="80" cy="80" r="5" fill="#e11d48" /> </svg>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-rose-900">Covarianza Negativa ($-$)</p>
+                            <p class="text-lg text-slate-700 font-medium mt-1">
+                                Concentración en Cuadrantes II y IV. El producto de signos opuestos $(-) \cdot (+)$ suma valores negativos. <strong class="text-rose-800">Relación Inversa.</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-100 border-l-8 border-slate-400 p-6 rounded-2xl shadow-sm flex items-center gap-6">
+                        <div class="w-24 h-24 shrink-0 bg-white border-2 border-slate-300 rounded-lg relative">
+                            <svg viewBox="0 0 100 100" class="w-full h-full opacity-80">
+                                <line x1="50" y1="0" x2="50" y2="100" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4"/>
+                                <line x1="0" y1="50" x2="100" y2="50" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4"/>
+                                <circle cx="20" cy="20" r="4" fill="#64748b" /><circle cx="80" cy="20" r="4" fill="#64748b" />
+                                <circle cx="20" cy="80" r="4" fill="#64748b" /><circle cx="80" cy="80" r="4" fill="#64748b" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-slate-800">Covarianza Cercana a Cero ($\approx 0$)</p>
+                            <p class="text-lg text-slate-600 font-medium mt-1">
+                                Dispersión simétrica. Los productos positivos de los cuadrantes se anulan matemáticamente con los negativos. <strong class="text-slate-700">Ausencia de relación.</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="calculator" class="w-14 h-14 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Laboratorio: La Caja Algorítmica</h2>
+            </div>
+
+            <div class="grid grid-cols-12 gap-8 flex-1">
+                <div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+                    <p class="text-xl text-slate-700 font-medium bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                        Se extrajo una micro-muestra de 3 días analizando: <strong class="text-teal-700">Temperaturas Bajas ($X$)</strong> y <strong class="text-teal-700">Ventas de Sopas ($Y$)</strong>. ¿Cuál es el comportamiento de su variación conjunta?
+                    </p>
+                    
+                    <div class="space-y-4 mt-auto">
+                        <button onclick="revelarCeldas('.paso-1', 'btn-p1')" id="btn-p1" class="w-full text-left bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold py-4 px-6 rounded-xl transition border border-teal-200 flex justify-between items-center">
+                            <span>1. Extraer Centro de Gravedad (Medias)</span> <i data-lucide="target" class="w-6 h-6"></i>
+                        </button>
+                        <button onclick="revelarCeldas('.paso-2', 'btn-p2')" id="btn-p2" class="w-full text-left bg-slate-100 text-slate-400 font-bold py-4 px-6 rounded-xl border border-slate-200 flex justify-between items-center pointer-events-none transition-all">
+                            <span>2. Calcular Distancias al Centro</span> <i data-lucide="ruler" class="w-6 h-6"></i>
+                        </button>
+                        <button onclick="revelarCeldas('.paso-3', 'btn-p3')" id="btn-p3" class="w-full text-left bg-slate-100 text-slate-400 font-bold py-4 px-6 rounded-xl border border-slate-200 flex justify-between items-center pointer-events-none transition-all">
+                            <span>3. Multiplicar Signos de Cuadrantes</span> <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                        <button onclick="revelarFinal()" id="btn-p4" class="w-full text-left bg-slate-100 text-slate-400 font-bold py-4 px-6 rounded-xl border border-slate-200 flex justify-between items-center pointer-events-none transition-all">
+                            <span>4. Consolidar Covarianza Muestral</span> <i data-lucide="sigma" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-8 flex flex-col h-full relative">
+                    <table class="w-full text-left border-collapse rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-white">
+                        <thead class="bg-teal-900 text-white border-b-4 border-teal-600">
+                            <tr>
+                                <th class="p-4 font-bold text-center w-1/5">Dato</th>
+                                <th class="p-4 font-bold text-center w-1/5">$X$</th>
+                                <th class="p-4 font-bold text-center w-1/5">$Y$</th>
+                                <th class="p-4 font-bold text-center w-1/5 bg-teal-800 bg-opacity-50 border-l border-teal-700">Dist. X $(x - \bar{x})$</th>
+                                <th class="p-4 font-bold text-center w-1/5 bg-teal-800 bg-opacity-50">Dist. Y $(y - \bar{y})$</th>
+                                <th class="p-4 font-bold text-center w-1/5 bg-teal-700 border-l border-teal-600">Producto</th>
+                            </tr>
+                        </thead>
+                        <tbody class="font-mono text-xl text-slate-700">
+                            <tr class="border-b border-slate-100 hover:bg-slate-50">
+                                <td class="p-4 text-center font-sans font-bold text-slate-400">Día 1</td>
+                                <td class="p-4 text-center">4</td>
+                                <td class="p-4 text-center">20</td>
+                                <td class="p-4 text-center bg-slate-50 border-l border-slate-200"><span class="paso-2 opacity-0 transition-opacity duration-500 text-rose-600 font-bold">-6</span></td>
+                                <td class="p-4 text-center bg-slate-50"><span class="paso-2 opacity-0 transition-opacity duration-500 text-emerald-600 font-bold">+5</span></td>
+                                <td class="p-4 text-center bg-teal-50 border-l border-teal-100"><span class="paso-3 opacity-0 transition-opacity duration-500 font-bold text-rose-700">-30</span></td>
+                            </tr>
+                            <tr class="border-b border-slate-100 hover:bg-slate-50">
+                                <td class="p-4 text-center font-sans font-bold text-slate-400">Día 2</td>
+                                <td class="p-4 text-center">10</td>
+                                <td class="p-4 text-center">15</td>
+                                <td class="p-4 text-center bg-slate-50 border-l border-slate-200"><span class="paso-2 opacity-0 transition-opacity duration-500 text-slate-400 font-bold">0</span></td>
+                                <td class="p-4 text-center bg-slate-50"><span class="paso-2 opacity-0 transition-opacity duration-500 text-slate-400 font-bold">0</span></td>
+                                <td class="p-4 text-center bg-teal-50 border-l border-teal-100"><span class="paso-3 opacity-0 transition-opacity duration-500 font-bold text-slate-400">0</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-4 text-center font-sans font-bold text-slate-400">Día 3</td>
+                                <td class="p-4 text-center">16</td>
+                                <td class="p-4 text-center">10</td>
+                                <td class="p-4 text-center bg-slate-50 border-l border-slate-200"><span class="paso-2 opacity-0 transition-opacity duration-500 text-emerald-600 font-bold">+6</span></td>
+                                <td class="p-4 text-center bg-slate-50"><span class="paso-2 opacity-0 transition-opacity duration-500 text-rose-600 font-bold">-5</span></td>
+                                <td class="p-4 text-center bg-teal-50 border-l border-teal-100"><span class="paso-3 opacity-0 transition-opacity duration-500 font-bold text-rose-700">-30</span></td>
+                            </tr>
+                            <tr class="bg-slate-100 border-t-4 border-slate-300">
+                                <td class="p-4 text-center font-sans font-black text-slate-800">Centro</td>
+                                <td class="p-4 text-center"><span class="paso-1 opacity-0 transition-opacity duration-500 bg-teal-200 text-teal-900 px-3 py-1 rounded font-bold border border-teal-400">$\bar{x} = 10$</span></td>
+                                <td class="p-4 text-center"><span class="paso-1 opacity-0 transition-opacity duration-500 bg-teal-200 text-teal-900 px-3 py-1 rounded font-bold border border-teal-400">$\bar{y} = 15$</span></td>
+                                <td colspan="2" class="p-4 text-right font-sans font-bold text-slate-500 border-l border-slate-300">Sumatoria Total $\rightarrow$</td>
+                                <td class="p-4 text-center bg-teal-100 border-l border-teal-200"><span class="paso-3 opacity-0 transition-opacity duration-500 font-black text-2xl text-rose-800">-60</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="resultado-final" class="hidden absolute bottom-0 left-0 w-full bg-slate-900 p-8 rounded-2xl shadow-2xl border-b-8 border-rose-500 text-white transform translate-y-6">
+                        <div class="flex justify-between items-center gap-8">
+                            <div>
+                                <p class="text-rose-400 font-bold uppercase tracking-widest text-sm mb-2">Paso 4: División Muestral (n-1)</p>
+                                <p class="text-4xl font-mono font-bold">$$ S_{xy} = \frac{-60}{3-1} = \mathbf{-30} $$</p>
+                            </div>
+                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex-1">
+                                <p class="text-xl font-bold text-white mb-1"><i data-lucide="info" class="inline w-5 h-5 text-rose-400"></i> Conclusión Analítica</p>
+                                <p class="text-slate-300">Al dar negativo ($-$), la matemática certifica la lógica: a menor temperatura, mayor venta de sopas. Es una <strong class="text-rose-300">Relación Inversa</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-3 shrink-0">
+                <i data-lucide="shield" class="w-12 h-12 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Aplicación Analítica Final</h2>
+            </div>
+
+            <p class="text-2xl text-slate-600 mb-6 font-medium border-l-4 border-teal-500 pl-4">Desarrolla el razonamiento analítico en tu cuaderno, interconectando con materia pasada.</p>
+
+            <div class="flex-1 overflow-y-auto w-full max-w-full">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start pb-10">
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-emerald-500 shadow-md flex flex-col gap-4">
+                        <p class="text-emerald-800 font-extrabold text-xl uppercase tracking-widest font-mono">Deducción de Sumatoria</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Si en una muestra de 10 trabajadores, la sumatoria de las multiplicaciones de las distancias al centro de gravedad arrojó $+450$. Calcula explícitamente el valor de la Covarianza Muestral y define la relación.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-emerald-600 shadow-md flex flex-col gap-4">
+                        <p class="text-emerald-900 font-extrabold text-xl uppercase tracking-widest font-mono">Topología Visual</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Al trazar el Centro de Gravedad sobre una Nube de Puntos, notas que el $95\%$ de las observaciones habitan en los cuadrantes formados por signos $(-,+)$ y $(+,-)$. ¿Qué signo dictaminará tu fórmula sin necesidad de hacer el cálculo numérico?
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-emerald-700 shadow-md flex flex-col gap-4">
+                        <p class="text-emerald-900 font-extrabold text-xl uppercase tracking-widest font-mono">Clausura del Cero</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Un ecosistema financiero reporta una Covarianza de $-0.0004$. Un analista sin experiencia indica que "las variables están inversamente correlacionadas de forma brutal". Corrige a este analista utilizando el concepto de "Simetría Nula".
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-indigo-500 shadow-md flex flex-col gap-4">
+                        <p class="text-indigo-800 font-extrabold text-xl uppercase tracking-widest font-mono">Interconexión: Constantes</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Recordando Medidas de Dispersión: Si a todos los valores de la variable $X$ les sumamos una constante de $+10$ puntos. ¿Qué alteración sufre el valor bruto de la Covarianza Muestral? Justifica analíticamente usando la fórmula.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-indigo-600 shadow-md flex flex-col gap-4">
+                        <p class="text-indigo-900 font-extrabold text-xl uppercase tracking-widest font-mono">Fallo Estructural (RIC)</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Se calcula un Rango Intercuartílico ($RIC$) de $0$ para la variable $X$, indicando que al menos la mitad central de los datos carece de variabilidad. Si además se sabe que $Q_1 = Min = Max$, ¿cuál será irremediablemente la Covarianza y por qué?
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-indigo-700 shadow-md flex flex-col gap-4">
+                        <p class="text-indigo-900 font-extrabold text-xl uppercase tracking-widest font-mono">Aislamiento de Signo</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            ¿Es teóricamente posible obtener una Covarianza negativa si todos los datos ingresados en la muestra original (tanto de $X$ como de $Y$) son números estrictamente positivos mayores a cero? Demuestra tu razonamiento mediante cuadrantes.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-rose-500 shadow-md flex flex-col gap-4">
+                        <p class="text-rose-800 font-extrabold text-xl uppercase tracking-widest font-mono">Equivalencia Monolítica</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Reemplaza en la fórmula de Covarianza la variable $Y$ por la misma variable $X$ (es decir, calcula $S_{xx}$). ¿A qué medida de dispersión unidimensional exacta, vista en la Clase C6, equivale esta nueva fórmula? Desarrolla el binomio.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-rose-600 shadow-md flex flex-col gap-4">
+                        <p class="text-rose-900 font-extrabold text-xl uppercase tracking-widest font-mono">Fuerza Atípica ($L_s$)</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Se tienen 50 puntos formando una perfecta nube redonda y simétrica (Covarianza cero). Se inyecta un único "Outlier" masivo que supera el Límite Superior $L_s$ en el Eje X y en el Eje Y. ¿Puede este solo punto alterar el signo general? Explica matemáticamente el peso del producto.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-rose-700 shadow-md flex flex-col gap-4">
+                        <p class="text-rose-900 font-extrabold text-xl uppercase tracking-widest font-mono">Ingeniería Inversa Pura</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Se entregan los siguientes datos parciales: $N=2$, $\bar{x} = 5$, $\bar{y} = 10$, y un dato conocido es $(2, 14)$. Despeja el dato faltante $(x_2, y_2)$ usando propiedades de la Media, y luego calcula la Covarianza de esta micro-muestra.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-100 pb-4 shrink-0 justify-between">
+                <div class="flex items-center gap-6">
+                    <i data-lucide="target" class="w-16 h-16 text-teal-800"></i>
+                    <h2 class="text-6xl font-bold text-slate-800">Ticket de Salida (DEMRE)</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-12 flex-1 min-h-[450px]">
+                <div class="col-span-12 xl:col-span-7 flex flex-col h-full space-y-8">
+                    <div class="bg-slate-50 border-2 border-slate-200 rounded-3xl p-8 shadow-md flex gap-8 items-center">
+                        <div class="flex-1">
+                            <p class="text-2xl font-medium text-slate-800 leading-relaxed mb-4">
+                                Un estudio económico arrojó que la Covarianza ($S_{xy}$) entre el "Aumento Porcentual del Precio del Combustible ($X$)" y el "Número Anual de Compra de Vehículos V8 ($Y$)" dio como resultado numérico un valor de <strong class="text-rose-700 font-mono">-125.4</strong>.
+                            </p>
+                            <p class="text-xl font-bold text-slate-700 tracking-wider">A partir de esta abstracción puramente matemática, ¿cuál de las siguientes conclusiones es INFALIBLE y rigurosamente correcta?</p>
+                        </div>
+                    </div>
+
+                    <div class="flex-1">
+                        <div class="space-y-4 text-2xl font-bold text-slate-700 font-mono leading-relaxed">
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left">
+                                A) Al disminuir el precio del combustible en una unidad, la compra de V8 aumentará exactamente en 125.4 unidades.</p>
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left">
+                                B) La inmensa mayoría de los puntos del diagrama habitan en el cuadrante I y III respecto al centro de gravedad.</p>
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left" id="alt-corr">
+                                C) Existe una relación estadística inversa: cuando las variaciones de combustible suben sobre la media, las compras de V8 tienden a caer bajo la media.</p>
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left">
+                                D) Dado que el número 125.4 es elevado, podemos concluir con certeza total que la correlación entre variables es funcional y perfecta.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-span-12 xl:col-span-5 flex flex-col h-full bg-slate-900 rounded-3xl p-8 shadow-xl items-center justify-center relative">
+                    <button id="btn-ticket" onclick="revelarTicket()"
+                        class="w-full px-8 py-6 bg-teal-600 text-white rounded-2xl text-3xl font-bold hover:bg-teal-500 transition shadow-2xl relative z-20">
+                        <i data-lucide="scan" class="inline-block w-8 h-8 mr-3 mb-1"></i> Ver Análisis de Alternativas
+                    </button>
+
+                    <div id="respuesta-ticket"
+                        class="hidden absolute inset-0 w-full h-full p-8 flex flex-col justify-center bg-teal-50 text-slate-800 rounded-3xl border-4 border-teal-500 z-10 overflow-y-auto">
+                        <h3 class="text-3xl font-extrabold text-teal-900 mb-6 flex items-center gap-4">
+                            <i data-lucide="check-circle" class="w-10 h-10 text-teal-600"></i> Alternativa C
+                        </h3>
+                        <div class="text-lg space-y-4 font-mono text-left pl-4 border-l-4 border-teal-400">
+                            <p><strong class="font-sans text-xl text-slate-600">A es Falsa:</strong> La Covarianza NO indica la pendiente de una recta ni cuánto sube uno respecto al otro de forma aislada. Solo indica dirección de variación conjunta.</p>
+                            <p><strong class="font-sans text-xl text-slate-600">B es Falsa:</strong> Si estuvieran en el Cuadrante I y III, el resultado de la Covarianza sería Positivo, pero aquí es $-125.4$.</p>
+                            <p><strong class="font-sans text-xl text-slate-600">D es Falsa:</strong> La magnitud del número de la Covarianza no indica fuerza. Depende de las unidades (si lo medimos en centavos o dólares). Para medir fuerza perfecta usaríamos Correlación de Pearson.</p>
+                            <p><strong class="font-sans text-xl text-teal-800">C es Correcta:</strong> Resume la verdadera interpretación del signo negativo ($-$): variaciones opuestas respecto a sus medias.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="fixed bottom-0 w-full bg-white border-t-2 border-slate-200 px-10 py-5 flex justify-between items-center z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <p class="text-slate-600 font-extrabold tracking-widest uppercase text-xl">
+            CLASE 10 • COVARIANZA • EP
+        </p>
+        <div class="flex gap-4 items-center">
+            <div class="w-5 h-5 rounded-full bg-teal-800 shadow-sm"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300"></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.fixed.bottom-0 .w-5.h-5');
+
+        function updateSlide() {
+            slides.forEach((s, i) => {
+                s.classList.remove('active');
+                if (i === currentSlide) {
+                    s.classList.add('active');
+                    s.scrollTop = 0;
+                }
+            });
+            // Update dots
+            dots.forEach((dot, i) => {
+                if(i === currentSlide) {
+                    dot.className = "w-5 h-5 rounded-full bg-teal-800 shadow-sm transition-all duration-300";
+                } else {
+                    dot.className = "w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300";
+                }
+            });
+        }
+
+        function changeSlide(d) {
+            const n = currentSlide + d;
+            if (n >= 0 && n < slides.length) {
+                currentSlide = n;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (['ArrowRight', 'Space', 'Enter'].includes(e.key)) changeSlide(1);
+            if (['ArrowLeft', 'Backspace'].includes(e.key)) changeSlide(-1);
+        });
+
+        function revelarElemento(id) {
+            const el = document.getElementById(id);
+            if (el && el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                if (window.MathJax) {
+                    MathJax.typesetPromise([el]).catch(err => console.log(err));
+                }
+            }
+        }
+
+        function revelarTicket() {
+            document.getElementById('btn-ticket').style.display = 'none';
+            document.getElementById('respuesta-ticket').classList.remove('hidden');
+            document.getElementById('respuesta-ticket').classList.add('flex');
+            document.getElementById('alt-corr').classList.add('border-l-8', 'border-teal-500', 'bg-teal-50', 'text-teal-900');
+            if (window.MathJax) {
+                MathJax.typesetPromise([document.getElementById('respuesta-ticket')]).catch(err => console.log(err));
+            }
+        }
+
+        // Lógica: Motivación Centro de Gravedad
+        function revelarCentroGravedad() {
+            document.getElementById('btn-centro').style.display = 'none';
+            document.getElementById('svg-centro').classList.remove('opacity-0');
+            document.getElementById('html-labels-centro').classList.remove('opacity-0');
+            
+            const exp = document.getElementById('explicacion-centro');
+            exp.classList.remove('hidden');
+            setTimeout(() => {
+                exp.classList.remove('opacity-0');
+                if (window.MathJax) MathJax.typesetPromise([exp]);
+            }, 50);
+        }
+
+        // Lógica: Motor Algorítmico (Yo Hago)
+        let estadoTabla = 1;
+        function revelarCeldas(selectorCeldas, idBoton) {
+            // Activar visualmente el botón tocado
+            const btn = document.getElementById(idBoton);
+            btn.classList.replace('bg-teal-50', 'bg-teal-100');
+            btn.classList.replace('text-teal-800', 'text-teal-900');
+
+            // Mostrar el contenido
+            const celdas = document.querySelectorAll(selectorCeldas);
+            celdas.forEach(c => c.classList.remove('opacity-0'));
+            
+            if (window.MathJax) MathJax.typesetPromise(Array.from(celdas));
+
+            // Desbloquear el siguiente paso
+            estadoTabla++;
+            if(estadoTabla <= 3) {
+                const nextBtn = document.getElementById(`btn-p${estadoTabla}`);
+                nextBtn.classList.remove('pointer-events-none', 'bg-slate-100', 'text-slate-400');
+                nextBtn.classList.add('bg-teal-50', 'hover:bg-teal-100', 'text-teal-800');
+            } else if (estadoTabla === 4) {
+                const nextBtn = document.getElementById('btn-p4');
+                nextBtn.classList.remove('pointer-events-none', 'bg-slate-100', 'text-slate-400');
+                nextBtn.classList.add('bg-rose-50', 'hover:bg-rose-100', 'text-rose-800', 'border-rose-200');
+            }
+        }
+
+        function revelarFinal() {
+            document.getElementById('btn-p4').classList.replace('bg-rose-50', 'bg-rose-100');
+            const res = document.getElementById('resultado-final');
+            res.classList.remove('hidden');
+            setTimeout(() => {
+                res.classList.remove('translate-y-6');
+                if (window.MathJax) MathJax.typesetPromise([res]);
+            }, 50);
+        }
+    </script>
+</body>
+
+</html>
+    
+  </body>
+  
+</html>

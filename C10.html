@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>C10 EP</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correlación de Pearson - IIIº Medio Electivo</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            startup: { typeset: true }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #f8fafc;
+        }
+
+        #slide-container {
+            height: calc(100vh - 5rem);
+            width: 100vw;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            height: 100%;
+            width: 100%;
+            animation: fadeIn 0.3s ease-out;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-bottom: 10rem; /* Margen protector Anti-Solapamiento */
+            scroll-behavior: smooth;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        ::-webkit-scrollbar { width: 14px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; margin: 10px 0; }
+        ::-webkit-scrollbar-thumb { background: #0d9488; border-radius: 8px; border: 3px solid #e2e8f0; }
+        ::-webkit-scrollbar-thumb:hover { background: #0f766e; }
+    </style>
+</head>
+
+<body class="text-slate-800 select-none flex flex-col">
+
+    <div class="h-4 w-full bg-teal-800 shrink-0 fixed top-0 z-50"></div>
+
+    <div id="slide-container" class="mt-4">
+
+        <div class="slide active p-10 bg-slate-50">
+            <div class="flex-1 flex flex-col items-center justify-center space-y-8 w-full h-full min-h-[500px]">
+                <i data-lucide="gauge" class="w-40 h-40 text-teal-800 opacity-90"></i>
+                <h1 class="text-7xl font-extrabold tracking-tight text-slate-900 uppercase text-center">
+                    Coeficiente de Correlación
+                </h1>
+                <p class="text-5xl text-slate-500 font-semibold tracking-wide text-center">
+                    Estandarizando la Fuerza Predictiva
+                </p>
+
+                <div class="mt-16 p-8 glass-card rounded-2xl border-l-8 border-teal-800 text-left w-full max-w-5xl flex justify-between items-end shadow-md">
+                    <div>
+                        <p class="text-4xl font-bold text-slate-900">Prof. Luis Quezada</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-3xl font-bold text-teal-800 uppercase tracking-wider">SEK CHILE • IIIº ELECTIVO</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="zoom-in" class="w-14 h-14 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">El Problema de la Escala (Ilusión Numérica)</h2>
+            </div>
+
+            <div class="grid grid-cols-12 gap-10 flex-1 items-center">
+                <div class="col-span-12 lg:col-span-6 flex flex-col gap-6">
+                    <p class="text-2xl text-slate-700 leading-relaxed font-medium">
+                        Imaginemos que analizamos la relación anatómica entre el <strong class="text-teal-700">Largo del Fémur ($X$)</strong> y la <strong class="text-teal-700">Estatura Total ($Y$)</strong> de un grupo de personas.
+                    </p>
+                    <p class="text-2xl text-slate-700 leading-relaxed font-medium">
+                        Si registramos todos los datos utilizando <strong class="text-slate-900 font-bold underline">metros</strong> como unidad de medida, la fórmula de la Covarianza nos arrojará el siguiente valor:
+                    </p>
+                    
+                    <div class="bg-slate-100 p-6 rounded-2xl border border-slate-300 flex items-center justify-between shadow-inner">
+                        <div>
+                            <p class="text-sm font-bold text-slate-500 uppercase tracking-widest mb-1">Resultado Base (en metros)</p>
+                            <p class="text-4xl font-mono font-bold text-slate-800">$S_{xy} = 0.045$</p>
+                        </div>
+                    </div>
+
+                    <p class="text-xl text-slate-600 font-medium italic mt-2 border-l-4 border-rose-400 pl-4">
+                        ¿Qué ocurriría matemáticamente si otro investigador utiliza <strong>los mismos individuos</strong>, pero decide medir todo en <strong class="text-rose-600 font-bold">centímetros</strong>?
+                    </p>
+
+                    <button onclick="cambiarEscala()" id="btn-escala"
+                        class="mt-4 px-8 py-4 bg-teal-700 text-white rounded-xl text-2xl font-bold hover:bg-teal-600 transition shadow-lg w-full flex items-center justify-center gap-4">
+                        <i data-lucide="ruler" class="w-6 h-6"></i> Transformar a Centímetros (x10.000)
+                    </button>
+
+                    <div id="resultado-escala" class="hidden mt-4 bg-rose-50 border-l-8 border-rose-500 p-6 rounded-r-2xl shadow-md transition-all">
+                        <p class="text-sm font-bold text-rose-500 uppercase tracking-widest mb-1">Nuevo Resultado (en cm)</p>
+                        <p class="text-4xl font-mono font-bold text-rose-900 mb-4">$S_{xy} = 450$</p>
+                        <p class="text-lg text-slate-700 font-medium">
+                            <strong class="text-rose-800">La Paradoja:</strong> La relación física entre los huesos y la altura es la misma, pero el número "explotó". La Covarianza <strong class="underline">es esclava de las unidades de medida</strong>. Por sí sola, no sirve para medir la fuerza real de la relación.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-6 bg-slate-50 rounded-3xl border-4 border-slate-200 shadow-inner p-8 flex justify-center items-center relative h-[500px]">
+                    <svg viewBox="-100 -50 650 550" class="w-full h-full font-mono overflow-visible z-0 relative">
+                        <line x1="0" y1="450" x2="550" y2="450" stroke="#94a3b8" stroke-width="4" marker-end="url(#arrow)"/>
+                        <line x1="0" y1="450" x2="0" y2="0" stroke="#94a3b8" stroke-width="4" marker-end="url(#arrow)"/>
+                        <defs>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+                            </marker>
+                        </defs>
+
+                        <text x="275" y="510" text-anchor="middle" font-weight="bold" font-size="22" fill="#475569">Largo del Fémur (<tspan id="unidad-x" class="transition-colors duration-500">metros</tspan>)</text>
+                        <text x="-225" y="-50" transform="rotate(-90)" text-anchor="middle" font-weight="bold" font-size="22" fill="#475569">Estatura Total (<tspan id="unidad-y" class="transition-colors duration-500">metros</tspan>)</text>
+
+                        <g id="nube-puntos" fill="#0d9488" class="transition-colors duration-1000">
+                            <circle cx="80" cy="380" r="8" />
+                            <circle cx="120" cy="340" r="8" />
+                            <circle cx="150" cy="300" r="8" />
+                            <circle cx="200" cy="270" r="8" />
+                            <circle cx="260" cy="210" r="8" />
+                            <circle cx="310" cy="180" r="8" />
+                            <circle cx="370" cy="140" r="8" />
+                            <circle cx="430" cy="90" r="8" />
+                            <circle cx="490" cy="40" r="8" />
+                        </g>
+
+                        <text id="alerta-visual" x="275" y="250" text-anchor="middle" font-weight="bold" font-size="45" fill="#e11d48" opacity="0" class="transition-opacity duration-500">¡GRÁFICO INTACTO!</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="globe" class="w-14 h-14 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">El Índice Universal de Pearson ($r$)</h2>
+            </div>
+
+            <div class="grid grid-cols-12 gap-8 flex-1">
+                <div class="col-span-12 lg:col-span-5 bg-white p-8 rounded-3xl border-4 border-slate-200 shadow-lg flex flex-col relative h-full">
+                    <p class="text-xl text-slate-700 font-medium mb-6 leading-relaxed">
+                        Para eliminar la dependencia engañosa de las unidades de medida, Karl Pearson propuso <strong class="text-teal-800">dividir la Covarianza por el producto de las Desviaciones Estándar</strong> ($\sigma_x \cdot \sigma_y$).
+                    </p>
+                    <div class="bg-slate-900 text-teal-300 p-8 rounded-2xl shadow-inner text-4xl font-bold font-mono text-center flex flex-col gap-4">
+                        <p class="text-sm text-slate-400 font-sans tracking-widest uppercase mb-2">Coeficiente de Correlación Lineal</p>
+                        $$ r = \frac{S_{xy}}{\sigma_x \cdot \sigma_y} $$
+                    </div>
+                    <p class="text-lg text-slate-600 mt-6 font-medium">
+                        Esta división "cancela" algebraicamente las dimensiones numéricas (metros, kilos, grados), creando un indicador puramente <strong>adimensional</strong> que vive atrapado para siempre en un rango cerrado y perfecto:
+                    </p>
+                    <div class="mt-auto bg-teal-50 border border-teal-200 p-4 rounded-xl text-center shadow-sm">
+                        <p class="text-3xl font-mono font-bold text-teal-900">$$ -1 \leq r \leq 1 $$</p>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-7 flex flex-col h-full bg-slate-100 p-6 rounded-3xl border border-slate-300 shadow-sm">
+                    <p class="text-lg font-bold text-slate-500 uppercase tracking-widest mb-4 text-center">El Espectro de Fuerza Predictiva Lineal</p>
+                    
+                    <div class="flex-1 flex items-center justify-between gap-2">
+                        <div class="flex flex-col items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 w-1/5">
+                            <p class="font-mono font-bold text-rose-700 text-xl mb-2">$r = -1$</p>
+                            <svg viewBox="0 0 100 100" class="w-full h-auto">
+                                <line x1="10" y1="90" x2="90" y2="90" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="10" y1="90" x2="10" y2="10" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="20" y1="20" x2="80" y2="80" stroke="#e11d48" stroke-width="1" stroke-dasharray="2"/>
+                                <circle cx="20" cy="20" r="3" fill="#be123c" /><circle cx="35" cy="35" r="3" fill="#be123c" />
+                                <circle cx="50" cy="50" r="3" fill="#be123c" /><circle cx="65" cy="65" r="3" fill="#be123c" />
+                                <circle cx="80" cy="80" r="3" fill="#be123c" />
+                            </svg>
+                            <p class="text-xs text-slate-500 text-center font-bold mt-2 leading-tight">Inversa Perfecta</p>
+                        </div>
+
+                        <div class="flex flex-col items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 w-1/5">
+                            <p class="font-mono font-bold text-rose-500 text-xl mb-2">$r \approx -0.8$</p>
+                            <svg viewBox="0 0 100 100" class="w-full h-auto">
+                                <line x1="10" y1="90" x2="90" y2="90" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="10" y1="90" x2="10" y2="10" stroke="#cbd5e1" stroke-width="2"/>
+                                <circle cx="25" cy="30" r="3" fill="#f43f5e" /><circle cx="30" cy="20" r="3" fill="#f43f5e" />
+                                <circle cx="45" cy="55" r="3" fill="#f43f5e" /><circle cx="55" cy="45" r="3" fill="#f43f5e" />
+                                <circle cx="70" cy="80" r="3" fill="#f43f5e" /><circle cx="80" cy="70" r="3" fill="#f43f5e" />
+                            </svg>
+                            <p class="text-xs text-slate-500 text-center font-bold mt-2 leading-tight">Inversa Fuerte</p>
+                        </div>
+
+                        <div class="flex flex-col items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 w-1/5">
+                            <p class="font-mono font-bold text-slate-500 text-xl mb-2">$r \approx 0$</p>
+                            <svg viewBox="0 0 100 100" class="w-full h-auto">
+                                <line x1="10" y1="90" x2="90" y2="90" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="10" y1="90" x2="10" y2="10" stroke="#cbd5e1" stroke-width="2"/>
+                                <circle cx="30" cy="50" r="3" fill="#64748b" /><circle cx="70" cy="50" r="3" fill="#64748b" />
+                                <circle cx="50" cy="30" r="3" fill="#64748b" /><circle cx="50" cy="70" r="3" fill="#64748b" />
+                                <circle cx="40" cy="40" r="3" fill="#64748b" /><circle cx="60" cy="60" r="3" fill="#64748b" />
+                            </svg>
+                            <p class="text-xs text-slate-500 text-center font-bold mt-2 leading-tight">Nula (Amorfa)</p>
+                        </div>
+
+                        <div class="flex flex-col items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 w-1/5">
+                            <p class="font-mono font-bold text-teal-500 text-xl mb-2">$r \approx 0.8$</p>
+                            <svg viewBox="0 0 100 100" class="w-full h-auto">
+                                <line x1="10" y1="90" x2="90" y2="90" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="10" y1="90" x2="10" y2="10" stroke="#cbd5e1" stroke-width="2"/>
+                                <circle cx="25" cy="70" r="3" fill="#14b8a6" /><circle cx="30" cy="80" r="3" fill="#14b8a6" />
+                                <circle cx="45" cy="45" r="3" fill="#14b8a6" /><circle cx="55" cy="55" r="3" fill="#14b8a6" />
+                                <circle cx="70" cy="20" r="3" fill="#14b8a6" /><circle cx="80" cy="30" r="3" fill="#14b8a6" />
+                            </svg>
+                            <p class="text-xs text-slate-500 text-center font-bold mt-2 leading-tight">Directa Fuerte</p>
+                        </div>
+
+                        <div class="flex flex-col items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 w-1/5">
+                            <p class="font-mono font-bold text-teal-700 text-xl mb-2">$r = 1$</p>
+                            <svg viewBox="0 0 100 100" class="w-full h-auto">
+                                <line x1="10" y1="90" x2="90" y2="90" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="10" y1="90" x2="10" y2="10" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="20" y1="80" x2="80" y2="20" stroke="#0f766e" stroke-width="1" stroke-dasharray="2"/>
+                                <circle cx="20" cy="80" r="3" fill="#0f766e" /><circle cx="35" cy="65" r="3" fill="#0f766e" />
+                                <circle cx="50" cy="50" r="3" fill="#0f766e" /><circle cx="65" cy="35" r="3" fill="#0f766e" />
+                                <circle cx="80" cy="20" r="3" fill="#0f766e" />
+                            </svg>
+                            <p class="text-xs text-slate-500 text-center font-bold mt-2 leading-tight">Directa Perfecta</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="calculator" class="w-14 h-14 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Laboratorio: Normalización Algorítmica</h2>
+            </div>
+
+            <div class="grid grid-cols-12 gap-10 flex-1">
+                <div class="col-span-12 lg:col-span-5 flex flex-col gap-6">
+                    <p class="text-xl text-slate-700 font-medium bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                        Retomemos los datos de la clase pasada. Teníamos una micro-muestra de <strong class="text-teal-700">Temperaturas Bajas ($X$)</strong> y <strong class="text-teal-700">Ventas de Sopas ($Y$)</strong>. Ya sabemos que la Covarianza dio un valor bruto de <strong class="font-mono text-rose-600">-30</strong>.
+                    </p>
+                    
+                    <div class="space-y-4 mt-auto">
+                        <button onclick="revelarCeldasP4('.paso-1', 'btn-p1-s4')" id="btn-p1-s4" class="w-full text-left bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold py-4 px-6 rounded-xl transition border border-teal-200 flex justify-between items-center">
+                            <span>1. Traer Covarianza ($S_{xy}$)</span> <i data-lucide="download" class="w-6 h-6"></i>
+                        </button>
+                        <button onclick="revelarCeldasP4('.paso-2', 'btn-p2-s4')" id="btn-p2-s4" class="w-full text-left bg-slate-100 text-slate-400 font-bold py-4 px-6 rounded-xl border border-slate-200 flex justify-between items-center pointer-events-none transition-all">
+                            <span>2. Calcular Desviaciones ($\sigma_x, \sigma_y$)</span> <i data-lucide="activity" class="w-6 h-6"></i>
+                        </button>
+                        <button onclick="revelarFinalP4()" id="btn-p3-s4" class="w-full text-left bg-slate-100 text-slate-400 font-bold py-4 px-6 rounded-xl border border-slate-200 flex justify-between items-center pointer-events-none transition-all">
+                            <span>3. Estandarizar (Dividir)</span> <i data-lucide="divide-circle" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-7 bg-white rounded-3xl border-4 border-slate-200 shadow-lg p-8 flex flex-col relative h-full">
+                    
+                    <div class="flex gap-4 mb-8">
+                        <div class="flex-1 bg-slate-50 border border-slate-200 p-6 rounded-2xl text-center shadow-inner">
+                            <p class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Covarianza Previa</p>
+                            <div class="h-12 flex items-center justify-center">
+                                <span class="paso-1 opacity-0 transition-opacity duration-500 text-4xl font-mono font-bold text-rose-600">$$ S_{xy} = -30 $$</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 bg-slate-50 border border-slate-200 p-6 rounded-2xl text-center shadow-inner">
+                            <p class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Desviaciones Estándar</p>
+                            <div class="h-12 flex items-center justify-center flex-col gap-1">
+                                <span class="paso-2 opacity-0 transition-opacity duration-500 text-lg font-mono font-bold text-teal-700">$$ \sigma_x = 6 $$</span>
+                                <span class="paso-2 opacity-0 transition-opacity duration-500 text-lg font-mono font-bold text-teal-700">$$ \sigma_y = 5 $$</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="resultado-final-s4" class="hidden flex-1 bg-slate-900 rounded-2xl border-b-8 border-rose-500 p-8 text-white flex flex-col justify-center items-center shadow-2xl relative">
+                        <p class="text-rose-400 font-bold uppercase tracking-widest text-sm mb-4 absolute top-6 left-6">Paso 3: División Adimensional</p>
+                        
+                        <div class="text-5xl font-mono font-bold mt-4">
+                            $$ r = \frac{-30}{6 \cdot 5} = \frac{-30}{30} = \mathbf{-1} $$
+                        </div>
+
+                        <div class="w-full max-w-md mt-10">
+                            <div class="flex justify-between text-xs font-bold font-mono text-slate-400 mb-2">
+                                <span>-1 (Inversa Fuerte)</span>
+                                <span>0 (Nula)</span>
+                                <span>1 (Directa Fuerte)</span>
+                            </div>
+                            <div class="h-4 w-full bg-slate-700 rounded-full relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-r from-rose-500 via-slate-500 to-teal-500 opacity-50"></div>
+                                <div class="absolute top-0 bottom-0 w-2 bg-white rounded-full shadow-lg transition-all duration-1000 ease-out" style="left: 0%;"></div>
+                            </div>
+                            <p class="text-center mt-6 text-xl font-medium text-rose-200">
+                                La división confirma que las variables tienen una dependencia <strong class="text-white">Inversa y Perfecta</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-3 shrink-0">
+                <i data-lucide="shield" class="w-12 h-12 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Aplicación Analítica Final</h2>
+            </div>
+
+            <p class="text-2xl text-slate-600 mb-6 font-medium border-l-4 border-teal-500 pl-4">Desarrolla el razonamiento analítico en tu cuaderno, evaluando fuerza y dirección.</p>
+
+            <div class="flex-1 overflow-y-auto w-full max-w-full">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start pb-10">
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-emerald-500 shadow-md flex flex-col gap-4">
+                        <p class="text-emerald-800 font-extrabold text-xl uppercase tracking-widest font-mono">Lectura Visual</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Se te presentan tres gráficos de dispersión y tres valores calculados: $r = 0.05$, $r = -0.98$ y $r = 0.75$. Si observas una nube de puntos muy estrecha (como un enjambre apretado) descendiendo de izquierda a derecha, ¿qué coeficiente le corresponde lógicamente?
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-emerald-600 shadow-md flex flex-col gap-4">
+                        <p class="text-emerald-900 font-extrabold text-xl uppercase tracking-widest font-mono">Inmunidad de Escala</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Se calcula un $r = 0.60$ estudiando el Peso en <strong>Kilos</strong> y la Altura en <strong>Metros</strong>. Si rehacemos todos los cálculos con el Peso en <strong>Gramos</strong> y la Altura en <strong>Centímetros</strong>, ¿cuál será el nuevo valor exacto de $r$? Justifica tu respuesta usando las propiedades estandarizadoras.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-emerald-700 shadow-md flex flex-col gap-4">
+                        <p class="text-emerald-900 font-extrabold text-xl uppercase tracking-widest font-mono">Límites Axiomáticos</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Un analista de datos presenta su informe final a la gerencia y afirma emocionado: "He descubierto una correlación espectacularmente fuerte, ¡nuestro coeficiente $r$ es de $1.4$!". Explica matemáticamente por qué este analista será despedido.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-indigo-500 shadow-md flex flex-col gap-4">
+                        <p class="text-indigo-800 font-extrabold text-xl uppercase tracking-widest font-mono">La Trampa Parabólica</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Considera una Nube de Puntos que forma visualmente una <strong>curva en forma de U perfecta y simétrica</strong> (una parábola determinista). ¿El coeficiente $r$ será igual a $1$ por ser una figura "perfecta"? Fundamenta tu respuesta recordando el apellido de este coeficiente.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-indigo-600 shadow-md flex flex-col gap-4">
+                        <p class="text-indigo-900 font-extrabold text-xl uppercase tracking-widest font-mono">Equivalencia Unidimensional</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Si las variables $X$ e $Y$ son exactamente el mismo conjunto de datos (es decir, $X=Y$), sabemos que la Covarianza ($S_{xy}$) es igual a la Varianza ($\sigma_x^2$). Demuestra algebraicamente usando la fórmula que el coeficiente $r$ dará invariablemente $1$.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-indigo-700 shadow-md flex flex-col gap-4">
+                        <p class="text-indigo-900 font-extrabold text-xl uppercase tracking-widest font-mono">Apalancamiento Atípico</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Una nube amorfa indica correlación nula ($r \approx 0$). De pronto, se añade al registro un solo individuo "Outlier" que tiene un valor extremadamente gigante tanto en $X$ como en $Y$. ¿Es capaz este único punto de "secuestrar" el coeficiente y volverlo engañosamente alto?
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-rose-500 shadow-md flex flex-col gap-4">
+                        <p class="text-rose-800 font-extrabold text-xl uppercase tracking-widest font-mono">Ingeniería Inversa Pura</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            En un ecosistema financiero se conoce el Coeficiente de Correlación ($r = 0.8$), la Desviación Estándar de la variable independiente ($\sigma_x = 2$) y de la variable dependiente ($\sigma_y = 10$). Despeja la ecuación para descubrir el valor bruto de la Covarianza ($S_{xy}$).
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-rose-600 shadow-md flex flex-col gap-4">
+                        <p class="text-rose-900 font-extrabold text-xl uppercase tracking-widest font-mono">Transformación Lineal</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Si todos los valores de la variable $Y$ se pueden obtener multiplicando los valores de $X$ por $-3$ y sumando $5$ (es decir, obedecen la función estricta $Y = -3X + 5$). ¿Qué valor numérico exacto arrojará el coeficiente de correlación $r$ y por qué?
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border-t-8 border-rose-700 shadow-md flex flex-col gap-4">
+                        <p class="text-rose-900 font-extrabold text-xl uppercase tracking-widest font-mono">La Ilusión de la Pendiente</p>
+                        <p class="text-slate-700 font-medium text-lg leading-snug">
+                            Verdadero o Falso analítico justificado: "Si al graficar la relación, la línea recta de tendencia es muy empinada (casi vertical), significa obligatoriamente que el coeficiente $r$ es más fuerte que si la línea de tendencia fuera menos inclinada."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-100 pb-4 shrink-0 justify-between">
+                <div class="flex items-center gap-6">
+                    <i data-lucide="target" class="w-16 h-16 text-teal-800"></i>
+                    <h2 class="text-6xl font-bold text-slate-800">Ticket de Salida (DEMRE)</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-12 flex-1 min-h-[450px]">
+                <div class="col-span-12 xl:col-span-7 flex flex-col h-full space-y-8">
+                    <div class="bg-slate-50 border-2 border-slate-200 rounded-3xl p-8 shadow-md flex gap-8 items-center">
+                        <div class="flex-1">
+                            <p class="text-2xl font-medium text-slate-800 leading-relaxed mb-4">
+                                Se analiza la eficacia de dos entrenamientos distintos. El Estudio A evalúa la correlación entre Edad y Velocidad, obteniendo <strong class="text-teal-700 font-mono font-bold">$r = -0.91$</strong>.<br><br>El Estudio B evalúa la correlación entre Horas Prácticas y Rendimiento, obteniendo <strong class="text-teal-700 font-mono font-bold">$r = +0.75$</strong>.
+                            </p>
+                            <p class="text-xl font-bold text-slate-700 tracking-wider">¿Cuál de las siguientes afirmaciones es matemáticamente INFALIBLE?</p>
+                        </div>
+                    </div>
+
+                    <div class="flex-1">
+                        <div class="space-y-4 text-2xl font-bold text-slate-700 font-mono leading-relaxed">
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left">
+                                A) El Estudio B ostenta una correlación mucho más fuerte, dado que es positiva y $+0.75$ es un número algebraicamente mayor que $-0.91$.</p>
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left" id="alt-corr">
+                                B) El Estudio A presenta la relación de predictibilidad lineal más robusta y fuerte, a pesar de manifestar una tendencia descendente.</p>
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left">
+                                C) Ambos estudios demuestran relaciones estadísticas directas, porque los valores absolutos de los coeficientes son cercanos a 1.</p>
+                            <p class="bg-white p-4 rounded-xl border border-slate-300 shadow-sm transition-all text-left">
+                                D) El cálculo del Estudio A es erróneo, puesto que el coeficiente de correlación de Pearson no admite valores por debajo de cero.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-span-12 xl:col-span-5 flex flex-col h-full bg-slate-900 rounded-3xl p-8 shadow-xl items-center justify-center relative">
+                    <button id="btn-ticket" onclick="revelarTicket()"
+                        class="w-full px-8 py-6 bg-teal-600 text-white rounded-2xl text-3xl font-bold hover:bg-teal-500 transition shadow-2xl relative z-20">
+                        <i data-lucide="scan" class="inline-block w-8 h-8 mr-3 mb-1"></i> Ver Análisis de Alternativas
+                    </button>
+
+                    <div id="respuesta-ticket"
+                        class="hidden absolute inset-0 w-full h-full p-8 flex flex-col justify-center bg-teal-50 text-slate-800 rounded-3xl border-4 border-teal-500 z-10 overflow-y-auto">
+                        <h3 class="text-3xl font-extrabold text-teal-900 mb-6 flex items-center gap-4">
+                            <i data-lucide="check-circle" class="w-10 h-10 text-teal-600"></i> Alternativa B
+                        </h3>
+                        <div class="text-lg space-y-4 font-mono text-left pl-4 border-l-4 border-teal-400">
+                            <p><strong class="font-sans text-xl text-slate-600">A es Falsa (Trampa Típica):</strong> En correlación, el signo $(+$ o $-)$ solo indica la <strong>dirección</strong> (crece o decrece). La <strong>fuerza</strong> se mide por el Valor Absoluto. $|-0.91|$ es mayor que $|0.75|$.</p>
+                            <p><strong class="font-sans text-xl text-slate-600">C es Falsa:</strong> El Estudio A es una relación "Inversa", no directa, debido a su signo negativo.</p>
+                            <p><strong class="font-sans text-xl text-slate-600">D es Falsa:</strong> El rango axiomático de Pearson es de $-1$ a $1$. Sí admite valores negativos sin ningún problema matemático.</p>
+                            <p><strong class="font-sans text-xl text-teal-800">B es Correcta:</strong> El Estudio A, al estar su valor ($-0.91$) mucho más cerca del límite extremo $(-1)$ que el B de su límite $(+1)$, garantiza que sus puntos están mucho más agrupados y apretados a la línea de tendencia.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="fixed bottom-0 w-full bg-white border-t-2 border-slate-200 px-10 py-5 flex justify-between items-center z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <p class="text-slate-600 font-extrabold tracking-widest uppercase text-xl">
+            CLASE 11 • COEFICIENTE DE CORRELACIÓN • EP
+        </p>
+        <div class="flex gap-4 items-center">
+            <div class="w-5 h-5 rounded-full bg-teal-800 shadow-sm"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300"></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.fixed.bottom-0 .w-5.h-5');
+
+        function updateSlide() {
+            slides.forEach((s, i) => {
+                s.classList.remove('active');
+                if (i === currentSlide) {
+                    s.classList.add('active');
+                    s.scrollTop = 0;
+                }
+            });
+            // Update dots
+            dots.forEach((dot, i) => {
+                if(i === currentSlide) {
+                    dot.className = "w-5 h-5 rounded-full bg-teal-800 shadow-sm transition-all duration-300";
+                } else {
+                    dot.className = "w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300";
+                }
+            });
+        }
+
+        function changeSlide(d) {
+            const n = currentSlide + d;
+            if (n >= 0 && n < slides.length) {
+                currentSlide = n;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (['ArrowRight', 'Space', 'Enter'].includes(e.key)) changeSlide(1);
+            if (['ArrowLeft', 'Backspace'].includes(e.key)) changeSlide(-1);
+        });
+
+        function revelarTicket() {
+            document.getElementById('btn-ticket').style.display = 'none';
+            document.getElementById('respuesta-ticket').classList.remove('hidden');
+            document.getElementById('respuesta-ticket').classList.add('flex');
+            document.getElementById('alt-corr').classList.add('border-l-8', 'border-teal-500', 'bg-teal-50', 'text-teal-900');
+            if (window.MathJax) {
+                MathJax.typesetPromise([document.getElementById('respuesta-ticket')]).catch(err => console.log(err));
+            }
+        }
+
+        // Lógica: Motivación - El Problema de la Escala
+        function cambiarEscala() {
+            document.getElementById('btn-escala').style.display = 'none';
+            document.getElementById('resultado-escala').classList.remove('hidden');
+            
+            // Cambiar textos HTML overlay
+            document.getElementById('unidad-x').innerText = 'centímetros';
+            document.getElementById('unidad-y').innerText = 'centímetros';
+            document.getElementById('unidad-x').classList.add('text-rose-600');
+            document.getElementById('unidad-y').classList.add('text-rose-600');
+            
+            // Animación flash para demostrar que el SVG NO cambia
+            const nube = document.getElementById('nube-puntos');
+            const alerta = document.getElementById('alerta-visual');
+            
+            nube.setAttribute('fill', '#e11d48'); // Cambia a rojo temporalmente
+            alerta.setAttribute('opacity', '1');
+            
+            setTimeout(() => {
+                nube.setAttribute('fill', '#0d9488'); // Vuelve a teal
+                alerta.setAttribute('opacity', '0');
+            }, 1500);
+
+            if (window.MathJax) {
+                MathJax.typesetPromise([document.getElementById('resultado-escala')]).catch(err => console.log(err));
+            }
+        }
+
+        // Lógica: Motor Algorítmico P4 (Yo Hago)
+        let estadoTablaP4 = 1;
+        function revelarCeldasP4(selectorCeldas, idBoton) {
+            const btn = document.getElementById(idBoton);
+            btn.classList.replace('bg-teal-50', 'bg-teal-100');
+            btn.classList.replace('text-teal-800', 'text-teal-900');
+
+            const celdas = document.querySelectorAll(selectorCeldas);
+            celdas.forEach(c => c.classList.remove('opacity-0'));
+            
+            if (window.MathJax) MathJax.typesetPromise(Array.from(celdas));
+
+            estadoTablaP4++;
+            if(estadoTablaP4 <= 2) {
+                const nextBtn = document.getElementById(`btn-p${estadoTablaP4}-s4`);
+                nextBtn.classList.remove('pointer-events-none', 'bg-slate-100', 'text-slate-400');
+                nextBtn.classList.add('bg-teal-50', 'hover:bg-teal-100', 'text-teal-800');
+            } else if (estadoTablaP4 === 3) {
+                const nextBtn = document.getElementById('btn-p3-s4');
+                nextBtn.classList.remove('pointer-events-none', 'bg-slate-100', 'text-slate-400');
+                nextBtn.classList.add('bg-rose-50', 'hover:bg-rose-100', 'text-rose-800', 'border-rose-200');
+            }
+        }
+
+        function revelarFinalP4() {
+            document.getElementById('btn-p3-s4').classList.replace('bg-rose-50', 'bg-rose-100');
+            const res = document.getElementById('resultado-final-s4');
+            res.classList.remove('hidden');
+            res.classList.add('flex');
+            
+            if (window.MathJax) {
+                MathJax.typesetPromise([res]).then(() => {
+                    // Animación del Gauge después de que MathJax renderiza
+                    setTimeout(() => {
+                        const aguja = res.querySelector('.bg-white.rounded-full');
+                        if(aguja) aguja.style.left = '0%'; // Ya está en 0%, pero nos aseguramos. (0% = -1, 50% = 0, 100% = 1)
+                    }, 100);
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>
+    
+  </body>
+  
+</html>
