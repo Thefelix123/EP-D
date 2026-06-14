@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probabilidad de la Unión - IIIº Medio EP-D</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            startup: { typeset: true }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; background-color: #f8fafc; }
+        #slide-container { height: calc(100vh - 5rem); width: 100vw; position: relative; }
+
+        .slide {
+            display: none; height: 100%; width: 100%; flex-direction: column;
+            overflow-y: auto; overflow-x: hidden; padding-bottom: 10rem; scroll-behavior: smooth;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .slide.active { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .glass-card { background: rgba(255, 255, 255, 0.98); border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+
+        ::-webkit-scrollbar { width: 14px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; margin: 10px 0; }
+        ::-webkit-scrollbar-thumb { background: #0d9488; border-radius: 8px; border: 3px solid #e2e8f0; }
+
+        .paso-ejemplo { opacity: 0; transform: translateY(20px); transition: all 0.5s ease-out; }
+        .paso-ejemplo.visible { opacity: 1; transform: translateY(0); }
+
+        .venn-fill { transition: fill-opacity 0.6s ease-out; }
+    </style>
+</head>
+
+<body class="text-slate-800 select-none flex flex-col">
+
+    <div class="h-4 w-full bg-teal-800 shrink-0 fixed top-0 z-50"></div>
+
+    <div id="slide-container" class="mt-4">
+
+        <!-- 1. PORTADA -->
+        <div class="slide active p-10 bg-slate-50">
+            <div class="flex-1 flex flex-col items-center justify-center space-y-8 w-full h-full min-h-[500px]">
+                <div class="bg-teal-100 p-8 rounded-full shadow-inner border-4 border-white">
+                    <i data-lucide="circle-dot" class="w-32 h-32 text-teal-800"></i>
+                </div>
+                <h1 class="text-7xl font-extrabold tracking-tight text-slate-900 uppercase text-center">
+                    Probabilidad de la Unión
+                </h1>
+                <p class="text-4xl text-slate-600 font-semibold tracking-wide text-center max-w-3xl leading-snug">
+                    El Principio de Inclusión y Exclusión
+                </p>
+
+                <div class="mt-16 p-8 glass-card rounded-2xl border-l-8 border-teal-800 text-left w-full max-w-5xl flex justify-between items-end shadow-md">
+                    <div>
+                        <p class="text-xl font-bold text-slate-500 uppercase tracking-widest mb-1">Profesor</p>
+                        <p class="text-4xl font-bold text-slate-900">Luis Quezada</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-3xl font-bold text-teal-800 uppercase tracking-wider">SEK CHILE • IIIº EP-D</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. INTRODUCCIÓN -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="alert-triangle" class="w-12 h-12 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Introducción</h2>
+            </div>
+
+            <div class="grid grid-cols-12 gap-10 flex-1 items-center">
+                <div class="col-span-12 lg:col-span-6 flex flex-col gap-6">
+                    <p class="text-3xl text-slate-700 leading-relaxed font-medium">
+                        Queremos calcular la probabilidad de que ocurra <strong class="text-teal-800">$A$ o $B$</strong>. La tentación es sumar: $P(A) + P(B)$.
+                    </p>
+
+                    <div class="bg-rose-50 p-6 rounded-2xl border-l-8 border-rose-500 shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i data-lucide="x-circle" class="w-7 h-7 text-rose-600"></i>
+                            <p class="text-xl font-bold uppercase tracking-wide text-rose-800">El Error de Contar Doble</p>
+                        </div>
+                        <p class="text-lg text-slate-700 font-medium leading-relaxed">
+                            Si $A$ y $B$ comparten elementos, esos resultados se cuentan <strong>dos veces</strong>: una en $P(A)$ y otra en $P(B)$. La suma directa infla el resultado.
+                        </p>
+                    </div>
+
+                    <div class="bg-teal-50 p-6 rounded-2xl border-l-8 border-teal-700 shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i data-lucide="check-circle-2" class="w-7 h-7 text-teal-800"></i>
+                            <p class="text-xl font-bold uppercase tracking-wide text-teal-900">La Corrección</p>
+                        </div>
+                        <p class="text-lg text-slate-700 font-medium leading-relaxed">
+                            Basta restar una vez la intersección $P(A \cap B)$ para compensar el doble conteo. Esa es la idea de toda la clase.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-6 bg-slate-900 rounded-3xl p-10 flex flex-col items-center justify-center h-[500px] shadow-xl text-white">
+                    <p class="text-teal-300 font-bold uppercase tracking-widest text-sm mb-6">El Doble Conteo, Visto</p>
+                    <svg viewBox="-20 -20 360 220" class="w-full max-w-md">
+                        <rect x="0" y="0" width="320" height="180" rx="12" fill="#1e293b" stroke="#0d9488" stroke-width="3"/>
+                        <text x="295" y="22" fill="#5eead4" font-size="18" font-weight="bold" font-family="Inter">Ω</text>
+                        <circle cx="125" cy="95" r="65" fill="#14b8a6" fill-opacity="0.5" stroke="#5eead4" stroke-width="2"/>
+                        <circle cx="195" cy="95" r="65" fill="#f59e0b" fill-opacity="0.5" stroke="#fcd34d" stroke-width="2"/>
+                        <text x="85" y="100" fill="white" font-size="24" font-weight="bold" font-family="Inter" text-anchor="middle">A</text>
+                        <text x="235" y="100" fill="white" font-size="24" font-weight="bold" font-family="Inter" text-anchor="middle">B</text>
+                        <text x="160" y="92" fill="white" font-size="13" font-weight="bold" font-family="Inter" text-anchor="middle">contada</text>
+                        <text x="160" y="108" fill="white" font-size="13" font-weight="bold" font-family="Inter" text-anchor="middle">2 veces</text>
+                    </svg>
+                    <p class="text-lg text-slate-300 mt-6 text-center max-w-sm">
+                        La zona central (intersección) pertenece a ambos círculos. Sumar las áreas sin más la cuenta dos veces.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. DEFINICIONES -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-6 border-b-4 border-slate-200 pb-3 shrink-0">
+                <i data-lucide="book-open" class="w-12 h-12 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Definiciones</h2>
+            </div>
+
+            <div class="flex-1 flex flex-col gap-5">
+
+                <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl flex items-center justify-between border-b-8 border-teal-600 gap-8">
+                    <div class="flex-1">
+                        <p class="text-teal-300 font-bold uppercase tracking-widest text-sm mb-2">Caso General · Principio de Inclusión-Exclusión</p>
+                        <p class="text-lg text-slate-300 leading-relaxed">
+                            Para dos sucesos cualesquiera $A$ y $B$ de un mismo espacio muestral, la probabilidad de su unión es la suma de sus probabilidades <strong class="text-white">menos</strong> la de su intersección.
+                        </p>
+                    </div>
+                    <div class="text-3xl md:text-4xl font-mono font-black tracking-tight bg-slate-800 px-8 py-6 rounded-2xl border border-slate-700 shrink-0">
+                        $$ P(A \cup B) = P(A) + P(B) - P(A \cap B) $$
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center text-rose-700 font-bold">∅</div>
+                            <h4 class="text-2xl font-bold text-slate-900">Caso Particular: Excluyentes</h4>
+                        </div>
+                        <p class="text-base text-slate-700 mb-3 flex-1">
+                            Si $A$ y $B$ son <strong>mutuamente excluyentes</strong> ($A \cap B = \varnothing$), no hay intersección que restar. Como $P(\varnothing) = 0$, la fórmula se simplifica a una suma directa.
+                        </p>
+                        <div class="bg-rose-50 py-3 px-4 rounded-xl border border-rose-200 text-center font-mono text-xl text-rose-700">
+                            $$ P(A \cup B) = P(A) + P(B) $$
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold">∪</div>
+                            <h4 class="text-2xl font-bold text-slate-900">Despeje de la Intersección</h4>
+                        </div>
+                        <p class="text-base text-slate-700 mb-3 flex-1">
+                            La misma fórmula, reordenada, permite obtener la probabilidad de la intersección cuando se conocen las otras tres cantidades.
+                        </p>
+                        <div class="bg-indigo-50 py-3 px-4 rounded-xl border border-indigo-200 text-center font-mono text-xl text-indigo-700">
+                            $$ P(A \cap B) = P(A) + P(B) - P(A \cup B) $$
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="bg-teal-50 p-5 rounded-2xl border-l-8 border-teal-600 flex items-start gap-4">
+                    <i data-lucide="lightbulb" class="w-8 h-8 text-teal-800 shrink-0 mt-1"></i>
+                    <p class="text-base text-slate-700 leading-relaxed">
+                        <strong>Conexión con la clase anterior:</strong> en la práctica, la unión se traduce como el conector <strong>"o"</strong> (al menos uno de los dos), la intersección como <strong>"y"</strong> (ambos a la vez), y el complemento $P(A^c) = 1 - P(A)$ sigue siendo válido para resolver por la vía del suceso contrario.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 4. EJEMPLO -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center justify-between mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <div class="flex items-center gap-6">
+                    <i data-lucide="play-circle" class="w-12 h-12 text-teal-800"></i>
+                    <h2 class="text-5xl font-bold text-slate-900">Ejemplo</h2>
+                </div>
+                <button onclick="avanzarEjemplo()" id="btn-ejemplo" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-xl text-xl transition flex items-center gap-2 shadow-md">
+                    Siguiente Paso <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-12 gap-8 flex-1">
+
+                <div class="col-span-12 lg:col-span-5 flex flex-col gap-3">
+                    <div class="bg-slate-50 rounded-2xl border border-slate-200 p-5 shadow-sm">
+                        <p class="text-slate-500 font-bold uppercase tracking-widest text-sm mb-3">Enunciado</p>
+                        <p class="text-base font-medium text-slate-800 leading-relaxed">
+                            Se lanza un dado equilibrado. Considere los sucesos:
+                        </p>
+                        <div class="bg-white py-2 px-3 rounded-xl border border-slate-200 font-mono text-base text-slate-900 space-y-1 mt-2">
+                            <p class="text-teal-700">$A$ = "número par" $= \{2, 4, 6\}$</p>
+                            <p class="text-amber-700">$B$ = "mayor que 3" $= \{4, 5, 6\}$</p>
+                        </div>
+                        <p class="text-base font-medium text-slate-800 leading-relaxed mt-2">
+                            Calcule $P(A \cup B)$: la probabilidad de obtener un número par <strong>o</strong> mayor que 3.
+                        </p>
+                    </div>
+
+                    <div id="paso1" class="paso-ejemplo hidden bg-white border-l-8 border-l-teal-500 border border-slate-200 rounded-2xl p-4 shadow-sm">
+                        <p class="font-bold text-teal-700 text-sm uppercase tracking-widest mb-1">Paso 1 · Probabilidades individuales</p>
+                        <p class="text-base text-slate-700">$\#A = 3$, $\#B = 3$, $\#\Omega = 6$.</p>
+                        <p class="text-lg font-mono text-teal-800 mt-1">$P(A) = \tfrac{3}{6}, \quad P(B) = \tfrac{3}{6}$</p>
+                    </div>
+
+                    <div id="paso2" class="paso-ejemplo hidden bg-white border-l-8 border-l-indigo-500 border border-slate-200 rounded-2xl p-4 shadow-sm">
+                        <p class="font-bold text-indigo-700 text-sm uppercase tracking-widest mb-1">Paso 2 · La intersección</p>
+                        <p class="text-base text-slate-700">$A \cap B = \{4, 6\} \Rightarrow \#(A \cap B) = 2$.</p>
+                        <p class="text-lg font-mono text-indigo-700 mt-1">$P(A \cap B) = \tfrac{2}{6}$</p>
+                    </div>
+
+                    <div id="paso3" class="paso-ejemplo hidden bg-slate-900 text-white rounded-2xl p-4 shadow-xl border-b-8 border-teal-500">
+                        <p class="text-teal-300 font-bold text-sm uppercase tracking-widest mb-1">Paso 3 · Aplicar la fórmula</p>
+                        <p class="text-lg font-mono text-white mt-1">$P(A \cup B) = \tfrac{3}{6} + \tfrac{3}{6} - \tfrac{2}{6}$</p>
+                        <p class="text-2xl font-mono font-black text-teal-300 mt-2 text-center">$= \tfrac{4}{6} = \mathbf{\tfrac{2}{3}}$</p>
+                        <p class="text-sm text-slate-400 mt-2">Verificación directa: $A \cup B = \{2, 4, 5, 6\}$, que son 4 casos de 6. Coincide.</p>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-7 flex flex-col items-center justify-center">
+                    <div class="bg-slate-50 rounded-3xl border border-slate-200 p-8 shadow-sm w-full">
+                        <p class="text-slate-500 font-bold uppercase tracking-widest text-sm mb-6 text-center">Diagrama de Venn sobre $\Omega = \{1,\dots,6\}$</p>
+                        <svg viewBox="-10 -10 420 240" class="w-full">
+                            <rect x="0" y="0" width="400" height="220" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+                            <text x="375" y="25" fill="#94a3b8" font-size="20" font-weight="bold" font-family="Inter">Ω</text>
+
+                            <!-- Círculo A -->
+                            <circle id="venn-A" cx="155" cy="110" r="85" class="venn-fill" fill="#14b8a6" fill-opacity="0" stroke="#0d9488" stroke-width="2.5"/>
+                            <!-- Círculo B -->
+                            <circle id="venn-B" cx="255" cy="110" r="85" class="venn-fill" fill="#f59e0b" fill-opacity="0" stroke="#d97706" stroke-width="2.5"/>
+
+                            <text x="110" y="50" fill="#0d9488" font-size="20" font-weight="bold" font-family="Inter">A</text>
+                            <text x="295" y="50" fill="#d97706" font-size="20" font-weight="bold" font-family="Inter">B</text>
+
+                            <!-- Elementos -->
+                            <text x="110" y="120" font-size="26" font-weight="bold" font-family="monospace" text-anchor="middle" fill="#0f766e">2</text>
+                            <text x="205" y="95" font-size="26" font-weight="bold" font-family="monospace" text-anchor="middle" fill="#3730a3">4</text>
+                            <text x="205" y="135" font-size="26" font-weight="bold" font-family="monospace" text-anchor="middle" fill="#3730a3">6</text>
+                            <text x="300" y="120" font-size="26" font-weight="bold" font-family="monospace" text-anchor="middle" fill="#92400e">5</text>
+                            <text x="55" y="200" font-size="22" font-weight="bold" font-family="monospace" text-anchor="middle" fill="#94a3b8">1</text>
+                            <text x="345" y="200" font-size="22" font-weight="bold" font-family="monospace" text-anchor="middle" fill="#94a3b8">3</text>
+                        </svg>
+                        <div class="flex justify-center gap-6 mt-4 text-sm">
+                            <span class="flex items-center gap-2"><span class="w-4 h-4 rounded-full bg-teal-500/50 border border-teal-600"></span>A (par)</span>
+                            <span class="flex items-center gap-2"><span class="w-4 h-4 rounded-full bg-amber-500/50 border border-amber-600"></span>B (&gt;3)</span>
+                            <span class="flex items-center gap-2"><span class="w-4 h-4 rounded-full bg-indigo-400 border border-indigo-600"></span>A ∩ B</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 5. PROBLEMAS -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-6 border-b-4 border-slate-200 pb-3 shrink-0">
+                <i data-lucide="edit-3" class="w-12 h-12 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Problemas</h2>
+            </div>
+
+            <div class="flex-1 overflow-y-auto w-full pb-10 pr-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-emerald-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>1.</strong> Se lanza un dado. Sean $A$ = "obtener un número impar" y $B$ = "obtener un múltiplo de 3". Calcule $P(A \cup B)$ usando la fórmula de inclusión-exclusión.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-emerald-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>2.</strong> Sean dos sucesos con $P(A) = 0{,}4$, $P(B) = 0{,}5$ y $P(A \cap B) = 0{,}2$. Determine $P(A \cup B)$.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-emerald-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>3.</strong> En una baraja inglesa se extrae una carta. Sean $R$ = "carta roja" y $A$ = "un as". Justifique que $P(R \cup A) = P(R) + P(A) - P(R \cap A)$ y calcule su valor.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-amber-400 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>4.</strong> Se lanza un dado. Sean $A$ = "obtener un 1 o 2" y $B$ = "obtener un 5 o 6". Demuestre que son mutuamente excluyentes y calcule $P(A \cup B)$.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-amber-400 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>5.</strong> Se sabe que $P(A) = 0{,}6$, $P(B) = 0{,}3$ y $P(A \cup B) = 0{,}7$. Determine $P(A \cap B)$ despejando la fórmula.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-amber-400 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>6.</strong> Se lanzan dos dados y se registra la suma. Sean $A$ = "la suma es 7" y $B$ = "la suma es par". Calcule $P(A \cup B)$ enumerando los casos favorables de cada suceso.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-rose-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>7.</strong> En un curso, $P(\text{aprobar matemática}) = 0{,}8$, $P(\text{aprobar lenguaje}) = 0{,}7$ y $P(\text{aprobar ambas}) = 0{,}6$. ¿Cuál es la probabilidad de aprobar al menos una de las dos asignaturas? ¿Y la de reprobar ambas?
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-rose-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>8.</strong> Demuestre, a partir de la fórmula de inclusión-exclusión, que para dos sucesos cualesquiera siempre se cumple $P(A \cup B) \leq P(A) + P(B)$. ¿Cuándo se alcanza la igualdad?
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-rose-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>9.</strong> Sean $A$ y $B$ con $P(A) = 0{,}5$ y $P(B) = 0{,}4$. Si se afirma que $P(A \cup B) = 0{,}3$, demuestre que esa afirmación es imposible. (Pista: ¿qué valor tomaría $P(A \cap B)$?)
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. TICKET DE SALIDA -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-100 pb-4 shrink-0 justify-between">
+                <div class="flex items-center gap-4">
+                    <i data-lucide="check-square" class="w-12 h-12 text-teal-800"></i>
+                    <h2 class="text-6xl font-bold text-slate-800">Ticket de Salida</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-12 flex-1 min-h-[450px]">
+                <div class="col-span-12 xl:col-span-6 flex flex-col justify-center space-y-6">
+                    <div class="bg-slate-50 border border-slate-200 p-8 rounded-3xl shadow-sm">
+                        <p class="text-xl font-medium text-slate-800 leading-relaxed mb-4">
+                            Se extrae una carta al azar de una baraja inglesa de <strong class="text-teal-700">52 cartas</strong>. Considere los sucesos $C$ = "extraer una carta de corazones" y $F$ = "extraer una figura (J, Q o K)".
+                        </p>
+
+                        <p class="text-xl font-bold text-slate-900 mb-3">Resuelva en su cuaderno:</p>
+                        <ol class="list-decimal list-inside text-lg text-slate-700 font-medium space-y-3 ml-2">
+                            <li>Determine $P(C)$ y $P(F)$.</li>
+                            <li>Determine $P(C \cap F)$ (cartas que son figura y de corazones a la vez).</li>
+                            <li>Calcule $P(C \cup F)$ con la fórmula de inclusión-exclusión.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="col-span-12 xl:col-span-6 flex flex-col bg-slate-900 rounded-3xl p-8 shadow-xl items-center justify-center relative">
+                    <button id="btn-ticket" onclick="revelarTicket()" class="w-full max-w-sm px-8 py-6 bg-teal-600 text-white rounded-2xl text-2xl font-bold hover:bg-teal-500 transition shadow-lg border-b-4 border-teal-800 active:border-b-0 active:mt-1">
+                        Revelar Pauta
+                    </button>
+
+                    <div id="respuesta-ticket" class="hidden absolute inset-0 w-full h-full p-8 flex-col justify-center bg-teal-50 text-slate-800 rounded-3xl border-4 border-teal-500 z-10 overflow-y-auto">
+                        <div class="text-base space-y-4 text-left">
+                            <div>
+                                <p class="font-bold text-slate-900 mb-1 bg-teal-200 w-fit px-3 py-1 rounded-lg">1. Probabilidades individuales</p>
+                                <p class="font-mono">$P(C) = \dfrac{13}{52} = \dfrac{1}{4}$ &nbsp;·&nbsp; $P(F) = \dfrac{12}{52} = \dfrac{3}{13}$</p>
+                                <p class="text-sm text-slate-600 mt-1">13 corazones; 12 figuras (3 por cada una de las 4 pintas).</p>
+                            </div>
+                            <div class="border-t-2 border-teal-200 pt-3">
+                                <p class="font-bold text-slate-900 mb-1 bg-teal-200 w-fit px-3 py-1 rounded-lg">2. Intersección</p>
+                                <p class="font-mono">$P(C \cap F) = \dfrac{3}{52}$</p>
+                                <p class="text-sm text-slate-600 mt-1">Las figuras de corazones: J, Q y K de corazones (3 cartas).</p>
+                            </div>
+                            <div class="border-t-2 border-teal-200 pt-3">
+                                <p class="font-bold text-slate-900 mb-1 bg-teal-200 w-fit px-3 py-1 rounded-lg">3. Unión</p>
+                                <p class="font-mono">$P(C \cup F) = \dfrac{13}{52} + \dfrac{12}{52} - \dfrac{3}{52}$</p>
+                                <p class="text-teal-800 font-black text-2xl mt-1">$= \dfrac{22}{52} = \dfrac{11}{26} \approx \mathbf{0{,}423}$</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="fixed bottom-0 w-full bg-white border-t-2 border-slate-200 px-10 py-5 flex justify-between items-center z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <p class="text-slate-600 font-extrabold tracking-widest uppercase text-xl">
+            CLASE 16 • PROBABILIDAD DE LA UNIÓN • LQ
+        </p>
+        <div class="flex gap-4 items-center" id="dot-container">
+            <div class="w-5 h-5 rounded-full bg-teal-800 shadow-sm transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentSlide = 0;
+        let estadoEjemplo = 0;
+
+        function updateSlide() {
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('#dot-container div');
+
+            slides.forEach((s, i) => {
+                s.classList.remove('active');
+                if (i === currentSlide) {
+                    s.classList.add('active');
+                    s.scrollTop = 0;
+                }
+            });
+
+            dots.forEach((dot, i) => {
+                dot.className = i === currentSlide
+                    ? "w-5 h-5 rounded-full bg-teal-800 shadow-sm transition-all duration-300"
+                    : "w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300";
+            });
+        }
+
+        function changeSlide(d) {
+            const slides = document.querySelectorAll('.slide');
+            const n = currentSlide + d;
+            if (n >= 0 && n < slides.length) {
+                currentSlide = n;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (['ArrowRight', ' ', 'Enter'].includes(e.key)) changeSlide(1);
+            if (['ArrowLeft', 'Backspace'].includes(e.key)) changeSlide(-1);
+        });
+
+        function avanzarEjemplo() {
+            estadoEjemplo++;
+            const vennA = document.getElementById('venn-A');
+            const vennB = document.getElementById('venn-B');
+
+            if (estadoEjemplo === 1) {
+                document.getElementById('paso1').classList.remove('hidden');
+                setTimeout(() => document.getElementById('paso1').classList.add('visible'), 50);
+                vennA.setAttribute('fill-opacity', '0.45');
+                vennB.setAttribute('fill-opacity', '0.45');
+            } else if (estadoEjemplo === 2) {
+                document.getElementById('paso2').classList.remove('hidden');
+                setTimeout(() => document.getElementById('paso2').classList.add('visible'), 50);
+                // resaltar intersección bajando opacidad de los demás
+                vennA.setAttribute('fill-opacity', '0.25');
+                vennB.setAttribute('fill-opacity', '0.25');
+            } else if (estadoEjemplo === 3) {
+                document.getElementById('paso3').classList.remove('hidden');
+                setTimeout(() => document.getElementById('paso3').classList.add('visible'), 50);
+                vennA.setAttribute('fill-opacity', '0.45');
+                vennB.setAttribute('fill-opacity', '0.45');
+                document.getElementById('btn-ejemplo').style.display = 'none';
+            }
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function revelarTicket() {
+            document.getElementById('btn-ticket').style.display = 'none';
+            const res = document.getElementById('respuesta-ticket');
+            res.classList.remove('hidden');
+            res.classList.add('flex');
+            if (window.MathJax) MathJax.typesetPromise([res]);
+        }
+    </script>
+</body>
+</html>

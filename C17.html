@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablas de Contingencia - IIIº Medio EP-D</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            startup: { typeset: true }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; background-color: #f8fafc; }
+        #slide-container { height: calc(100vh - 5rem); width: 100vw; position: relative; }
+
+        .slide {
+            display: none; height: 100%; width: 100%; flex-direction: column;
+            overflow-y: auto; overflow-x: hidden; padding-bottom: 10rem; scroll-behavior: smooth;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .slide.active { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .glass-card { background: rgba(255, 255, 255, 0.98); border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+
+        ::-webkit-scrollbar { width: 14px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; margin: 10px 0; }
+        ::-webkit-scrollbar-thumb { background: #0d9488; border-radius: 8px; border: 3px solid #e2e8f0; }
+
+        .paso-ejemplo { opacity: 0; transform: translateY(20px); transition: all 0.5s ease-out; }
+        .paso-ejemplo.visible { opacity: 1; transform: translateY(0); }
+
+        .celda { transition: all 0.4s ease-out; }
+        .celda.resaltar-fila { background-color: #ccfbf1 !important; color: #0f766e; transform: scale(1.04); }
+        .celda.resaltar-col { background-color: #fef3c7 !important; color: #92400e; transform: scale(1.04); }
+        .celda.resaltar-conjunta { background-color: #c7d2fe !important; color: #3730a3; transform: scale(1.08); box-shadow: 0 4px 12px -2px rgba(79, 70, 229, 0.5); }
+        .celda.resaltar-total { background-color: #e2e8f0 !important; color: #0f172a; font-weight: 900; }
+
+        table.contingencia { border-collapse: separate; border-spacing: 0; }
+        table.contingencia td, table.contingencia th { border: 2px solid #e2e8f0; }
+    </style>
+</head>
+
+<body class="text-slate-800 select-none flex flex-col">
+
+    <div class="h-4 w-full bg-teal-800 shrink-0 fixed top-0 z-50"></div>
+
+    <div id="slide-container" class="mt-4">
+
+        <!-- 1. PORTADA -->
+        <div class="slide active p-10 bg-slate-50">
+            <div class="flex-1 flex flex-col items-center justify-center space-y-8 w-full h-full min-h-[500px]">
+                <div class="bg-teal-100 p-8 rounded-full shadow-inner border-4 border-white">
+                    <i data-lucide="table-2" class="w-32 h-32 text-teal-800"></i>
+                </div>
+                <h1 class="text-7xl font-extrabold tracking-tight text-slate-900 uppercase text-center">
+                    Tablas de Contingencia
+                </h1>
+                <p class="text-4xl text-slate-600 font-semibold tracking-wide text-center max-w-3xl leading-snug">
+                    Asignar Probabilidades a Dos Características a la Vez
+                </p>
+
+                <div class="mt-16 p-8 glass-card rounded-2xl border-l-8 border-teal-800 text-left w-full max-w-5xl flex justify-between items-end shadow-md">
+                    <div>
+                        <p class="text-xl font-bold text-slate-500 uppercase tracking-widest mb-1">Profesor</p>
+                        <p class="text-4xl font-bold text-slate-900">Luis Quezada</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-3xl font-bold text-teal-800 uppercase tracking-wider">SEK CHILE • IIIº EP-D</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. INTRODUCCIÓN -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="layout-grid" class="w-12 h-12 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Introducción</h2>
+            </div>
+
+            <div class="grid grid-cols-12 gap-10 flex-1 items-center">
+                <div class="col-span-12 lg:col-span-6 flex flex-col gap-6">
+                    <p class="text-3xl text-slate-700 leading-relaxed font-medium">
+                        Muchas veces clasificamos a un grupo según <strong class="text-teal-800">dos características al mismo tiempo</strong>.
+                    </p>
+
+                    <div class="bg-slate-50 p-6 rounded-2xl border-l-8 border-slate-700 shadow-sm">
+                        <p class="text-lg text-slate-700 font-medium leading-relaxed">
+                            Por ejemplo, una clínica registra a sus pacientes según su <strong>sexo</strong> (hombre / mujer) y según si <strong>tienen o no diabetes</strong>. Cada paciente cae en una y solo una de las cuatro combinaciones posibles.
+                        </p>
+                    </div>
+
+                    <div class="bg-teal-50 p-6 rounded-2xl border-l-8 border-teal-700 shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i data-lucide="target" class="w-7 h-7 text-teal-800"></i>
+                            <p class="text-xl font-bold uppercase tracking-wide text-teal-900">Idea Central</p>
+                        </div>
+                        <p class="text-lg text-slate-700 font-medium leading-relaxed">
+                            Una <strong>tabla de contingencia</strong> ordena estos recuentos en filas y columnas. Una vez ordenados, las probabilidades se leen <strong>directamente</strong> dividiendo por el total.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-6 bg-slate-900 rounded-3xl p-8 flex flex-col items-center justify-center h-[500px] shadow-xl text-white">
+                    <p class="text-teal-300 font-bold uppercase tracking-widest text-sm mb-6">Estructura Básica</p>
+                    <table class="text-center text-lg w-full max-w-sm">
+                        <tr>
+                            <td class="p-3 text-slate-500"></td>
+                            <td class="p-3 font-bold text-amber-300 border-b-2 border-slate-700">Diabetes</td>
+                            <td class="p-3 font-bold text-amber-300 border-b-2 border-slate-700">Sin diab.</td>
+                            <td class="p-3 font-bold text-slate-400 border-b-2 border-slate-700">Total</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-bold text-teal-300 border-r-2 border-slate-700">Hombre</td>
+                            <td class="p-3 bg-slate-800 rounded">·</td>
+                            <td class="p-3 bg-slate-800 rounded">·</td>
+                            <td class="p-3 text-slate-400">·</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-bold text-teal-300 border-r-2 border-slate-700">Mujer</td>
+                            <td class="p-3 bg-slate-800 rounded">·</td>
+                            <td class="p-3 bg-slate-800 rounded">·</td>
+                            <td class="p-3 text-slate-400">·</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-bold text-slate-400 border-t-2 border-slate-700">Total</td>
+                            <td class="p-3 text-slate-400 border-t-2 border-slate-700">·</td>
+                            <td class="p-3 text-slate-400 border-t-2 border-slate-700">·</td>
+                            <td class="p-3 text-white font-black border-t-2 border-slate-700">N</td>
+                        </tr>
+                    </table>
+                    <p class="text-base text-slate-300 mt-6 text-center max-w-sm">
+                        Las casillas interiores cruzan ambas características. Los <strong class="text-white">márgenes</strong> (fila y columna "Total") resumen cada característica por separado.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. DEFINICIONES -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-6 border-b-4 border-slate-200 pb-3 shrink-0">
+                <i data-lucide="book-open" class="w-12 h-12 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Definiciones</h2>
+            </div>
+
+            <div class="flex-1 flex flex-col gap-5">
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold">∩</div>
+                            <h4 class="text-2xl font-bold text-slate-900">Probabilidad Conjunta</h4>
+                        </div>
+                        <p class="text-base text-slate-700 mb-3 flex-1">
+                            Mide que ocurran <strong>ambas características a la vez</strong>. Se obtiene dividiendo el valor de una <strong>casilla interior</strong> por el total.
+                        </p>
+                        <div class="bg-indigo-50 py-3 px-4 rounded-xl border border-indigo-200 text-center font-mono text-lg text-indigo-700">
+                            $$ P(A \cap B) = \frac{\text{casilla } A\,\text{y}\,B}{N} $$
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold">∑</div>
+                            <h4 class="text-2xl font-bold text-slate-900">Probabilidad Marginal</h4>
+                        </div>
+                        <p class="text-base text-slate-700 mb-3 flex-1">
+                            Mide una <strong>sola característica</strong>, sin importar la otra. Se obtiene dividiendo un <strong>total de fila o de columna</strong> (el margen) por el total general.
+                        </p>
+                        <div class="bg-teal-50 py-3 px-4 rounded-xl border border-teal-200 text-center font-mono text-lg text-teal-700">
+                            $$ P(A) = \frac{\text{margen de } A}{N} $$
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-xl border-b-8 border-teal-600">
+                    <p class="text-teal-300 font-bold uppercase tracking-widest text-sm mb-3">Cómo leer la tabla</p>
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <p class="text-indigo-300 font-bold text-sm uppercase mb-1">Casilla interior</p>
+                            <p class="text-sm text-slate-300">Conjunta: $A$ <strong>y</strong> $B$</p>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <p class="text-teal-300 font-bold text-sm uppercase mb-1">Margen (fila/col.)</p>
+                            <p class="text-sm text-slate-300">Marginal: solo $A$ o solo $B$</p>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <p class="text-slate-300 font-bold text-sm uppercase mb-1">Esquina inferior</p>
+                            <p class="text-sm text-slate-300">Total general $N$ (divisor)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-teal-50 p-5 rounded-2xl border-l-8 border-teal-600 flex items-start gap-4">
+                    <i data-lucide="link" class="w-8 h-8 text-teal-800 shrink-0 mt-1"></i>
+                    <p class="text-base text-slate-700 leading-relaxed">
+                        <strong>Coherencia interna:</strong> cada margen es la suma de su fila o columna, y la suma de todas las casillas interiores es el total $N$. Con la tabla, la unión de la clase anterior también se calcula: $P(A \cup B) = P(A) + P(B) - P(A \cap B)$.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 4. EJEMPLO -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center justify-between mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <div class="flex items-center gap-6">
+                    <i data-lucide="play-circle" class="w-12 h-12 text-teal-800"></i>
+                    <h2 class="text-5xl font-bold text-slate-900">Ejemplo</h2>
+                </div>
+                <button onclick="avanzarEjemplo()" id="btn-ejemplo" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-xl text-xl transition flex items-center gap-2 shadow-md">
+                    Siguiente Cálculo <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-12 gap-8 flex-1">
+
+                <div class="col-span-12 lg:col-span-7 flex flex-col items-center justify-center">
+                    <div class="bg-slate-50 rounded-3xl border border-slate-200 p-6 shadow-sm w-full">
+                        <p class="text-slate-500 font-bold uppercase tracking-widest text-sm mb-4 text-center">
+                            Clínica: 200 pacientes · $D$ = diabetes, $H$ = hombre
+                        </p>
+                        <table class="contingencia w-full text-center text-xl">
+                            <tr>
+                                <th class="p-4 bg-white text-slate-400 text-sm"></th>
+                                <th class="p-4 bg-amber-50 text-amber-800 font-bold">$D$</th>
+                                <th class="p-4 bg-amber-50 text-amber-800 font-bold">$D^c$</th>
+                                <th class="p-4 bg-slate-100 text-slate-700 font-bold">Total</th>
+                            </tr>
+                            <tr>
+                                <th class="p-4 bg-teal-50 text-teal-800 font-bold">$H$</th>
+                                <td id="c-HD" class="celda p-4 bg-white font-mono font-bold">30</td>
+                                <td id="c-HDc" class="celda p-4 bg-white font-mono font-bold">70</td>
+                                <td id="c-H" class="celda p-4 bg-slate-50 font-mono font-bold">100</td>
+                            </tr>
+                            <tr>
+                                <th class="p-4 bg-teal-50 text-teal-800 font-bold">$H^c$</th>
+                                <td id="c-McD" class="celda p-4 bg-white font-mono font-bold">20</td>
+                                <td id="c-McDc" class="celda p-4 bg-white font-mono font-bold">80</td>
+                                <td id="c-Mc" class="celda p-4 bg-slate-50 font-mono font-bold">100</td>
+                            </tr>
+                            <tr>
+                                <th class="p-4 bg-slate-100 text-slate-700 font-bold">Total</th>
+                                <td id="c-D" class="celda p-4 bg-slate-50 font-mono font-bold">50</td>
+                                <td id="c-Dc" class="celda p-4 bg-slate-50 font-mono font-bold">150</td>
+                                <td id="c-N" class="celda p-4 bg-slate-200 font-mono font-black">200</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-5 flex flex-col gap-3">
+                    <div class="bg-slate-50 rounded-2xl border border-slate-200 p-4 shadow-sm">
+                        <p class="text-slate-500 font-bold uppercase tracking-widest text-sm">Se pide</p>
+                        <p class="text-base text-slate-700">Calcular probabilidades marginales, conjuntas y la unión, leyendo directamente la tabla.</p>
+                    </div>
+
+                    <div id="paso1" class="paso-ejemplo hidden bg-white border-l-8 border-l-teal-500 border border-slate-200 rounded-2xl p-4 shadow-sm">
+                        <p class="font-bold text-teal-700 text-sm uppercase tracking-widest mb-1">Marginal · $P(H)$</p>
+                        <p class="text-base text-slate-700">Margen de la fila Hombre, sobre el total.</p>
+                        <p class="text-lg font-mono text-teal-800 mt-1">$P(H) = \tfrac{100}{200} = \tfrac{1}{2}$</p>
+                    </div>
+
+                    <div id="paso2" class="paso-ejemplo hidden bg-white border-l-8 border-l-amber-500 border border-slate-200 rounded-2xl p-4 shadow-sm">
+                        <p class="font-bold text-amber-700 text-sm uppercase tracking-widest mb-1">Marginal · $P(D)$</p>
+                        <p class="text-base text-slate-700">Margen de la columna Diabetes, sobre el total.</p>
+                        <p class="text-lg font-mono text-amber-700 mt-1">$P(D) = \tfrac{50}{200} = \tfrac{1}{4}$</p>
+                    </div>
+
+                    <div id="paso3" class="paso-ejemplo hidden bg-white border-l-8 border-l-indigo-500 border border-slate-200 rounded-2xl p-4 shadow-sm">
+                        <p class="font-bold text-indigo-700 text-sm uppercase tracking-widest mb-1">Conjunta · $P(D \cap H)$</p>
+                        <p class="text-base text-slate-700">Casilla interior: hombre con diabetes.</p>
+                        <p class="text-lg font-mono text-indigo-700 mt-1">$P(D \cap H) = \tfrac{30}{200} = 0{,}15$</p>
+                    </div>
+
+                    <div id="paso4" class="paso-ejemplo hidden bg-slate-900 text-white rounded-2xl p-4 shadow-xl border-b-8 border-teal-500">
+                        <p class="text-teal-300 font-bold text-sm uppercase tracking-widest mb-1">Unión · $P(D \cup H)$</p>
+                        <p class="text-base font-mono text-white">$= \tfrac{50}{200} + \tfrac{100}{200} - \tfrac{30}{200}$</p>
+                        <p class="text-xl font-mono font-black text-teal-300 mt-1 text-center">$= \tfrac{120}{200} = \mathbf{0{,}6}$</p>
+                        <p class="text-sm text-slate-400 mt-1">Probabilidad de ser hombre o tener diabetes (o ambas).</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 5. PROBLEMAS -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-6 border-b-4 border-slate-200 pb-3 shrink-0">
+                <i data-lucide="edit-3" class="w-12 h-12 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Problemas</h2>
+            </div>
+
+            <div class="flex-1 overflow-y-auto w-full pb-10 pr-4">
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm mb-6">
+                    <p class="text-slate-600 font-bold text-sm uppercase tracking-widest mb-3">Tabla A — Para los problemas 1 a 5</p>
+                    <p class="text-slate-700 mb-3">Encuesta a <strong>150 estudiantes</strong> sobre si usan lentes y su nivel (Básica / Media):</p>
+                    <table class="contingencia w-full max-w-2xl text-center text-base">
+                        <tr>
+                            <th class="p-3 bg-white"></th>
+                            <th class="p-3 bg-amber-50 text-amber-800 font-bold">Usa lentes ($L$)</th>
+                            <th class="p-3 bg-amber-50 text-amber-800 font-bold">No usa ($L^c$)</th>
+                            <th class="p-3 bg-slate-100 font-bold">Total</th>
+                        </tr>
+                        <tr>
+                            <th class="p-3 bg-teal-50 text-teal-800 font-bold">Básica ($B$)</th>
+                            <td class="p-3 font-mono">25</td>
+                            <td class="p-3 font-mono">55</td>
+                            <td class="p-3 bg-slate-50 font-mono font-bold">80</td>
+                        </tr>
+                        <tr>
+                            <th class="p-3 bg-teal-50 text-teal-800 font-bold">Media ($B^c$)</th>
+                            <td class="p-3 font-mono">35</td>
+                            <td class="p-3 font-mono">35</td>
+                            <td class="p-3 bg-slate-50 font-mono font-bold">70</td>
+                        </tr>
+                        <tr>
+                            <th class="p-3 bg-slate-100 font-bold">Total</th>
+                            <td class="p-3 bg-slate-50 font-mono font-bold">60</td>
+                            <td class="p-3 bg-slate-50 font-mono font-bold">90</td>
+                            <td class="p-3 bg-slate-200 font-mono font-black">150</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-emerald-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>1.</strong> Usando la Tabla A, calcule la probabilidad marginal $P(L)$ de que un estudiante elegido al azar use lentes.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-emerald-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>2.</strong> Calcule la probabilidad conjunta $P(B \cap L)$ de que un estudiante sea de Básica y use lentes.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-emerald-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>3.</strong> Calcule $P(B)$ y $P(B^c)$ y verifique que suman 1.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-amber-400 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>4.</strong> Calcule $P(B \cup L)$: que el estudiante sea de Básica o use lentes. Use la fórmula de inclusión-exclusión y verifique contando las casillas correspondientes.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-amber-400 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>5.</strong> ¿Cuál es la probabilidad de que un estudiante sea de Media y <em>no</em> use lentes? Exprese el suceso con notación de conjuntos y calcule $P(B^c \cap L^c)$.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-amber-400 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>6.</strong> En una empresa de 240 personas, 90 son mujeres y 60 personas trabajan en turno de noche; 25 mujeres trabajan de noche. Construya la tabla de contingencia completa (sexo × turno) con todos sus márgenes.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-rose-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>7.</strong> Con la tabla del problema 6, calcule la probabilidad de que una persona elegida al azar sea mujer o trabaje de noche.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-rose-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>8.</strong> Una tabla 2×2 tiene total $N = 100$. Se sabe que $P(A) = 0{,}6$, $P(B) = 0{,}5$ y $P(A \cap B) = 0{,}3$. Reconstruya las cuatro casillas interiores y todos los márgenes.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-rose-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>9.</strong> En la Tabla A, demuestre que la suma de las cuatro probabilidades conjuntas ($P(B \cap L)$, $P(B \cap L^c)$, $P(B^c \cap L)$, $P(B^c \cap L^c)$) es exactamente 1. Explique por qué esto siempre debe cumplirse.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. TICKET DE SALIDA -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-100 pb-4 shrink-0 justify-between">
+                <div class="flex items-center gap-4">
+                    <i data-lucide="check-square" class="w-12 h-12 text-teal-800"></i>
+                    <h2 class="text-6xl font-bold text-slate-800">Ticket de Salida</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-12 flex-1 min-h-[450px]">
+                <div class="col-span-12 xl:col-span-6 flex flex-col justify-center space-y-5">
+                    <div class="bg-slate-50 border border-slate-200 p-6 rounded-3xl shadow-sm">
+                        <p class="text-lg font-medium text-slate-800 leading-relaxed mb-3">
+                            En un colegio se encuestó a <strong class="text-teal-700">120 alumnos</strong> sobre si practican deporte ($P$) y su sexo:
+                        </p>
+                        <table class="contingencia w-full text-center text-base mb-4">
+                            <tr>
+                                <th class="p-2 bg-white"></th>
+                                <th class="p-2 bg-amber-50 text-amber-800 font-bold">Deporte ($P$)</th>
+                                <th class="p-2 bg-amber-50 text-amber-800 font-bold">No ($P^c$)</th>
+                                <th class="p-2 bg-slate-100 font-bold">Total</th>
+                            </tr>
+                            <tr>
+                                <th class="p-2 bg-teal-50 text-teal-800 font-bold">Hombre ($H$)</th>
+                                <td class="p-2 font-mono">45</td>
+                                <td class="p-2 font-mono">15</td>
+                                <td class="p-2 bg-slate-50 font-mono font-bold">60</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2 bg-teal-50 text-teal-800 font-bold">Mujer ($H^c$)</th>
+                                <td class="p-2 font-mono">30</td>
+                                <td class="p-2 font-mono">30</td>
+                                <td class="p-2 bg-slate-50 font-mono font-bold">60</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2 bg-slate-100 font-bold">Total</th>
+                                <td class="p-2 bg-slate-50 font-mono font-bold">75</td>
+                                <td class="p-2 bg-slate-50 font-mono font-bold">45</td>
+                                <td class="p-2 bg-slate-200 font-mono font-black">120</td>
+                            </tr>
+                        </table>
+                        <p class="text-lg font-bold text-slate-900 mb-2">Resuelva en su cuaderno:</p>
+                        <ol class="list-decimal list-inside text-base text-slate-700 font-medium space-y-2 ml-2">
+                            <li>$P(P)$: probabilidad de que practique deporte (marginal).</li>
+                            <li>$P(H \cap P)$: probabilidad de ser hombre y practicar deporte (conjunta).</li>
+                            <li>$P(H \cup P)$: probabilidad de ser hombre o practicar deporte (unión).</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="col-span-12 xl:col-span-6 flex flex-col bg-slate-900 rounded-3xl p-8 shadow-xl items-center justify-center relative">
+                    <button id="btn-ticket" onclick="revelarTicket()" class="w-full max-w-sm px-8 py-6 bg-teal-600 text-white rounded-2xl text-2xl font-bold hover:bg-teal-500 transition shadow-lg border-b-4 border-teal-800 active:border-b-0 active:mt-1">
+                        Revelar Pauta
+                    </button>
+
+                    <div id="respuesta-ticket" class="hidden absolute inset-0 w-full h-full p-8 flex-col justify-center bg-teal-50 text-slate-800 rounded-3xl border-4 border-teal-500 z-10 overflow-y-auto">
+                        <div class="text-base space-y-4 text-left">
+                            <div>
+                                <p class="font-bold text-slate-900 mb-1 bg-teal-200 w-fit px-3 py-1 rounded-lg">1. Marginal P(P)</p>
+                                <p class="font-mono">$P(P) = \dfrac{75}{120} = \dfrac{5}{8} = \mathbf{0{,}625}$</p>
+                            </div>
+                            <div class="border-t-2 border-teal-200 pt-3">
+                                <p class="font-bold text-slate-900 mb-1 bg-teal-200 w-fit px-3 py-1 rounded-lg">2. Conjunta P(H ∩ P)</p>
+                                <p class="font-mono">$P(H \cap P) = \dfrac{45}{120} = \dfrac{3}{8} = \mathbf{0{,}375}$</p>
+                            </div>
+                            <div class="border-t-2 border-teal-200 pt-3">
+                                <p class="font-bold text-slate-900 mb-1 bg-teal-200 w-fit px-3 py-1 rounded-lg">3. Unión P(H ∪ P)</p>
+                                <p class="font-mono">$P(H \cup P) = \dfrac{60}{120} + \dfrac{75}{120} - \dfrac{45}{120}$</p>
+                                <p class="text-teal-800 font-black text-2xl mt-1">$= \dfrac{90}{120} = \dfrac{3}{4} = \mathbf{0{,}75}$</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="fixed bottom-0 w-full bg-white border-t-2 border-slate-200 px-10 py-5 flex justify-between items-center z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <p class="text-slate-600 font-extrabold tracking-widest uppercase text-xl">
+            CLASE 17 • TABLAS DE CONTINGENCIA • LQ
+        </p>
+        <div class="flex gap-4 items-center" id="dot-container">
+            <div class="w-5 h-5 rounded-full bg-teal-800 shadow-sm transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentSlide = 0;
+        let estadoEjemplo = 0;
+
+        function updateSlide() {
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('#dot-container div');
+
+            slides.forEach((s, i) => {
+                s.classList.remove('active');
+                if (i === currentSlide) {
+                    s.classList.add('active');
+                    s.scrollTop = 0;
+                }
+            });
+
+            dots.forEach((dot, i) => {
+                dot.className = i === currentSlide
+                    ? "w-5 h-5 rounded-full bg-teal-800 shadow-sm transition-all duration-300"
+                    : "w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300";
+            });
+        }
+
+        function changeSlide(d) {
+            const slides = document.querySelectorAll('.slide');
+            const n = currentSlide + d;
+            if (n >= 0 && n < slides.length) {
+                currentSlide = n;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (['ArrowRight', ' ', 'Enter'].includes(e.key)) changeSlide(1);
+            if (['ArrowLeft', 'Backspace'].includes(e.key)) changeSlide(-1);
+        });
+
+        function limpiarCeldas() {
+            document.querySelectorAll('.celda').forEach(c => {
+                c.classList.remove('resaltar-fila', 'resaltar-col', 'resaltar-conjunta', 'resaltar-total');
+            });
+        }
+
+        function avanzarEjemplo() {
+            estadoEjemplo++;
+            limpiarCeldas();
+
+            if (estadoEjemplo === 1) {
+                document.getElementById('paso1').classList.remove('hidden');
+                setTimeout(() => document.getElementById('paso1').classList.add('visible'), 50);
+                document.getElementById('c-H').classList.add('resaltar-fila');
+                document.getElementById('c-N').classList.add('resaltar-total');
+            } else if (estadoEjemplo === 2) {
+                document.getElementById('paso2').classList.remove('hidden');
+                setTimeout(() => document.getElementById('paso2').classList.add('visible'), 50);
+                document.getElementById('c-D').classList.add('resaltar-col');
+                document.getElementById('c-N').classList.add('resaltar-total');
+            } else if (estadoEjemplo === 3) {
+                document.getElementById('paso3').classList.remove('hidden');
+                setTimeout(() => document.getElementById('paso3').classList.add('visible'), 50);
+                document.getElementById('c-HD').classList.add('resaltar-conjunta');
+                document.getElementById('c-N').classList.add('resaltar-total');
+            } else if (estadoEjemplo === 4) {
+                document.getElementById('paso4').classList.remove('hidden');
+                setTimeout(() => document.getElementById('paso4').classList.add('visible'), 50);
+                document.getElementById('c-H').classList.add('resaltar-fila');
+                document.getElementById('c-D').classList.add('resaltar-col');
+                document.getElementById('c-HD').classList.add('resaltar-conjunta');
+                document.getElementById('c-N').classList.add('resaltar-total');
+                document.getElementById('btn-ejemplo').style.display = 'none';
+            }
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function revelarTicket() {
+            document.getElementById('btn-ticket').style.display = 'none';
+            const res = document.getElementById('respuesta-ticket');
+            res.classList.remove('hidden');
+            res.classList.add('flex');
+            if (window.MathJax) MathJax.typesetPromise([res]);
+        }
+    </script>
+</body>
+</html>

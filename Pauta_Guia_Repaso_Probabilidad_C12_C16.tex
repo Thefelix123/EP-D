@@ -1,0 +1,146 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{lastpage}
+\usepackage{enumitem}
+\usepackage{array}
+
+% --- Encabezado y pie de página ---
+\setlength{\headheight}{14.5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{Colegio Internacional SEK Chile}}
+%\fancyhead[R]{\includegraphics[height=1cm]{chile-identidad-corporativa-sek-2024_1.png}}
+\fancyfoot[L]{Departamento de Matemáticas}
+\fancyfoot[C]{\thepage\ de \pageref{LastPage}}
+\fancyfoot[R]{Santiago, 2026}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+
+\noindent
+\fbox{%
+    \begin{tabular*}{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}{@{}l@{\extracolsep{\fill}}r@{}}
+        Departamento de Matemáticas. & Profesores: H.F; L.Q \\
+        Asignatura: Probabilidad y Estadística. & Nivel: III\textsuperscript{o} medio \\[1.5em]
+        \multicolumn{2}{c}{\textbf{PAUTA DE CORRECCIÓN — Guía de Repaso N\textsuperscript{o}1}} \\
+        \multicolumn{2}{c}{\textbf{Sucesos y Regla de Laplace}} \\[1.0em]
+        \multicolumn{2}{c}{\textit{Documento de uso exclusivo del docente}} \\
+    \end{tabular*}%
+}
+
+\vspace{0.5cm}
+\centerline{\textbf{CLAVE DE RESPUESTAS — ÍTEM I (20 puntos)}}
+\vspace{0.3cm}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|c|*{10}{>{\centering\arraybackslash}p{0.055\textwidth}|}}
+\hline
+\textbf{Preg.} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+\hline
+\textbf{Resp.} & b & d & a & c & d & c & a & b & d & a \\
+\hline
+\end{tabular}
+
+\vspace{0.3cm}
+
+\begin{tabular}{|c|*{10}{>{\centering\arraybackslash}p{0.055\textwidth}|}}
+\hline
+\textbf{Preg.} & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 & 20 \\
+\hline
+\textbf{Resp.} & c & b & a & d & c & b & a & b & c & d \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.2cm}
+\noindent\textit{Distribución: 5 respuestas en cada alternativa (a, b, c, d). Cada pregunta correcta vale 1 punto.}
+
+\vspace{0.5cm}
+\centerline{\textbf{JUSTIFICACIÓN BREVE — ÍTEM I}}
+\vspace{0.3cm}
+
+\begin{enumerate}[leftmargin=*, itemsep=4pt]
+    \item \textbf{(b)} Solo anotar la patente del próximo auto es impredecible bajo las mismas condiciones; las otras tres tienen un resultado único (deterministas).
+    \item \textbf{(d)} Principio multiplicativo en tres etapas: $2 \cdot 6 \cdot 3 = 36$.
+    \item \textbf{(a)} Del total de $36$ pares, los $6$ con números iguales se descartan: $36 - 6 = 30$.
+    \item \textbf{(c)} Cargos distintos (orden importa) y sin repetir persona: $5 \cdot 4 = 20$.
+    \item \textbf{(d)} Como $1,2,3,4,5,6$ dividen todos a $60$, el suceso es $\Omega$ (seguro). Las demás no abarcan todo $\Omega$.
+    \item \textbf{(c)} Primos en $\{1,\dots,10\}$: $\{2,3,5,7\}$ ($4$ elementos). Luego $\#A^c = 10 - 4 = 6$.
+    \item \textbf{(a)} Total de sucesos $= 2^4 = 16$; sin el suceso vacío: $16 - 1 = 15$.
+    \item \textbf{(b)} Con $\Omega = \{CC, CS, SC, SS\}$, ``dos sellos'' $= \{SS\}$ es el único subconjunto unitario.
+    \item \textbf{(d)} $A \cup B = \{1,2,3,4,5,6,7\}$, por lo tanto $(A \cup B)^c = \{8, 9\}$.
+    \item \textbf{(a)} $A \setminus B = \{1,2,3\}$ y $B \setminus A = \{6,7\}$; su unión es $\{1,2,3,6,7\}$.
+    \item \textbf{(c)} ``No le gusta ninguno'' $= (A \cup B)^c$, que por De Morgan equivale a $A^c \cap B^c$.
+    \item \textbf{(b)} $\{1,2\} \cap \{5,6\} = \varnothing$. En las otras opciones la intersección no es vacía.
+    \item \textbf{(a)} Sumas múltiplo de $4$: $4$ ($3$ casos), $8$ ($5$ casos), $12$ ($1$ caso) $= 9$. Luego $\tfrac{9}{36} = \tfrac{1}{4}$.
+    \item \textbf{(d)} Por complemento: $1 - P(\text{ninguna cara}) = 1 - \tfrac{1}{8} = \tfrac{7}{8}$.
+    \item \textbf{(c)} El dado trucado no es equiprobable, por lo que no se aplica la Regla de Laplace.
+    \item \textbf{(b)} Producto impar solo si ambos son impares: $\tfrac{9}{36} = \tfrac{1}{4}$. Producto par $= 1 - \tfrac{1}{4} = \tfrac{3}{4}$.
+    \item \textbf{(a)} $P(A \cup B) = 0{,}6 + 0{,}5 - 0{,}3 = 0{,}8$; luego $P\big((A\cup B)^c\big) = 1 - 0{,}8 = 0{,}2$.
+    \item \textbf{(b)} Al ser excluyentes, $P(A \cup B) = P(A) + P(B)$, de donde $P(B) = 0{,}8 - 0{,}35 = 0{,}45$.
+    \item \textbf{(c)} El mínimo ocurre cuando $P(A \cup B) = 1$: $P(A \cap B) \ge P(A) + P(B) - 1 = 0{,}3$.
+    \item \textbf{(d)} $R$: $26$ cartas, $F$: $12$ figuras, $R \cap F$: $6$ figuras rojas. $P(R \cup F) = \tfrac{26 + 12 - 6}{52} = \tfrac{32}{52} = \tfrac{8}{13}$.
+\end{enumerate}
+
+\newpage
+
+\centerline{\textbf{DESARROLLO RESUELTO — ÍTEM II (10 puntos)}}
+\vspace{0.4cm}
+
+\noindent\textbf{Pregunta 1 — Lanzamiento de dos dados (5 puntos).}
+\vspace{0.2cm}
+
+\begin{enumerate}[label=\alph*), leftmargin=*, itemsep=6pt]
+    \item \textit{(1 pto)} Cada dado tiene $6$ resultados y se registra el par ordenado, por el principio multiplicativo:
+    \[ \#\Omega = 6 \cdot 6 = \mathbf{36}. \]
+
+    \item \textit{(1,5 ptos)} El suceso $A = $ ``la suma es $6$'' por extensión:
+    \[ A = \{(1,5),\,(2,4),\,(3,3),\,(4,2),\,(5,1)\}, \qquad \#A = 5. \]
+    Por la Regla de Laplace:
+    \[ P(A) = \frac{\#A}{\#\Omega} = \frac{5}{36}. \]
+
+    \item \textit{(1,5 ptos)} El suceso $B = $ ``al menos un dado muestra $5$''. Contando (dado rojo $=5$: $6$ casos; dado azul $=5$: $6$ casos; ambos $=5$: $1$ caso):
+    \[ \#B = 6 + 6 - 1 = 11, \qquad P(B) = \frac{11}{36}. \]
+
+    \item \textit{(1 pto)} La intersección $A \cap B$ son los pares de suma $6$ que además tienen algún $5$: $\{(1,5),(5,1)\}$, así $P(A \cap B) = \tfrac{2}{36}$. Por la fórmula de la unión:
+    \[ P(A \cup B) = \frac{5}{36} + \frac{11}{36} - \frac{2}{36} = \frac{14}{36} = \mathbf{\frac{7}{18}} \approx 0{,}39. \]
+\end{enumerate}
+
+\vspace{0.6cm}
+
+\noindent\textbf{Pregunta 2 — Idiomas de un grupo de turistas (5 puntos).}
+\vspace{0.2cm}
+
+\noindent Datos: $\#\Omega = 50$, $\#I = 30$, $\#F = 24$, y $8$ no hablan ninguno.
+
+\begin{enumerate}[label=\alph*), leftmargin=*, itemsep=6pt]
+    \item \textit{(2 ptos)} Hablan al menos un idioma: $50 - 8 = 42$, es decir $\#(I \cup F) = 42$. Despejando de la fórmula de la unión:
+    \[ \#(I \cup F) = \#I + \#F - \#(I \cap F) \;\Rightarrow\; 42 = 30 + 24 - \#(I \cap F), \]
+    \[ \#(I \cap F) = 54 - 42 = \mathbf{12} \text{ turistas hablan ambos idiomas.} \]
+
+    \item \textit{(1 pto)} Probabilidad de hablar ambos:
+    \[ P(I \cap F) = \frac{12}{50} = \frac{6}{25} = \mathbf{0{,}24}. \]
+
+    \item \textit{(1 pto)} Probabilidad de hablar inglés o francés:
+    \[ P(I \cup F) = \frac{42}{50} = \frac{21}{25} = \mathbf{0{,}84}. \]
+
+    \item \textit{(1 pto)} Solo inglés (inglés pero no francés): $\#I - \#(I \cap F) = 30 - 12 = 18$. Luego
+    \[ P(\text{solo inglés}) = \frac{18}{50} = \frac{9}{25} = \mathbf{0{,}36}. \]
+\end{enumerate}
+
+\vspace{0.5cm}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{0.1cm}
+
+\noindent\textbf{Criterios generales de corrección (Ítem II):} se asigna puntaje parcial por planteamiento correcto aunque el resultado numérico final tenga un error de cálculo aislado. Se exige procedimiento; una respuesta sin desarrollo recibe a lo más la mitad del puntaje de la parte.
+
+\end{document}

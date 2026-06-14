@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regla de Laplace - IIIº Medio EP-D</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            startup: { typeset: true }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; background-color: #f8fafc; }
+        #slide-container { height: calc(100vh - 5rem); width: 100vw; position: relative; }
+
+        .slide {
+            display: none; height: 100%; width: 100%; flex-direction: column;
+            overflow-y: auto; overflow-x: hidden; padding-bottom: 10rem; scroll-behavior: smooth;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .slide.active { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .glass-card { background: rgba(255, 255, 255, 0.98); border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+
+        ::-webkit-scrollbar { width: 14px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; margin: 10px 0; }
+        ::-webkit-scrollbar-thumb { background: #0d9488; border-radius: 8px; border: 3px solid #e2e8f0; }
+
+        .paso-ejemplo { opacity: 0; transform: translateY(20px); transition: all 0.5s ease-out; }
+        .paso-ejemplo.visible { opacity: 1; transform: translateY(0); }
+
+        .face-dado { transition: all 0.4s ease-out; }
+        .face-dado.favorable { background-color: #ccfbf1; border-color: #14b8a6; color: #0f766e; transform: scale(1.06); box-shadow: 0 4px 12px -2px rgba(20, 184, 166, 0.4); }
+        .face-dado.no-favorable { opacity: 0.35; }
+
+        .barra-prob {
+            width: 0%;
+            transition: width 0.8s ease-out;
+            background: linear-gradient(90deg, #14b8a6, #0d9488);
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 select-none flex flex-col">
+
+    <div class="h-4 w-full bg-teal-800 shrink-0 fixed top-0 z-50"></div>
+
+    <div id="slide-container" class="mt-4">
+
+        <!-- 1. PORTADA -->
+        <div class="slide active p-10 bg-slate-50">
+            <div class="flex-1 flex flex-col items-center justify-center space-y-8 w-full h-full min-h-[500px]">
+                <div class="bg-teal-100 p-8 rounded-full shadow-inner border-4 border-white">
+                    <i data-lucide="percent" class="w-32 h-32 text-teal-800"></i>
+                </div>
+                <h1 class="text-7xl font-extrabold tracking-tight text-slate-900 uppercase text-center">
+                    Regla de Laplace
+                </h1>
+                <p class="text-4xl text-slate-600 font-semibold tracking-wide text-center max-w-3xl leading-snug">
+                    Probabilidad Clásica · Casos Favorables sobre Posibles
+                </p>
+
+                <div class="mt-16 p-8 glass-card rounded-2xl border-l-8 border-teal-800 text-left w-full max-w-5xl flex justify-between items-end shadow-md">
+                    <div>
+                        <p class="text-xl font-bold text-slate-500 uppercase tracking-widest mb-1">Profesor</p>
+                        <p class="text-4xl font-bold text-slate-900">Luis Quezada</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-3xl font-bold text-teal-800 uppercase tracking-wider">SEK CHILE • IIIº EP-D</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. INTRODUCCIÓN -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <i data-lucide="scale" class="w-12 h-12 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Introducción</h2>
+            </div>
+
+            <div class="grid grid-cols-12 gap-10 flex-1 items-center">
+                <div class="col-span-12 lg:col-span-6 flex flex-col gap-6">
+                    <p class="text-3xl text-slate-700 leading-relaxed font-medium">
+                        Ya sabemos describir sucesos como subconjuntos de $\Omega$. La pregunta inevitable es: <strong class="text-teal-800">¿qué tan probable es que ocurran?</strong>
+                    </p>
+
+                    <div class="bg-slate-50 p-6 rounded-2xl border-l-8 border-slate-700 shadow-sm">
+                        <p class="text-lg text-slate-700 font-medium leading-relaxed">
+                            Hasta ahora podíamos decir <em>"obtener un número par es un subconjunto de tres elementos"</em>. Pero no podíamos asignarle un número que cuantifique nuestra <strong>expectativa</strong> de que ocurra.
+                        </p>
+                    </div>
+
+                    <div class="bg-teal-50 p-6 rounded-2xl border-l-8 border-teal-700 shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i data-lucide="lightbulb" class="w-7 h-7 text-teal-800"></i>
+                            <p class="text-xl font-bold uppercase tracking-wide text-teal-900">Intuición</p>
+                        </div>
+                        <p class="text-lg text-slate-700 font-medium leading-relaxed">
+                            Si los resultados del experimento son <strong>igualmente posibles</strong> (equiprobables), la probabilidad de un suceso es simplemente la proporción de resultados que lo cumplen.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-6 bg-slate-900 rounded-3xl p-10 flex flex-col items-center justify-center h-[500px] shadow-xl text-white">
+                    <p class="text-teal-300 font-bold uppercase tracking-widest text-sm mb-4">Pregunta Histórica</p>
+                    <p class="text-2xl font-semibold text-center leading-snug max-w-md mb-6">
+                        Pierre-Simon Laplace (1812):
+                    </p>
+                    <p class="text-xl text-slate-300 text-center italic max-w-md leading-relaxed">
+                        "La probabilidad de un suceso es la razón entre el número de casos favorables y el número total de casos posibles, siempre que todos sean igualmente posibles."
+                    </p>
+                    <div class="mt-8 text-6xl">⚖️</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. DEFINICIONES -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-6 border-b-4 border-slate-200 pb-3 shrink-0">
+                <i data-lucide="book-open" class="w-12 h-12 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Definiciones</h2>
+            </div>
+
+            <div class="flex-1 flex flex-col gap-5">
+
+                <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl flex items-center justify-between border-b-8 border-teal-600 gap-8">
+                    <div class="flex-1">
+                        <p class="text-teal-300 font-bold uppercase tracking-widest text-sm mb-2">Regla de Laplace</p>
+                        <p class="text-lg text-slate-300 leading-relaxed">
+                            Sea $A$ un suceso definido sobre un espacio muestral $\Omega$ con resultados <strong class="text-white">equiprobables</strong>. Su probabilidad es:
+                        </p>
+                        <p class="text-base text-slate-400 mt-2">
+                            $\#A$: casos favorables (elementos de $A$). $\;\#\Omega$: casos posibles totales.
+                        </p>
+                    </div>
+                    <div class="text-5xl font-mono font-black tracking-tight bg-slate-800 px-8 py-6 rounded-2xl border border-slate-700 shrink-0">
+                        $$ P(A) = \frac{\#A}{\#\Omega} $$
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-5">
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center text-rose-700 font-bold">!</div>
+                            <h4 class="text-xl font-bold text-slate-900">Condición</h4>
+                        </div>
+                        <p class="text-base text-slate-700 mb-3 flex-1">
+                            La fórmula solo se aplica si los resultados elementales son <strong>equiprobables</strong>: cada uno tiene la misma posibilidad de ocurrir.
+                        </p>
+                        <p class="text-sm text-slate-500 italic">
+                            Ej: dado equilibrado, moneda no cargada, urna con bolas idénticas.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold">≤</div>
+                            <h4 class="text-xl font-bold text-slate-900">Rango</h4>
+                        </div>
+                        <p class="text-base text-slate-700 mb-3 flex-1">
+                            La probabilidad de cualquier suceso es un número real entre $0$ y $1$:
+                        </p>
+                        <div class="bg-slate-50 py-2 px-3 rounded-lg border border-slate-200 text-center font-mono text-base text-teal-800">
+                            $$ 0 \leq P(A) \leq 1 $$
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold">c</div>
+                            <h4 class="text-xl font-bold text-slate-900">Complemento</h4>
+                        </div>
+                        <p class="text-base text-slate-700 mb-3 flex-1">
+                            La probabilidad del suceso contrario se obtiene restando a $1$:
+                        </p>
+                        <div class="bg-slate-50 py-2 px-3 rounded-lg border border-slate-200 text-center font-mono text-base text-indigo-700">
+                            $$ P(A^c) = 1 - P(A) $$
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="grid grid-cols-3 gap-5">
+
+                    <div class="bg-emerald-50 p-5 rounded-2xl border-l-8 border-emerald-500 shadow-sm">
+                        <p class="text-emerald-700 font-bold uppercase tracking-widest text-xs mb-1">Caso 1</p>
+                        <h4 class="text-lg font-bold text-slate-900 mb-1">Suceso Seguro</h4>
+                        <p class="text-sm text-slate-700">Si $A = \Omega$, todos los casos son favorables.</p>
+                        <p class="font-mono text-center text-emerald-700 mt-2 text-lg">$P(\Omega) = 1$</p>
+                    </div>
+
+                    <div class="bg-rose-50 p-5 rounded-2xl border-l-8 border-rose-500 shadow-sm">
+                        <p class="text-rose-700 font-bold uppercase tracking-widest text-xs mb-1">Caso 2</p>
+                        <h4 class="text-lg font-bold text-slate-900 mb-1">Suceso Imposible</h4>
+                        <p class="text-sm text-slate-700">Si $A = \varnothing$, no hay casos favorables.</p>
+                        <p class="font-mono text-center text-rose-700 mt-2 text-lg">$P(\varnothing) = 0$</p>
+                    </div>
+
+                    <div class="bg-amber-50 p-5 rounded-2xl border-l-8 border-amber-500 shadow-sm">
+                        <p class="text-amber-700 font-bold uppercase tracking-widest text-xs mb-1">Caso 3</p>
+                        <h4 class="text-lg font-bold text-slate-900 mb-1">Equiprobabilidad</h4>
+                        <p class="text-sm text-slate-700">Cada suceso elemental $\{\omega\}$ tiene probabilidad:</p>
+                        <p class="font-mono text-center text-amber-700 mt-2 text-lg">$P(\{\omega\}) = \frac{1}{\#\Omega}$</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 4. EJEMPLO -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center justify-between mb-8 border-b-4 border-slate-200 pb-4 shrink-0">
+                <div class="flex items-center gap-6">
+                    <i data-lucide="play-circle" class="w-12 h-12 text-teal-800"></i>
+                    <h2 class="text-5xl font-bold text-slate-900">Ejemplo</h2>
+                </div>
+                <button onclick="avanzarEjemplo()" id="btn-ejemplo" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-xl text-xl transition flex items-center gap-2 shadow-md">
+                    Siguiente Cálculo <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-12 gap-8 flex-1">
+
+                <div class="col-span-12 lg:col-span-5 flex flex-col gap-3">
+                    <div class="bg-slate-50 rounded-2xl border border-slate-200 p-5 shadow-sm">
+                        <p class="text-slate-500 font-bold uppercase tracking-widest text-sm mb-3">Enunciado</p>
+                        <p class="text-base font-medium text-slate-800 leading-relaxed">
+                            Se lanza un dado equilibrado de seis caras. Como todas las caras tienen la misma posibilidad de salir, se cumple la condición de <strong class="text-teal-700">equiprobabilidad</strong>.
+                        </p>
+                        <p class="text-base font-medium text-slate-800 leading-relaxed mt-2">
+                            Calcule la probabilidad de los siguientes sucesos.
+                        </p>
+                    </div>
+
+                    <div id="paso-A" class="paso-ejemplo hidden bg-white border-l-8 border-l-teal-500 border border-slate-200 rounded-2xl p-4 shadow-sm">
+                        <p class="font-bold text-teal-700 text-sm uppercase tracking-widest mb-1">A · "obtener un número par"</p>
+                        <p class="text-base text-slate-700">Casos favorables: $\{2, 4, 6\} \Rightarrow \#A = 3$. Casos posibles: $\#\Omega = 6$.</p>
+                        <p class="text-xl font-mono text-teal-800 mt-2 text-center">
+                            $$ P(A) = \frac{3}{6} = \mathbf{0{,}5} $$
+                        </p>
+                    </div>
+
+                    <div id="paso-B" class="paso-ejemplo hidden bg-white border-l-8 border-l-amber-500 border border-slate-200 rounded-2xl p-4 shadow-sm">
+                        <p class="font-bold text-amber-700 text-sm uppercase tracking-widest mb-1">B · "obtener un múltiplo de 3"</p>
+                        <p class="text-base text-slate-700">Casos favorables: $\{3, 6\} \Rightarrow \#B = 2$.</p>
+                        <p class="text-xl font-mono text-amber-700 mt-2 text-center">
+                            $$ P(B) = \frac{2}{6} = \frac{1}{3} \approx \mathbf{0{,}333} $$
+                        </p>
+                    </div>
+
+                    <div id="paso-C" class="paso-ejemplo hidden bg-white border-l-8 border-l-emerald-500 border border-slate-200 rounded-2xl p-4 shadow-sm">
+                        <p class="font-bold text-emerald-700 text-sm uppercase tracking-widest mb-1">C · "obtener un número menor que 10"</p>
+                        <p class="text-base text-slate-700">Todos los casos cumplen la condición: $C = \Omega$. Es un suceso seguro.</p>
+                        <p class="text-xl font-mono text-emerald-700 mt-2 text-center">
+                            $$ P(C) = \frac{6}{6} = \mathbf{1} $$
+                        </p>
+                    </div>
+
+                    <div id="paso-D" class="paso-ejemplo hidden bg-slate-900 text-white rounded-2xl p-4 shadow-xl border-b-8 border-rose-500">
+                        <p class="text-rose-300 font-bold text-sm uppercase tracking-widest mb-1">D · "obtener un 7"</p>
+                        <p class="text-base text-slate-300">El 7 no pertenece a $\Omega$: $D = \varnothing$. Suceso imposible.</p>
+                        <p class="text-xl font-mono text-rose-300 mt-2 text-center">
+                            $$ P(D) = \frac{0}{6} = \mathbf{0} $$
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-7 flex flex-col items-center justify-center gap-5">
+                    <div class="bg-slate-50 rounded-3xl border border-slate-200 p-6 shadow-sm w-full">
+                        <p id="titulo-dado" class="text-slate-500 font-bold uppercase tracking-widest text-sm mb-4 text-center">$\Omega = \{1, 2, 3, 4, 5, 6\}$ · equiprobables</p>
+                        <div class="grid grid-cols-6 gap-3" id="dado-grid">
+                            <div class="face-dado bg-white border-2 border-slate-300 rounded-2xl py-7 text-center font-mono font-black text-3xl text-slate-700" data-val="1">1</div>
+                            <div class="face-dado bg-white border-2 border-slate-300 rounded-2xl py-7 text-center font-mono font-black text-3xl text-slate-700" data-val="2">2</div>
+                            <div class="face-dado bg-white border-2 border-slate-300 rounded-2xl py-7 text-center font-mono font-black text-3xl text-slate-700" data-val="3">3</div>
+                            <div class="face-dado bg-white border-2 border-slate-300 rounded-2xl py-7 text-center font-mono font-black text-3xl text-slate-700" data-val="4">4</div>
+                            <div class="face-dado bg-white border-2 border-slate-300 rounded-2xl py-7 text-center font-mono font-black text-3xl text-slate-700" data-val="5">5</div>
+                            <div class="face-dado bg-white border-2 border-slate-300 rounded-2xl py-7 text-center font-mono font-black text-3xl text-slate-700" data-val="6">6</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl border border-slate-200 p-5 shadow-sm w-full">
+                        <p class="text-slate-500 font-bold uppercase tracking-widest text-xs mb-2 text-center">Probabilidad visualizada</p>
+                        <div class="w-full bg-slate-100 rounded-full h-8 overflow-hidden border border-slate-200">
+                            <div id="barra-prob" class="barra-prob h-full flex items-center justify-end pr-3 text-white font-bold text-sm"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-slate-500 font-mono mt-2 px-1">
+                            <span>0</span>
+                            <span>0,25</span>
+                            <span>0,5</span>
+                            <span>0,75</span>
+                            <span>1</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 5. PROBLEMAS -->
+        <div class="slide bg-slate-50 p-10">
+            <div class="flex items-center gap-6 mb-6 border-b-4 border-slate-200 pb-3 shrink-0">
+                <i data-lucide="edit-3" class="w-12 h-12 text-teal-800"></i>
+                <h2 class="text-5xl font-bold text-slate-900">Problemas</h2>
+            </div>
+
+            <div class="flex-1 overflow-y-auto w-full pb-10 pr-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-emerald-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>1.</strong> Se lanza un dado equilibrado. Calcule la probabilidad de obtener un número mayor que 4.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-emerald-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>2.</strong> De una urna con 5 bolas blancas y 3 bolas negras se extrae una al azar. Determine la probabilidad de obtener una bola blanca.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-emerald-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>3.</strong> Se elige al azar un día de la semana. Calcule la probabilidad de que sea un día con la letra "s" en su nombre.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-amber-400 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>4.</strong> Se lanzan dos dados equilibrados y se registra el par ordenado. Determine la probabilidad de obtener una suma igual a 7.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-amber-400 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>5.</strong> Se extrae una carta de una baraja inglesa de 52 cartas. Calcule la probabilidad de obtener: (a) un as; (b) una carta de corazones; (c) una figura (J, Q o K).
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-amber-400 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>6.</strong> Sea $A$ un suceso tal que $P(A) = \tfrac{2}{5}$. Determine $P(A^c)$ y verifique que $P(A) + P(A^c) = 1$.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-rose-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>7.</strong> Se lanzan dos dados y se registra la suma. Calcule la probabilidad de que la suma sea un número primo. Justifique enumerando los casos favorables.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-rose-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>8.</strong> Un experimento tiene $\#\Omega = n$ con resultados equiprobables. Sin conocer $n$, demuestre que $P(\{\omega_1\}) + P(\{\omega_2\}) + \dots + P(\{\omega_n\}) = 1$.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border-t-8 border-rose-500 shadow-md flex flex-col">
+                        <p class="text-slate-700 font-medium text-lg leading-relaxed">
+                            <strong>9.</strong> Una moneda está cargada de modo que $P(\text{cara}) = 0{,}7$. Explique por qué la Regla de Laplace <em>no</em> es aplicable a este experimento y determine $P(\text{sello})$ usando la propiedad del complemento.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. TICKET DE SALIDA -->
+        <div class="slide bg-white p-10">
+            <div class="flex items-center gap-6 mb-8 border-b-4 border-slate-100 pb-4 shrink-0 justify-between">
+                <div class="flex items-center gap-4">
+                    <i data-lucide="check-square" class="w-12 h-12 text-teal-800"></i>
+                    <h2 class="text-6xl font-bold text-slate-800">Ticket de Salida</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-12 flex-1 min-h-[450px]">
+                <div class="col-span-12 xl:col-span-6 flex flex-col justify-center space-y-6">
+                    <div class="bg-slate-50 border border-slate-200 p-8 rounded-3xl shadow-sm">
+                        <p class="text-xl font-medium text-slate-800 leading-relaxed mb-4">
+                            En una bolsa hay <strong class="text-teal-700">12 fichas</strong> indistinguibles al tacto: 4 rojas, 5 azules y 3 verdes. Se extrae una ficha al azar.
+                        </p>
+
+                        <p class="text-xl font-bold text-slate-900 mb-3">Resuelva en su cuaderno:</p>
+                        <ol class="list-decimal list-inside text-lg text-slate-700 font-medium space-y-3 ml-2">
+                            <li>Calcule la probabilidad de obtener una ficha azul.</li>
+                            <li>Calcule la probabilidad de obtener una ficha roja o verde, usando dos métodos distintos (suma directa y complemento de "azul").</li>
+                            <li>Identifique un suceso seguro y un suceso imposible en este experimento.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="col-span-12 xl:col-span-6 flex flex-col bg-slate-900 rounded-3xl p-8 shadow-xl items-center justify-center relative">
+                    <button id="btn-ticket" onclick="revelarTicket()" class="w-full max-w-sm px-8 py-6 bg-teal-600 text-white rounded-2xl text-2xl font-bold hover:bg-teal-500 transition shadow-lg border-b-4 border-teal-800 active:border-b-0 active:mt-1">
+                        Revelar Pauta
+                    </button>
+
+                    <div id="respuesta-ticket" class="hidden absolute inset-0 w-full h-full p-8 flex-col justify-center bg-teal-50 text-slate-800 rounded-3xl border-4 border-teal-500 z-10 overflow-y-auto">
+                        <div class="text-base space-y-4 text-left">
+                            <div>
+                                <p class="font-bold text-slate-900 mb-1 bg-teal-200 w-fit px-3 py-1 rounded-lg">1. P(Azul)</p>
+                                <p class="font-mono">$P(A) = \dfrac{\#A}{\#\Omega} = \dfrac{5}{12} \approx \mathbf{0{,}417}$</p>
+                            </div>
+                            <div class="border-t-2 border-teal-200 pt-3">
+                                <p class="font-bold text-slate-900 mb-1 bg-teal-200 w-fit px-3 py-1 rounded-lg">2. P(Roja o Verde)</p>
+                                <p class="text-sm text-slate-700">Método 1 (suma directa):</p>
+                                <p class="font-mono">$P(R \cup V) = \dfrac{4 + 3}{12} = \dfrac{7}{12}$</p>
+                                <p class="text-sm text-slate-700 mt-2">Método 2 (complemento de A):</p>
+                                <p class="font-mono">$P(A^c) = 1 - \dfrac{5}{12} = \dfrac{7}{12} \approx \mathbf{0{,}583}$</p>
+                            </div>
+                            <div class="border-t-2 border-teal-200 pt-3">
+                                <p class="font-bold text-slate-900 mb-1 bg-teal-200 w-fit px-3 py-1 rounded-lg">3. Casos extremos</p>
+                                <p class="text-sm">Seguro: "obtener una ficha de color rojo, azul o verde" $\Rightarrow P = 1$.</p>
+                                <p class="text-sm">Imposible: "obtener una ficha amarilla" $\Rightarrow P = 0$.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="fixed bottom-0 w-full bg-white border-t-2 border-slate-200 px-10 py-5 flex justify-between items-center z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <p class="text-slate-600 font-extrabold tracking-widest uppercase text-xl">
+            CLASE 15 • REGLA DE LAPLACE • LQ
+        </p>
+        <div class="flex gap-4 items-center" id="dot-container">
+            <div class="w-5 h-5 rounded-full bg-teal-800 shadow-sm transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+            <div class="w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300"></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentSlide = 0;
+        let estadoEjemplo = 0;
+
+        function updateSlide() {
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('#dot-container div');
+
+            slides.forEach((s, i) => {
+                s.classList.remove('active');
+                if (i === currentSlide) {
+                    s.classList.add('active');
+                    s.scrollTop = 0;
+                }
+            });
+
+            dots.forEach((dot, i) => {
+                dot.className = i === currentSlide
+                    ? "w-5 h-5 rounded-full bg-teal-800 shadow-sm transition-all duration-300"
+                    : "w-5 h-5 rounded-full border-[3px] border-slate-300 transition-all duration-300";
+            });
+        }
+
+        function changeSlide(d) {
+            const slides = document.querySelectorAll('.slide');
+            const n = currentSlide + d;
+            if (n >= 0 && n < slides.length) {
+                currentSlide = n;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (['ArrowRight', ' ', 'Enter'].includes(e.key)) changeSlide(1);
+            if (['ArrowLeft', 'Backspace'].includes(e.key)) changeSlide(-1);
+        });
+
+        function limpiarDado() {
+            document.querySelectorAll('.face-dado').forEach(f => {
+                f.classList.remove('favorable', 'no-favorable');
+            });
+        }
+
+        function pintarSuceso(favorables, titulo, probDecimal, probTexto) {
+            limpiarDado();
+            [1, 2, 3, 4, 5, 6].forEach(v => {
+                const cell = document.querySelector(`.face-dado[data-val="${v}"]`);
+                if (favorables.includes(v)) cell.classList.add('favorable');
+                else cell.classList.add('no-favorable');
+            });
+            const tEl = document.getElementById('titulo-dado');
+            tEl.innerHTML = titulo;
+            if (window.MathJax) MathJax.typesetPromise([tEl]);
+
+            const barra = document.getElementById('barra-prob');
+            barra.style.width = (probDecimal * 100) + '%';
+            barra.textContent = probTexto;
+        }
+
+        function avanzarEjemplo() {
+            estadoEjemplo++;
+            if (estadoEjemplo === 1) {
+                document.getElementById('paso-A').classList.remove('hidden');
+                setTimeout(() => document.getElementById('paso-A').classList.add('visible'), 50);
+                pintarSuceso([2, 4, 6], 'A = "número par" · $P(A) = 3/6$', 0.5, '0,5');
+            } else if (estadoEjemplo === 2) {
+                document.getElementById('paso-B').classList.remove('hidden');
+                setTimeout(() => document.getElementById('paso-B').classList.add('visible'), 50);
+                pintarSuceso([3, 6], 'B = "múltiplo de 3" · $P(B) = 2/6$', 1/3, '0,333');
+            } else if (estadoEjemplo === 3) {
+                document.getElementById('paso-C').classList.remove('hidden');
+                setTimeout(() => document.getElementById('paso-C').classList.add('visible'), 50);
+                pintarSuceso([1, 2, 3, 4, 5, 6], 'C = "menor que 10" · $P(C) = 6/6$', 1, '1');
+            } else if (estadoEjemplo === 4) {
+                document.getElementById('paso-D').classList.remove('hidden');
+                setTimeout(() => document.getElementById('paso-D').classList.add('visible'), 50);
+                pintarSuceso([], 'D = "obtener un 7" · $P(D) = 0/6$', 0, '0');
+                document.getElementById('btn-ejemplo').style.display = 'none';
+            }
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function revelarTicket() {
+            document.getElementById('btn-ticket').style.display = 'none';
+            const res = document.getElementById('respuesta-ticket');
+            res.classList.remove('hidden');
+            res.classList.add('flex');
+            if (window.MathJax) MathJax.typesetPromise([res]);
+        }
+    </script>
+</body>
+</html>

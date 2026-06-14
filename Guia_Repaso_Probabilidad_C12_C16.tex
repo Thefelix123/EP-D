@@ -1,0 +1,327 @@
+\documentclass[12pt, a4paper]{article} % Clase de documento: artículo, tamaño A4, fuente 12pt
+\usepackage[utf8]{inputenc} % Codificación de entrada UTF-8 para caracteres especiales (tildes, ñ)
+\usepackage[spanish]{babel}    % Idioma español
+\usepackage{amsmath}           % Matemáticas avanzadas
+\usepackage{amssymb}           % Símbolos matemáticos adicionales (\varnothing, etc.)
+\usepackage{geometry}          % Márgenes y tamaño de página
+\geometry{a4paper, margin=1in} % Márgenes de 1 pulgada
+\usepackage{fancyhdr}          % Encabezados y pies de página personalizados
+\usepackage{graphicx}          % Para incluir imágenes (logo, opcional)
+\usepackage{lastpage}          % Número total de páginas
+\usepackage{enumitem}          % Personalización de listas
+\usepackage{ragged2e}          % Justificación de texto
+
+% --- Configuración de Encabezado y Pie de Página ---
+\setlength{\headheight}{14.5pt} % Evita la advertencia de fancyhdr (headheight)
+\pagestyle{fancy}
+\fancyhf{} % Limpia encabezados y pies por defecto
+\fancyhead[L]{\textbf{Colegio Internacional SEK Chile}}
+% Logo opcional: descomentar si la imagen está en la misma carpeta.
+%\fancyhead[R]{\includegraphics[height=1cm]{chile-identidad-corporativa-sek-2024_1.png}}
+\fancyfoot[L]{Departamento de Matemáticas}
+\fancyfoot[C]{\thepage\ de \pageref{LastPage}}
+\fancyfoot[R]{Santiago, 2026}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+
+\noindent
+\fbox{%
+    \begin{tabular*}{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}{@{}l@{\extracolsep{\fill}}r@{}}
+        Departamento de Matemáticas. & Profesores: H.F; L.Q \\
+        Asignatura: Probabilidad y Estadística. & Nivel: III\textsuperscript{o} medio \\[1.5em]
+        \multicolumn{2}{c}{\textbf{Guía de Repaso N\textsuperscript{o}1: Sucesos y Regla de Laplace}} \\
+        \\[1.5em]
+        Nombre: \makebox[5.3cm]{\hrulefill}
+        & Curso: \makebox[1.5cm]{\hrulefill} \quad Fecha: \makebox[0.5cm]{\hrulefill} / Junio / 2026 \\[1.5em]
+        Puntaje Total: 30 pts. & Puntaje Obtenido: \makebox[1.5cm]{\hrulefill} \quad Nota: \makebox[1.5cm]{\hrulefill} \\
+    \end{tabular*}%
+}
+
+\vspace{0.5cm}
+\centerline{\textbf{RÚBRICA DE EVALUACIÓN}}
+\vspace{0.4cm}
+
+\textbf{Ítem I — Preguntas de alternativas (20 puntos):}
+\begin{itemize}[topsep=2pt, itemsep=1pt]
+    \item \textbf{1 punto: Respuesta correcta.} El estudiante marca la única opción correcta.
+    \item \textbf{0 puntos: Respuesta incorrecta.} El estudiante marca una opción incorrecta, marca más de una o no responde.
+\end{itemize}
+
+\textbf{Ítem II — Preguntas de desarrollo (10 puntos):}
+\begin{itemize}[topsep=2pt, itemsep=1pt]
+    \item \textbf{5 puntos por pregunta}, distribuidos en sus partes. Se evalúa el procedimiento lógico, los cálculos correctos, la justificación clara y el orden.
+\end{itemize}
+
+\vspace{0.4cm}
+\centerline{\textbf{INSTRUCCIONES}}
+\vspace{0.3cm}
+
+\begin{itemize}[topsep=2pt, itemsep=1pt]
+    \item Resuelva cada ejercicio de la manera más ordenada posible y con lápiz pasta.
+    \item En el Ítem I, marque solo \textbf{una} alternativa por pregunta.
+    \item En el Ítem II, \textbf{desarrolle y justifique} sus respuestas con un procedimiento claro.
+    \item Recuerde: un suceso es un subconjunto del espacio muestral $\Omega$; la Regla de Laplace exige resultados equiprobables.
+\end{itemize}
+
+\newpage
+
+\section*{ÍTEM I: Preguntas de Selección Múltiple (20 puntos)}
+\vspace{0.2cm}
+
+\begin{enumerate}[leftmargin=*]
+
+    \begin{minipage}{\linewidth}
+    \item ¿Cuál de las siguientes situaciones corresponde a un \textbf{experimento aleatorio}?
+    \begin{enumerate}
+        \item Medir la temperatura de ebullición del agua pura a nivel del mar.
+        \item Anotar el número de la patente del próximo automóvil que pase por una esquina.
+        \item Calcular el área de un triángulo conocidas su base y su altura.
+        \item Determinar el cociente de dividir 100 entre 4.
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item Un experimento consiste en lanzar una moneda, lanzar un dado y extraer una bola de una urna con 3 bolas de distinto color, registrando el resultado de las tres etapas. ¿Cuántos resultados posibles tiene el espacio muestral?
+    \begin{enumerate}
+        \item 11
+        \item 18
+        \item 12
+        \item 36
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item Se lanzan dos dados y se registra el par ordenado $(d_1, d_2)$. ¿En cuántos de los 36 resultados posibles los dos dados muestran números \textbf{distintos}?
+    \begin{enumerate}
+        \item 30
+        \item 15
+        \item 6
+        \item 36
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item De un grupo de 5 personas se eligen dos para ocupar los cargos de presidente y secretario (una misma persona no puede ocupar ambos cargos). ¿Cuántas configuraciones distintas del par (presidente, secretario) son posibles?
+    \begin{enumerate}
+        \item 10
+        \item 25
+        \item 20
+        \item 5
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item Al lanzar un dado común de seis caras, ¿cuál de los siguientes es un suceso \textbf{seguro}?
+    \begin{enumerate}
+        \item ``Obtener un número primo''.
+        \item ``Obtener un múltiplo de 7''.
+        \item ``Obtener un número mayor que 4''.
+        \item ``Obtener un divisor de 60''.
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item En el espacio muestral $\Omega = \{1, 2, \dots, 10\}$ se define $A = $ ``obtener un número primo''. ¿Cuál es la cardinalidad del complemento $A^c$?
+    \begin{enumerate}
+        \item 4
+        \item 5
+        \item 6
+        \item 7
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item Un experimento tiene un espacio muestral de 4 elementos. ¿Cuántos sucesos distintos \textbf{no vacíos} se pueden definir sobre él (es decir, sin contar el suceso imposible)?
+    \begin{enumerate}
+        \item 15
+        \item 16
+        \item 8
+        \item 14
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item Se lanzan dos monedas y se registra la secuencia de caras (C) y sellos (S). ¿Cuál de los siguientes es un suceso \textbf{elemental}?
+    \begin{enumerate}
+        \item ``Obtener al menos una cara''.
+        \item ``Obtener dos sellos''.
+        \item ``Obtener exactamente una cara''.
+        \item ``Obtener resultados distintos en las dos monedas''.
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item En $\Omega = \{1, 2, \dots, 9\}$, sean $A = \{1, 2, 3, 4, 5\}$ y $B = \{4, 5, 6, 7\}$. El suceso $(A \cup B)^c$ es:
+    \begin{enumerate}
+        \item $\{4, 5\}$
+        \item $\{1, 2, 3\}$
+        \item $\{6, 7, 8, 9\}$
+        \item $\{8, 9\}$
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item En $\Omega = \{1, 2, \dots, 9\}$, con $A = \{1, 2, 3, 4, 5\}$ y $B = \{4, 5, 6, 7\}$, el suceso ``ocurre exactamente uno de los dos sucesos'', es decir $(A \setminus B) \cup (B \setminus A)$, es:
+    \begin{enumerate}
+        \item $\{1, 2, 3, 6, 7\}$
+        \item $\{4, 5\}$
+        \item $\{1, 2, 3\}$
+        \item $\{1, 2, 3, 4, 5, 6, 7\}$
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item En una encuesta se definen $A = $ ``a la persona le gusta el fútbol'' y $B = $ ``le gusta el tenis''. El suceso ``a la persona no le gusta ninguno de los dos deportes'' se expresa como:
+    \begin{enumerate}
+        \item $A^c \cup B^c$
+        \item $(A \cap B)^c$
+        \item $A^c \cap B^c$
+        \item $A \cap B$
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item Al lanzar un dado común, ¿cuál de los siguientes pares de sucesos son \textbf{mutuamente excluyentes}?
+    \begin{enumerate}
+        \item ``Obtener un número par'' y ``obtener un número mayor que 3''.
+        \item ``Obtener un número menor que 3'' y ``obtener un número mayor que 4''.
+        \item ``Obtener un número primo'' y ``obtener un número impar''.
+        \item ``Obtener un número par'' y ``obtener un múltiplo de 3''.
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item Se lanzan dos dados equilibrados. La probabilidad de que la suma de sus caras sea un \textbf{múltiplo de 4} es:
+    \begin{enumerate}
+        \item $\dfrac{1}{4}$
+        \item $\dfrac{1}{6}$
+        \item $\dfrac{5}{36}$
+        \item $\dfrac{1}{9}$
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item Se lanza una moneda equilibrada tres veces. La probabilidad de obtener \textbf{al menos una} cara es:
+    \begin{enumerate}
+        \item $\dfrac{1}{8}$
+        \item $\dfrac{1}{2}$
+        \item $\dfrac{3}{8}$
+        \item $\dfrac{7}{8}$
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item ¿En cuál de las siguientes situaciones \textbf{NO} se puede aplicar directamente la Regla de Laplace?
+    \begin{enumerate}
+        \item Extraer una carta de una baraja inglesa bien mezclada.
+        \item Elegir al azar un día de la semana.
+        \item Lanzar un dado trucado en el que el 6 aparece el doble de veces que cada una de las otras caras.
+        \item Sacar una bola de una urna con bolas idénticas al tacto.
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item Se lanzan dos dados equilibrados. La probabilidad de que el \textbf{producto} de los resultados sea un número par es:
+    \begin{enumerate}
+        \item $\dfrac{1}{4}$
+        \item $\dfrac{3}{4}$
+        \item $\dfrac{1}{2}$
+        \item $\dfrac{2}{3}$
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item Si $P(A) = 0{,}6$, $P(B) = 0{,}5$ y $P(A \cap B) = 0{,}3$, entonces la probabilidad de que \textbf{no ocurra ninguno} de los dos sucesos, $P\big((A \cup B)^c\big)$, es:
+    \begin{enumerate}
+        \item $0{,}2$
+        \item $0{,}8$
+        \item $0{,}4$
+        \item $0{,}3$
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item Sean $A$ y $B$ dos sucesos \textbf{mutuamente excluyentes}. Si $P(A) = 0{,}35$ y $P(A \cup B) = 0{,}8$, entonces $P(B)$ es:
+    \begin{enumerate}
+        \item $0{,}28$
+        \item $0{,}45$
+        \item $0{,}55$
+        \item $1{,}15$
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item Se sabe que $P(A) = 0{,}7$ y $P(B) = 0{,}6$. ¿Cuál es el \textbf{menor} valor posible de $P(A \cap B)$?
+    \begin{enumerate}
+        \item $0$
+        \item $0{,}1$
+        \item $0{,}3$
+        \item $0{,}42$
+    \end{enumerate}
+    \end{minipage}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\linewidth}
+    \item De una baraja inglesa de 52 cartas se extrae una al azar. Sean $R = $ ``obtener una carta roja'' y $F = $ ``obtener una figura (J, Q o K)''. La probabilidad $P(R \cup F)$ es:
+    \begin{enumerate}
+        \item $\dfrac{1}{2}$
+        \item $\dfrac{19}{26}$
+        \item $\dfrac{9}{13}$
+        \item $\dfrac{8}{13}$
+    \end{enumerate}
+    \end{minipage}
+
+\end{enumerate}
+
+\newpage
+
+\section*{ÍTEM II: Preguntas de Desarrollo (10 puntos)}
+\vspace{0.2cm}
+\textbf{Resuelva detallando todo su procedimiento. Cada pregunta vale 5 puntos, repartidos en sus partes.}
+\vspace{0.4cm}
+
+\begin{enumerate}[leftmargin=*]
+
+    \item \textbf{Lanzamiento de dos dados.} Se lanzan dos dados equilibrados, uno rojo y uno azul, y se registra el par ordenado (resultado del dado rojo, resultado del dado azul).
+    \begin{enumerate}[label=\alph*), topsep=4pt, itemsep=3pt]
+        \item Indique la cardinalidad del espacio muestral $\Omega$. \hfill \textit{(1 pto)}
+        \item Defina por extensión el suceso $A = $ ``la suma de ambos dados es igual a 6'' y calcule $P(A)$ por la Regla de Laplace. \hfill \textit{(1,5 ptos)}
+        \item Defina el suceso $B = $ ``al menos uno de los dados muestra un 5'' y calcule $P(B)$. \hfill \textit{(1,5 ptos)}
+        \item Determine $P(A \cap B)$ y, con ella, calcule $P(A \cup B)$ usando la fórmula de la probabilidad de la unión. \hfill \textit{(1 pto)}
+    \end{enumerate}
+    \vspace{9cm}
+
+    \newpage
+
+    \item \textbf{Idiomas de un grupo de turistas.} En un grupo de 50 turistas, 30 hablan inglés ($I$), 24 hablan francés ($F$) y 8 \textbf{no} hablan ninguno de los dos idiomas. Se elige un turista al azar.
+    \begin{enumerate}[label=\alph*), topsep=4pt, itemsep=3pt]
+        \item Determine cuántos turistas hablan al menos uno de los dos idiomas y, a partir de ese dato, cuántos hablan \textbf{ambos} idiomas ($I \cap F$). \hfill \textit{(2 ptos)}
+        \item Calcule la probabilidad de que el turista hable ambos idiomas, $P(I \cap F)$. \hfill \textit{(1 pto)}
+        \item Calcule la probabilidad de que el turista hable inglés o francés, $P(I \cup F)$. \hfill \textit{(1 pto)}
+        \item Calcule la probabilidad de que el turista hable \textbf{solo} inglés (inglés, pero no francés). \hfill \textit{(1 pto)}
+    \end{enumerate}
+    \vspace{9cm}
+
+\end{enumerate}
+
+\end{document}
